@@ -1,18 +1,69 @@
 # Catchment definition.
 #
 # A tract belongs to a branch's catchment if its centroid falls within the
-# radius below. Straight-line distance, NOT drive time - a deliberate
-# simplification that must be stated as a limitation in the case study.
+# radius for that branch's tier. Straight-line distance, NOT drive time - a
+# deliberate simplification that must be stated as a limitation.
 #
-# Set these empirically in Week 1 from observed branch spacing rather than
-# accepting the defaults. Record the reasoning in docs/assumptions.md.
+# THE RULE IS THE ARTIFACT. THE NUMBERS ARE ITS OUTPUT.
+#
+# The radius is not chosen. It is computed, per tier, as the observed median
+# nearest-neighbour distance between the subject's own branches. That property
+# is what makes it defensible: "why 3.5 miles and not 4?" has an answer that
+# does not reduce to judgement, because nothing was picked.
+#
+# It also has to keep being true. If the 2027 branch set is denser, the radius
+# must move with it. Script 08 RECOMPUTES these values from the staged data on
+# every run - it must never read the observed_2025 block below as an input.
+# Hardcoding 3.5 would make the tool quietly wrong on a new vintage in exactly
+# the way the old binary tier rule was wrong on this one.
 
-radius_miles:
-  urban: 3.0
-  non_urban: 8.0
+radius_rule: median_nearest_neighbour_spacing_within_tier
+
+# ---------------------------------------------------------------------------
+# Tiering
+# ---------------------------------------------------------------------------
+# THREE tiers, not two. The previous setting was `cbsa_membership`, a binary
+# urban/non-urban split treating any CBSA as urban. That put micropolitan
+# areas in the same bucket as Milwaukee. Observed spacing between the
+# subject's branches, 2025:
+#
+#     Metropolitan      median  3.5 mi   (n=127)
+#     Micropolitan      median 13.1 mi   (n= 22)
+#     Outside any CBSA  median 20.8 mi   (n= 18)
+#
+# Micropolitan sits at 3.7x metro spacing. The binary rule was not merely
+# imprecise, it was assigning a 3-mile radius to branches sitting 13 miles
+# apart, which understates rural catchments by roughly a factor of four.
+tier_definition: cbsa_type       # metro | micro | rural (outside any CBSA)
+tier_source: cbsa_delineation_2023.xlsx
+
+# ---------------------------------------------------------------------------
+# Observed values - EVIDENCE, NOT INPUT
+# ---------------------------------------------------------------------------
+# Recorded so a reader can see what the rule produced on this vintage, and so
+# a re-run that yields materially different radii is visible as a change
+# rather than a silent drift. Script 08 recomputes; it does not read these.
+observed_2025:
+  computed_from: Associated Bank (CERT 5296), 167 branches, 2025 vintage
+  metro:
+    median_nn_miles: 3.5
+    branches: 127
+  micro:
+    median_nn_miles: 13.1
+    branches: 22
+  rural:
+    median_nn_miles: 20.8
+    branches: 18
+
+# Sanity bounds. If the recomputed radius falls outside these, something has
+# changed structurally and the run should stop rather than proceed on a number
+# nobody looked at.
+bounds_miles:
+  min: 1.0
+  max: 30.0
 
 # A tract can fall inside several catchments. The nearest branch is primary;
 # acceptance criterion AC-03 tests that each tract has at most one primary.
+# Overlap is expected under this rule - radius equals the distance at which
+# one branch's trade area meets its neighbour's - and this is what resolves it.
 primary_assignment: nearest_branch
-
-urban_definition: cbsa_membership   # tract in a CBSA counts as urban
