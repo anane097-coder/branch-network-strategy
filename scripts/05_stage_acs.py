@@ -51,8 +51,32 @@ REPORT = ROOT / "docs" / "acs_suppression.md"
 OUT = STAGING / "dim_tract.csv"
 
 ACS_YEAR, TIGER_YEAR = 2024, 2024
+ACS_GROWTH_YEAR = 2019        # 2015-2019, the NON-OVERLAPPING earlier vintage
+GROWTH_SPAN_YEARS = 5         # midpoints 2017 -> 2022
 STATE_FIPS = {"WI": "55", "IL": "17"}
 LMI_THRESHOLD = 80.0          # FFIEC: tract income ratio below 80% of area
+
+# A 2020 tract's 2019 household count is EXACT only where every contributing
+# 2010 parent lies entirely inside it. Any parent shared with another 2020
+# tract means the count is a uniform-density estimate.
+#
+# THE TEST IS FROM THE CHILD'S SIDE, WHICH IS NOT THE SAME QUESTION AS FROM
+# THE PARENT'S. A 2020 tract taking 2% of one 2010 parent looks like an
+# irrelevant sliver from the parent's perspective and is in fact the MOST
+# estimated case from the child's: its entire household count is 2% of
+# somebody else's, assumed uniform. Testing the parent's side marked exactly
+# those tracts "direct" and produced a Kendall County tract growing 117% a
+# year off an apportioned base of 34 households.
+WHOLE_PARENT_THRESHOLD = 0.95     # w at or above this: parent effectively whole
+ESTIMATED_SHARE_TOLERANCE = 0.01  # estimated share of households above which
+                                  # the value is labelled apportioned
+
+# A link below this share of its 2010 parent moves less than 1% of that
+# tract's households and cannot move a growth rate materially. It is used for
+# APPORTIONMENT, where it belongs, but NOT for deciding which areas are
+# connected - see the cluster build below. The two uses need different
+# treatment and conflating them produced clusters of 212 tracts.
+MATERIAL_LINK_SHARE = 0.01
 
 NUMERIC = {
     "B01003_001E": "population",
@@ -84,6 +108,149 @@ def clean_sentinels(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
             seen[dest] = Counter(neg.astype("int64").tolist())
         df[dest] = v.where(v >= 0)
     return df, seen
+
+
+def apportion_2019_households() -> pd.DataFrame:
+    """Carry 2015-2019 household counts onto 2020 tract boundaries.
+
+    THE TWO VINTAGES DO NOT SHARE A KEY. 2015-2019 is published on 2010 tract
+    definitions and 2020-2024 on 2020 definitions. Census publishes the
+    relationship file that bridges them; without it the join silently loses
+    every tract that split or merged, and a tract that fails to join reads as
+    a tract with no growth - a default standing in for a state.
+
+    Households are apportioned by LAND AREA share, which assumes households
+    are spread uniformly across a 2010 tract. That assumption is weakest
+    exactly where the component carries the most signal, because tracts split
+    BECAUSE they grew: WI+IL went from 4,533 tracts to 4,807. Hence
+    growth_basis, so a consumer can see which values are estimates.
+
+    Returns tract_geoid (2020), households_2019, growth_basis.
+    """
+    rel = pd.concat([
+        pd.read_csv(RAW / f"tract_rel_2020_2010_{f}.txt", sep="|",
+                    dtype={"GEOID_TRACT_20": "string", "GEOID_TRACT_10": "string"},
+                    encoding="utf-8-sig")
+        for f in STATE_FIPS.values()
+    ], ignore_index=True)
+
+    # Water-only overlaps carry no households and would inflate the split
+    # counts. Dropped on land area, not on a name.
+    rel["AREALAND_PART"] = pd.to_numeric(rel["AREALAND_PART"],
+                                         errors="coerce").fillna(0)
+    land = rel[rel["AREALAND_PART"] > 0].copy()
+
+    # Share of each 2010 tract's land landing in this 2020 tract.
+    land["w"] = (land["AREALAND_PART"]
+                 / land.groupby("GEOID_TRACT_10")["AREALAND_PART"]
+                       .transform("sum"))
+
+    old = pd.concat([load_acs(f"acs5_{ACS_GROWTH_YEAR}_tract_{s.lower()}.json")
+                     for s in STATE_FIPS], ignore_index=True)
+    old["tract_geoid_2010"] = old["state"] + old["county"] + old["tract"]
+    hh = pd.to_numeric(old["B25003_001E"], errors="coerce")
+    # Same sign rule as clean_sentinels: ANY negative is a suppression code.
+    old["hh_2019"] = hh.where(hh >= 0)
+    parent_hh = old.set_index("tract_geoid_2010")["hh_2019"]
+
+    land["parent_hh"] = land["GEOID_TRACT_10"].map(parent_hh)
+    land["contrib"] = land["parent_hh"] * land["w"]
+
+    # A 2020 tract whose parents are ALL suppressed has no basis at all. One
+    # whose parents are partly suppressed has an understated basis, which
+    # would read as spurious growth - both are refused below.
+    # Households arriving from a parent this tract does NOT wholly contain.
+    land["contrib_estimated"] = land["contrib"].where(
+        land["w"] < WHOLE_PARENT_THRESHOLD, 0)
+
+    agg = land.groupby("GEOID_TRACT_20").agg(
+        households_2019=("contrib", "sum"),
+        households_estimated=("contrib_estimated", "sum"),
+        parents=("GEOID_TRACT_10", "nunique"),
+        parents_missing=("parent_hh", lambda s: int(s.isna().sum())),
+        max_w=("w", "max"),
+    )
+    agg["estimated_share"] = (agg["households_estimated"]
+                              / agg["households_2019"].replace(0, pd.NA))
+
+    agg["growth_basis"] = "direct"
+    agg.loc[agg["estimated_share"] > ESTIMATED_SHARE_TOLERANCE,
+            "growth_basis"] = "apportioned"
+    # A tract assembled entirely from fragments of parents it does not
+    # contain. The uniform-density assumption is not a rounding detail here,
+    # it IS the number, so it gets its own state rather than hiding inside
+    # "apportioned".
+    agg.loc[agg["max_w"] < WHOLE_PARENT_THRESHOLD, "growth_basis"] = "fragmentary"
+    # Refuse rather than estimate. An understated 2019 base manufactures
+    # growth, and this component is 20% of the opportunity index.
+    agg.loc[agg["parents_missing"] > 0, "growth_basis"] = "parent_suppressed"
+    agg.loc[agg["parents_missing"] > 0, "households_2019"] = pd.NA
+
+    # --- the exact geography, for tracts where the tract is not one -------
+    #
+    # A fragmentary tract's own 2019 count is uniform-density guesswork and it
+    # shows: those values are six times more dispersed than direct ones and
+    # produce a Kendall County tract at +117% a year. Nulling them would be
+    # honest but expensive, because tracts fragment BECAUSE they grew - it
+    # would delete growth signal from exactly the siting candidates BQ-5 is
+    # looking for.
+    #
+    # There is a geography on which both vintages ARE exactly comparable: the
+    # connected component of the 2020<->2010 overlap graph. Every 2010 parent
+    # in a component lies wholly inside it and so does every 2020 child, so
+    # summing either side is EXACT - no density assumption survives. The
+    # growth of that area is measured, not estimated; what is assumed is only
+    # that the children within it grew alike, which is a far weaker claim than
+    # assuming 2010 households were spread evenly over land.
+    # ONLY MATERIAL LINKS CONNECT. Census relationship files carry boundary-
+    # resolution slivers: 345 of these rows cross a county line with a median
+    # land area of 3,986 m2 and a median weight of 0.000028. They transfer no
+    # households, but a graph built over them CHAINS otherwise separate areas
+    # - one component reached 212 tracts spanning four counties and two
+    # states, which is geometrically impossible and was the tell. Slivers stay
+    # in the apportionment sum above, where their contribution is correctly
+    # about zero; they are excluded here, where their effect is not small.
+    links = land[land["w"] >= MATERIAL_LINK_SHARE]
+    dropped = len(land) - len(links)
+
+    parent_of = {}                      # 2010 -> component id
+    child_of = {}                       # 2020 -> component id
+    adj: dict[str, list[str]] = {}
+    for c, p in zip(links["GEOID_TRACT_20"], links["GEOID_TRACT_10"]):
+        adj.setdefault("c" + c, []).append("p" + p)
+        adj.setdefault("p" + p, []).append("c" + c)
+    seen, comp_id = set(), 0
+    for start in adj:
+        if start in seen:
+            continue
+        stack, members = [start], []
+        seen.add(start)
+        while stack:                    # iterative: recursion would blow up
+            n = stack.pop()
+            members.append(n)
+            for m in adj[n]:
+                if m not in seen:
+                    seen.add(m)
+                    stack.append(m)
+        for m in members:
+            (child_of if m[0] == "c" else parent_of)[m[1:]] = comp_id
+        comp_id += 1
+
+    sizes = pd.Series(list(child_of.values())).value_counts()
+    print(f"growth clusters: {len(sizes):,} built from {len(links):,} material "
+          f"links ({dropped:,} slivers excluded from the graph); "
+          f"largest {sizes.max()} tracts, median {sizes.median():.0f}")
+
+    agg = agg.reset_index().rename(columns={"GEOID_TRACT_20": "tract_geoid"})
+    agg["growth_cluster"] = agg["tract_geoid"].map(child_of)
+    old["growth_cluster"] = old["tract_geoid_2010"].map(parent_of)
+    cluster_2019 = old.groupby("growth_cluster")["hh_2019"].sum(min_count=1)
+    agg["cluster_households_2019"] = agg["growth_cluster"].map(cluster_2019)
+    agg["cluster_tracts"] = agg["growth_cluster"].map(
+        agg["growth_cluster"].value_counts())
+
+    return agg[["tract_geoid", "households_2019", "growth_basis",
+                "growth_cluster", "cluster_households_2019", "cluster_tracts"]]
 
 
 def classify(row) -> str:
@@ -170,8 +337,73 @@ def main() -> int:
 
     tracts["tract_status"] = tracts.apply(classify, axis=1)
 
+    # --- household growth, 2015-2019 -> 2020-2024 -----------------------
+    g19 = apportion_2019_households()
+    tracts = tracts.merge(g19, on="tract_geoid", how="left")
+    # A tract with no 2010 counterpart at all. Named, not left as a silent NaN.
+    tracts["growth_basis"] = tracts["growth_basis"].fillna("no_2010_counterpart")
+
+    # CAGR over the gap between vintage midpoints (2017 -> 2022), so the
+    # component is comparable with deposit_market_growth rather than being a
+    # raw percentage over an unstated period.
+    #
+    # NULL IS WRITTEN BEFORE THE ARITHMETIC, not left to fall out of it. A
+    # zero or missing 2019 base must not become an infinite or fabricated
+    # growth rate - the same three-valued-logic trap that reported a branch
+    # with no CAGR as having a positive trajectory.
+    # A tract with no households in 2024 has no growth rate - it has an
+    # absence. Water and unpopulated tracts otherwise return exactly -100%,
+    # which is a category presenting itself as a measurement and would sort
+    # to the bottom of any growth ranking as though it were a finding.
+    structural = tracts["tract_status"].isin(["water_or_special", "unpopulated"])
+    tracts.loc[structural, "growth_basis"] = "not_applicable"
+
+    h19, h24 = tracts["households_2019"], tracts["households"]
+    computable = h19.notna() & h24.notna() & (h19 > 0) & ~structural
+    tracts["household_growth_pct"] = pd.NA
+    tracts.loc[computable, "household_growth_pct"] = (
+        ((h24[computable] / h19[computable]) ** (1 / GROWTH_SPAN_YEARS) - 1) * 100
+    ).round(4)
+    tracts.loc[~computable & tracts["growth_basis"].isin(
+        ["direct", "apportioned", "fragmentary"]), "growth_basis"] = "no_2019_base"
+
+    # For fragmentary tracts, replace the artifact with the measurement: the
+    # cluster's growth, which needs no density assumption. Both series are
+    # kept - household_growth_pct_tract preserves what the tract-level
+    # arithmetic said, so the correction stays auditable rather than being
+    # silently substituted.
+    tracts["household_growth_pct_tract"] = tracts["household_growth_pct"]
+    cl24 = tracts.groupby("growth_cluster")["households"].transform("sum")
+    cl19 = tracts["cluster_households_2019"]
+    ok = (tracts["growth_basis"] == "fragmentary") & cl19.notna() & (cl19 > 0) \
+        & cl24.notna() & (cl24 > 0)
+    tracts.loc[ok, "household_growth_pct"] = (
+        ((cl24[ok] / cl19[ok]) ** (1 / GROWTH_SPAN_YEARS) - 1) * 100).round(4)
+    tracts.loc[ok, "growth_basis"] = "cluster"
+    # Fragmentary with no usable cluster either: refuse, do not fall back.
+    tracts.loc[(tracts["growth_basis"] == "fragmentary"),
+               "household_growth_pct"] = pd.NA
+    tracts.loc[(tracts["growth_basis"] == "fragmentary"),
+               "growth_basis"] = "fragmentary_no_cluster"
+
+    cl = tracts.loc[tracts["growth_basis"] == "cluster", "cluster_tracts"]
+    if len(cl):
+        print(f"\ncluster basis covers {len(cl):,} tracts; cluster size "
+              f"median {cl.median():.0f}, p95 {cl.quantile(0.95):.0f}, "
+              f"max {cl.max():.0f} tracts")
+
+    gb = tracts["growth_basis"].value_counts()
+    print("\nhousehold_growth basis:")
+    for k, v in gb.items():
+        print(f"   {k:22s} {v:>6,}  {v / len(tracts):>6.2%}")
+    print(f"   computable growth rates: "
+          f"{tracts['household_growth_pct'].notna().sum():,}")
+
     cols = ["tract_geoid", "county_fips", "county_name", "cbsa", "cbsa_title",
-            "tier", "population", "households", "median_hh_income",
+            "tier", "population", "households", "households_2019",
+            "household_growth_pct", "household_growth_pct_tract",
+            "growth_basis", "growth_cluster", "cluster_tracts",
+            "median_hh_income",
             "median_family_income", "median_home_value", "owner_occupied_units",
             "tract_to_area_income_pct", "lmi_flag", "lmi_basis",
             "tract_status", "centroid_lat", "centroid_lon"]

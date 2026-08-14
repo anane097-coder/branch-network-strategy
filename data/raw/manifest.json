@@ -1,7 +1,23 @@
 {
   "project": "branch-network-strategy",
-  "written_utc": "2026-08-14T22:36:33.063597+00:00",
+  "written_utc": "2026-08-14T22:41:39.142143+00:00",
   "files": [
+    {
+      "file": "acs5_2019_tract_il.json",
+      "url": "https://api.census.gov/data/2019/acs/acs5?get=NAME,B01003_001E,B25003_001E&for=tract:*&in=state:17&key=REDACTED",
+      "label": "ACS tracts IL 2019",
+      "retrieved_utc": "2026-08-14T22:41:39.133197+00:00",
+      "bytes": 256124,
+      "sha256": "66f2b696ff59c198bd68e42cdb9ed63e351e736d1a59a4213dbc20bd194d00ef"
+    },
+    {
+      "file": "acs5_2019_tract_wi.json",
+      "url": "https://api.census.gov/data/2019/acs/acs5?get=NAME,B01003_001E,B25003_001E&for=tract:*&in=state:55&key=REDACTED",
+      "label": "ACS tracts WI 2019",
+      "retrieved_utc": "2026-08-14T22:41:37.720126+00:00",
+      "bytes": 118258,
+      "sha256": "9eb1ff455559befb970855398813b86b39e7fcde84139496f2a7d26dc01ba464"
+    },
     {
       "file": "acs5_2024_cbsa.json",
       "url": "https://api.census.gov/data/2024/acs/acs5?get=NAME,B19013_001E,B19113_001E&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*&key=REDACTED",

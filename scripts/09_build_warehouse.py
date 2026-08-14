@@ -131,6 +131,13 @@ def main() -> int:
         "dim_tract": (
             "tract_geoid TEXT, county_fips TEXT, county_name TEXT, cbsa TEXT, "
             "cbsa_title TEXT, tier TEXT, population BIGINT, households BIGINT, "
+            # households_2019 is DOUBLE, not BIGINT: an apportioned count is
+            # fractional by construction and rounding it would hide that.
+            "households_2019 DOUBLE, household_growth_pct DOUBLE, "
+            # The pre-correction tract-level value, kept so the cluster
+            # substitution stays auditable rather than silently applied.
+            "household_growth_pct_tract DOUBLE, growth_basis TEXT, "
+            "growth_cluster BIGINT, cluster_tracts BIGINT, "
             "median_hh_income BIGINT, median_family_income BIGINT, "
             "median_home_value BIGINT, owner_occupied_units BIGINT, "
             "tract_to_area_income_pct DOUBLE, lmi_flag BOOLEAN, "

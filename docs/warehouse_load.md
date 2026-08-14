@@ -15,6 +15,7 @@ on every run, which is what AC-04 requires.
 | `fact_branch_deposits` | 39,315 |
 | `fact_tract_lending` | 474,707 |
 | `bridge_branch_catchment` | 3,322 |
+| `ref_sod_state_totals` | 14 |
 
 ## Types are declared, not inferred
 
