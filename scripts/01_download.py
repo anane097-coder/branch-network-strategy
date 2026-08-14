@@ -476,15 +476,23 @@ def main() -> int:
     if good:
         by_file = dict(PRIOR)
         by_file.update({e["file"]: e for e in good})
-        MANIFEST.write_text(json.dumps(
-            {
-                "project": "branch-network-strategy",
-                "written_utc": datetime.now(timezone.utc).isoformat(),
-                "files": sorted(by_file.values(), key=lambda e: e["file"]),
-            },
-            indent=2,
-        ))
-        print(f"\nManifest: {MANIFEST}")
+        files = sorted(by_file.values(), key=lambda e: e["file"])
+        was = sorted(PRIOR.values(), key=lambda e: e["file"])
+        # Only rewrite when the file set actually changed. Stamping a fresh
+        # written_utc on a no-op re-run makes `git status` dirty every time
+        # the script is run, which trains the reader to ignore that signal.
+        if files == was and MANIFEST.exists():
+            print(f"\nManifest unchanged: {MANIFEST}")
+        else:
+            MANIFEST.write_text(json.dumps(
+                {
+                    "project": "branch-network-strategy",
+                    "written_utc": datetime.now(timezone.utc).isoformat(),
+                    "files": files,
+                },
+                indent=2,
+            ))
+            print(f"\nManifest: {MANIFEST}")
 
     print(f"\n{'=' * 60}")
     print(f"Retrieved: {len(good)} file(s)")
