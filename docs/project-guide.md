@@ -128,7 +128,17 @@ Scripts are numbered and idempotent. Re-running from scratch must reproduce iden
 ## Data model
 
 **Dimensions**
-- `dim_institution` — cert, name, hq_state, assets, fed_rssd, is_subject_bank
+- `dim_institution` — cert, name, hq_state, assets, fed_rssd, is_subject_bank, **`attribute_as_of_date`** (required)
+
+  **`attribute_as_of_date` is a constraint, not a note.** Institution
+  attributes come from the FDIC API at *current* vintage; branch and deposit
+  data are as of 30 June of the SOD year. For the subject those now straddle a
+  completed acquisition — Associated closed American National on 2026-04-01, so
+  its asset figure is post-deal while its branch network is pre-deal. Any ratio
+  with an institution-level denominator over branch-level numerator silently
+  spans that gap. Carry the date per attribute so a computation has to confront
+  the mismatch rather than average across it. This is the same shape of defect
+  as the `STALP` filter: plausible magnitude, wrong population.
 - `dim_institution_crosswalk` — cert, fed_rssd, lei, match_quality, match_method
 - `dim_branch` — uninumbr (PK — FDIC's unique office number; a per-institution branch number collides across institutions, see A-06), cert, name, address, city, county_fips, latitude, longitude, tract_geoid (derived via spatial join), service_type, first_year, last_year
 - `dim_tract` — tract_geoid (PK), county_fips, county_name, cbsa, households, median_hh_income, median_home_value, owner_occupied_units, lmi_flag, centroid_lat, centroid_lon
@@ -177,13 +187,58 @@ HMDA is pre-aggregated to `fact_tract_lending` in staging. Loan-level rows never
 
 ## Institution selection criteria (script 03)
 
-1. Branches in both WI and IL
+1. **≥10 branches in the primary state and ≥5 in the secondary state** (revised 2026-08-14 — see below)
 2. ≥25 branches across WI+IL
-3. Present in all seven SOD vintages (no mid-period merger disappearance)
+3. **Continuity, and interpretable growth** (revised 2026-08-14 — see below)
 4. Active 2025 HMDA filer with a resolvable LEI
 5. Not a top-5 national bank (deposits book to HQ at scale and distort branch figures)
 6. Assets roughly $2B–$60B
 7. Not in a publicly announced merger
+
+### Criterion 1, in full
+
+> **≥10 branches in the primary state and ≥5 in the secondary state.** A token
+> presence in the second state cannot support market-level comparison, which is
+> the analytical purpose of the two-state scope.
+
+The floor is functional, not a round number. Branch-level analysis needs enough
+branches per state for within-market comparison to mean anything, and a
+single-branch presence produces a catchment sample of one.
+
+The original wording — "branches in both WI and IL" — passed on a single
+branch. Three candidates cleared it on a token presence: North Shore with one
+Illinois branch, Byline with one Wisconsin branch, First American with three.
+None could support BQ-1 or BQ-2 on the thin side.
+
+This criterion is by far the most binding: **690 of 699 institutions** in the
+footprint fail it. Most banks in Wisconsin and Illinois operate in one state.
+
+### Criterion 3, in full
+
+> The institution, **tracked through successor chains**, must appear in all
+> seven vintages. Additionally, **no single year-over-year branch count change
+> exceeding 20% attributable to acquisition.** A candidate failing only the
+> second test may proceed if the analysis segments pre- and post-merger periods
+> explicitly and the case study states why.
+
+The original wording — "present in all seven vintages, no mid-period merger
+disappearance" — screens on the wrong thing twice.
+
+First, it tests the *certificate* rather than the *institution*. A charter
+change ends one CERT and continues under another, so a bank that was acquired
+or reorganized looks like a disappearance when nothing stopped operating.
+
+Second, and more importantly, presence gaps are not the actual problem. The
+real damage M&A does is to **deposit CAGR, which stops meaning anything when
+inorganic growth swamps organic** — the acquiring bank's deposits jump because
+it bought them, not because it earned them, and BQ-2 and BQ-3 both read that
+as performance. Screening purely on continuity would also exclude every bank
+that did anything, including Old National, whose First Midwest acquisition is
+analytically interesting rather than disqualifying.
+
+The revision keeps a strong candidate available while forcing the confound to
+be handled rather than ignored. `docs/sod_content_profile.md` computes the
+`transferred` column that this criterion is measured against.
 
 Write the shortlist and the reasoning to `docs/institution_selection.md`. That document is itself a work sample — it should read like an analyst explaining a choice, not like a log file.
 
