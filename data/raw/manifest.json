@@ -1,6 +1,6 @@
 {
   "project": "branch-network-strategy",
-  "written_utc": "2026-08-14T21:46:19.906535+00:00",
+  "written_utc": "2026-08-14T22:36:33.063597+00:00",
   "files": [
     {
       "file": "acs5_2024_cbsa.json",
@@ -275,6 +275,22 @@
       "retrieved_utc": "2026-08-14T17:21:33.818097+00:00",
       "bytes": 7642880,
       "sha256": "313c378d7fa173bf653381d644d8ded7b4f6241b2065d2b890e1fccccaab5de5"
+    },
+    {
+      "file": "tract_rel_2020_2010_17.txt",
+      "url": "https://www2.census.gov/geo/docs/maps-data/data/rel2020/tract/tab20_tract20_tract10_st17.txt",
+      "label": "Tract relationship 2020-2010 IL",
+      "retrieved_utc": "2026-08-14T22:36:33.052740+00:00",
+      "bytes": 727592,
+      "sha256": "e8ee9aa61bf148e02f2fe442c13735ceaac0f2d3de645c1a4a8e4b098836d7e1"
+    },
+    {
+      "file": "tract_rel_2020_2010_55.txt",
+      "url": "https://www2.census.gov/geo/docs/maps-data/data/rel2020/tract/tab20_tract20_tract10_st55.txt",
+      "label": "Tract relationship 2020-2010 WI",
+      "retrieved_utc": "2026-08-14T22:36:32.628949+00:00",
+      "bytes": 402815,
+      "sha256": "047914b0a88efefe40e4dc52681f1b1072661f038dfcd9eec79cb4155a26e22c"
     }
   ]
 }

@@ -55,6 +55,12 @@ MANIFEST = RAW / "manifest.json"
 SOD_YEARS = range(2019, 2026)   # 7 vintages - spans post-2020 consolidation
 HMDA_YEAR = 2025
 ACS_YEAR = 2024                 # 2020-2024 5-year estimates
+# The EARLIER 5-year vintage, for household_growth. 2015-2019 against 2020-2024
+# are NON-OVERLAPPING, which is the only comparison Census sanctions between
+# 5-year estimates - consecutive vintages share four years of sample and their
+# difference is mostly not change. Two points is all the component needs, so
+# dim_tract gains a growth column rather than a year dimension.
+ACS_GROWTH_YEAR = 2019          # 2015-2019 5-year estimates
 TIGER_YEAR = 2024
 DELINEATION_YEAR = 2023         # current OMB CBSA delineation; 2025 does not exist
 STATE_FIPS = {"WI": "55", "IL": "17"}
@@ -124,6 +130,14 @@ ACS_TRACT_VARS = [
     "B25003_002E",  # owner occupied
     "B25077_001E",  # median home value
 ]
+
+# The growth base needs the household count and nothing else. Income and home
+# value are NOT pulled for 2019: they would invite a change-over-time reading
+# that 5-year estimates on different boundaries cannot support.
+ACS_GROWTH_VARS = [
+    "B01003_001E",  # total population
+    "B25003_001E",  # occupied housing units (tenure universe = households)
+]
 ACS_TRACT_URL = (
     "https://api.census.gov/data/{year}/acs/acs5"
     "?get=NAME,{vars}&for=tract:*&in=state:{fips}"
@@ -148,6 +162,18 @@ ACS_CBSA_URL = (
 DELINEATION_URL = (
     "https://www2.census.gov/programs-surveys/metro-micro/geographies/"
     "reference-files/{year}/delineation-files/list1_{year}.xlsx"
+)
+
+# Census 2020-to-2010 tract relationship file. THE GROWTH JOIN NEEDS THIS.
+# 2015-2019 ACS is published on 2010 tract definitions and 2020-2024 on 2020
+# definitions, so the two vintages DO NOT SHARE A KEY. Tracts that split,
+# merged, or were renumbered between censuses will not join, and the unmatched
+# set has to be enumerated rather than dropped - a tract that silently fails to
+# join reads as a tract with no growth, which is a default standing in for a
+# state exactly as elsewhere in this project.
+TRACT_RELATIONSHIP_URL = (
+    "https://www2.census.gov/geo/docs/maps-data/data/rel2020/tract/"
+    "tab20_tract20_tract10_st{fips}.txt"
 )
 
 # TIGER/Line tract shapefiles. Must match the ACS vintage (2020 boundaries).
@@ -492,6 +518,19 @@ def get_acs(entries: list, failures: list) -> None:
                   "ACS CBSA median income (LMI denominator)", redact=key)
     (entries if entry else failures).append(entry or "ACS CBSA")
 
+    # The earlier vintage, for household_growth. Only the household count is
+    # needed - see ACS_GROWTH_YEAR above for why 2019 and not 2023.
+    print(f"\nACS 5-year ({ACS_GROWTH_YEAR - 4}-{ACS_GROWTH_YEAR}), growth base")
+    for state, fips in STATE_FIPS.items():
+        url = ACS_TRACT_URL.format(
+            year=ACS_GROWTH_YEAR, vars=",".join(ACS_GROWTH_VARS), fips=fips
+        ) + f"&key={key}"
+        entry = fetch(url,
+                      RAW / f"acs5_{ACS_GROWTH_YEAR}_tract_{state.lower()}.json",
+                      f"ACS tracts {state} {ACS_GROWTH_YEAR}", redact=key)
+        (entries if entry else failures).append(
+            entry or f"ACS tracts {state} {ACS_GROWTH_YEAR}")
+
 
 def get_geography(entries: list, failures: list) -> None:
     print("\nGeography reference files")
@@ -509,6 +548,15 @@ def get_geography(entries: list, failures: list) -> None:
             f"TIGER tracts {state}",
         )
         (entries if entry else failures).append(entry or f"TIGER {state}")
+
+    # 2020 <-> 2010 tract crosswalk - see TRACT_RELATIONSHIP_URL above.
+    for state, fips in STATE_FIPS.items():
+        entry = fetch(
+            TRACT_RELATIONSHIP_URL.format(fips=fips),
+            RAW / f"tract_rel_2020_2010_{fips}.txt",
+            f"Tract relationship 2020-2010 {state}",
+        )
+        (entries if entry else failures).append(entry or f"Tract rel {state}")
 
 
 SOURCES = {

@@ -5,14 +5,66 @@
 #
 # Weights must sum to 1.0.
 
-normalization: min_max        # min_max | z_score
+# NORMALIZATION: z_score, and the choice is not cosmetic.
+#
+# min_max anchors the whole scale on the two most extreme tracts, and at the
+# top end that extreme is NOT A MEASUREMENT. Exactly 17 tracts report
+# median_hh_income of $250,001, which is the ACS TOP-CODE -- a censored bound
+# meaning "at least", not a value. The floor does the same job at the other
+# end: $2,499 in an 802-household tract. Under min_max every tract's income
+# score is a fraction of the distance to a number that was never measured.
+#
+# A top-code is a default standing in for a state at the MEASUREMENT level
+# rather than the data level, which is why no null check reaches it: the value
+# is present, it is real, and it does not mean what it appears to mean.
+#
+# z_score does not anchor on the extremes. It was preferred over winsorising
+# because winsorising asks "at what percentile" and this model has enough free
+# choices already -- every one of them has to be defended in the case study.
+normalization: z_score        # min_max | z_score
 
+# All five components survive, reformulated. Nothing was dropped and no weight
+# was redistributed. See docs/acceptance_criteria_audit.md for the scale test
+# that reformulated three of them.
 weights:
   household_growth: 0.20      # higher is better
   median_income: 0.15         # higher is better
-  deposit_market_growth: 0.25 # higher is better
+  deposit_market_growth: 0.25 # higher is better - RETAIL basis, see below
   competitor_saturation: 0.20 # LOWER is better - inverted before scoring
   unmet_mortgage_demand: 0.20 # higher is better
+
+# Component definitions that the scale test changed. Recorded here because the
+# weight and the definition have to be read together -- a 25% weight on a
+# contaminated measure is worse than a 25% weight on a clean one.
+component_basis:
+  # Denominator matched to the numerator's grain. Competitor branches are
+  # counted within the tier radius of the tract centroid, so the households
+  # they are divided by must be CATCHMENT households, not tract households.
+  # Divided by tract households the component ranked tract size, not
+  # saturation: pooled correlation -0.404 against households, and a sevenfold
+  # gradient across household deciles that flattened to nothing when the grain
+  # was matched.
+  competitor_saturation: branches_per_10k_catchment_households
+
+  # RETAIL deposits, not total. County CAGR on all deposits is dominated by
+  # booking centres: McLean County IL reads -16.9% because State Farm Bank
+  # held $11.39bn across two branches in 2020 and is absent from 2021, and
+  # Brown County WI reads +12.3% because the SUBJECT books its own HQ deposits
+  # there. Branches flagged is_main_office or booking_concentration (>20x the
+  # network median, per SQL-08) are excluded from the growth calculation only.
+  # Both series are reported so the contamination stays visible.
+  deposit_market_growth: county_cagr_excluding_booking_centres
+
+  # Absolute unmet originations. NOT adjusted for tract size: under this basis
+  # the component answers a volume question, where a larger tract genuinely
+  # does hold more unmet demand. See SQL-11 -- the choice of basis is itself
+  # the recommendation, and it carries an equity consequence that BQ-6 reports.
+  unmet_mortgage_demand: basis_absolute
+
+  # Non-overlapping 5-year ACS vintages, 2015-2019 against 2020-2024. 12% of
+  # tracts need area-weighted apportionment across the 2010/2020 boundary
+  # change and carry a flag saying so.
+  household_growth: acs5_2019_to_acs5_2024_apportioned
 
 inverted:
   - competitor_saturation
