@@ -155,3 +155,58 @@ reading the shortlist needs them at the moment they read it, not after.
 
 *Pre-registered 2026-08-14, before AC-06 or any recommended footprint was
 computed. Amendments below this line only, dated, original text unchanged.*
+
+---
+
+## Amendment 1 — 2026-08-14, still before any footprint was computed
+
+### Corridor concentration: reported as a named risk, not constrained
+
+Tier-radius separation guarantees that three sites do not serve overlapping
+catchments. **It does not guarantee they represent three markets.** Kendall,
+Kane and Will are three counties forming one contiguous exurban corridor west
+of Chicago — geographically separated, economically correlated, and exposed to
+a single regional growth assumption. Three pins in that corridor is one bet.
+
+This is **reported, not constrained**, and the reasoning is deliberate:
+
+- Three sites in one growth corridor may genuinely be the right commercial
+  answer. A bank expanding into the Chicago collar counties on purpose is
+  making a coherent strategic bet, not an error.
+- A second hard constraint on top of proportionality risks **over-determining**
+  a three-item selection drawn from a 50-item shortlist. Two binding
+  constraints on three choices leaves almost nothing free, and the resulting
+  set would be an artifact of the constraints rather than of the analysis.
+- Correlated risk is a legitimate thing for a board to be told about. Telling
+  them is the deliverable; deciding for them is not.
+
+**What is reported, for whichever set is recommended:** the number of distinct
+CBSAs and distinct counties among the three sites, and — where two or more
+share a CBSA — an explicit statement that those sites share one growth
+assumption.
+
+### The two caveats are probably one caveat
+
+Corridor concentration and estimated-growth dependence are being treated
+throughout this project as separate limitations. **In this shortlist they are
+likely the same tracts**, and the mechanism is not a coincidence:
+
+1. Census splits a tract when its population grows.
+2. A split tract's own 2019 household count is therefore apportioned rather
+   than observed, so its growth is measured on an overlap cluster — 62.0% of
+   the top 50 against 16.3% of all scored tracts.
+3. High-growth tracts cluster geographically, because growth corridors are
+   contiguous.
+
+So the corridor and the cluster-measured tracts are the same population
+arriving by two routes, and the shared exposure compounds rather than adds:
+**a single regional growth assumption, measured for most of these tracts by
+estimate rather than observation.**
+
+**This is testable and will be tested**, not asserted: the overlap between
+"sites sharing a CBSA" and "sites with `growth_is_estimated`" is reported for
+the recommended set, and the correlation between the two is reported across
+the whole top 50. If they turn out to be independent, that is a better result
+than expected and will be stated as such.
+
+*Amendment 1 pre-registered before computation, as above.*
