@@ -1,7 +1,31 @@
 {
   "project": "branch-network-strategy",
-  "written_utc": "2026-08-14T17:37:05.490928+00:00",
+  "written_utc": "2026-08-14T17:38:55.301666+00:00",
   "files": [
+    {
+      "file": "acs5_2024_cbsa.json",
+      "url": "https://api.census.gov/data/2024/acs/acs5?get=NAME,B19013_001E,B19113_001E&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*&key=REDACTED",
+      "label": "ACS CBSA median income (LMI denominator)",
+      "retrieved_utc": "2026-08-14T17:38:55.279728+00:00",
+      "bytes": 53107,
+      "sha256": "76c15ac1d6aded3df227b097ec19ea5bc6ad5ad67ccef1339900ff6d3404245f"
+    },
+    {
+      "file": "acs5_2024_tract_il.json",
+      "url": "https://api.census.gov/data/2024/acs/acs5?get=NAME,B01003_001E,B19013_001E,B19113_001E,B25003_001E,B25003_002E,B25077_001E&for=tract:*&in=state:17&key=REDACTED",
+      "label": "ACS tracts IL",
+      "retrieved_utc": "2026-08-14T17:38:54.161707+00:00",
+      "bytes": 374010,
+      "sha256": "95976a3451dde90ec6c233a487e86fd8a81947c50143a4b4f4c5e472e4883ff2"
+    },
+    {
+      "file": "acs5_2024_tract_wi.json",
+      "url": "https://api.census.gov/data/2024/acs/acs5?get=NAME,B01003_001E,B19013_001E,B19113_001E,B25003_001E,B25003_002E,B25077_001E&for=tract:*&in=state:55&key=REDACTED",
+      "label": "ACS tracts WI",
+      "retrieved_utc": "2026-08-14T17:38:51.988354+00:00",
+      "bytes": 179845,
+      "sha256": "d885ad3a4304933f2c5217c9debb33dcf34dbe677e6851f04486d6410f21b758"
+    },
     {
       "file": "cbsa_delineation_2023.xlsx",
       "url": "https://www2.census.gov/programs-surveys/metro-micro/geographies/reference-files/2023/delineation-files/list1_2023.xlsx",
