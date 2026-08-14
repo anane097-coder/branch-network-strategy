@@ -1,0 +1,18 @@
+# Catchment definition.
+#
+# A tract belongs to a branch's catchment if its centroid falls within the
+# radius below. Straight-line distance, NOT drive time - a deliberate
+# simplification that must be stated as a limitation in the case study.
+#
+# Set these empirically in Week 1 from observed branch spacing rather than
+# accepting the defaults. Record the reasoning in docs/assumptions.md.
+
+radius_miles:
+  urban: 3.0
+  non_urban: 8.0
+
+# A tract can fall inside several catchments. The nearest branch is primary;
+# acceptance criterion AC-03 tests that each tract has at most one primary.
+primary_assignment: nearest_branch
+
+urban_definition: cbsa_membership   # tract in a CBSA counts as urban

@@ -1,0 +1,14 @@
+# Raw data is committed deliberately (durability - see docs).
+# Exclude only what is regenerable or oversized.
+data/staging/*
+data/warehouse/*.duckdb
+data/outputs/*.pbix
+!data/**/.gitkeep
+
+.env
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+.DS_Store

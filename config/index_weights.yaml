@@ -1,0 +1,40 @@
+# Market opportunity index weights.
+#
+# These are judgment calls, not facts. They must be justified in the case study
+# and stress-tested by scripts/11_sensitivity.py. Never hardcode them elsewhere.
+#
+# Weights must sum to 1.0.
+
+normalization: min_max        # min_max | z_score
+
+weights:
+  household_growth: 0.20      # higher is better
+  median_income: 0.15         # higher is better
+  deposit_market_growth: 0.25 # higher is better
+  competitor_saturation: 0.20 # LOWER is better - inverted before scoring
+  unmet_mortgage_demand: 0.20 # higher is better
+
+inverted:
+  - competitor_saturation
+
+# Alternative weightings for the sensitivity analysis. The question these answer
+# is: how much does the recommendation depend on the weights we chose?
+scenarios:
+  equal_weight:
+    household_growth: 0.20
+    median_income: 0.20
+    deposit_market_growth: 0.20
+    competitor_saturation: 0.20
+    unmet_mortgage_demand: 0.20
+  growth_led:
+    household_growth: 0.35
+    median_income: 0.10
+    deposit_market_growth: 0.35
+    competitor_saturation: 0.10
+    unmet_mortgage_demand: 0.10
+  underserved_led:
+    household_growth: 0.15
+    median_income: 0.05
+    deposit_market_growth: 0.20
+    competitor_saturation: 0.20
+    unmet_mortgage_demand: 0.40
