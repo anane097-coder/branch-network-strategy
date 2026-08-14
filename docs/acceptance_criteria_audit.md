@@ -274,6 +274,127 @@ is read before either.
 
 ---
 
+## The scale test, run — results against the predictions above
+
+Rank correlation of each component against tract households, pooled across the
+footprint and re-computed **within** each CBSA. The discriminator established
+by the BQ-3 performance index: a **mechanical** relationship *intensifies*
+within market, a **substantive** one attenuates.
+
+| Component | Pooled | Within | Reading |
+|---|---|---|---|
+| `median_income` | +0.240 | +0.225 | Mild and real. Larger tracts are modestly richer |
+| `deposit_market_growth` | +0.001 | −0.017 | **No scale exposure at all** |
+| `competitor_saturation` | **−0.404** | **−0.449** | **Mechanical.** Within stronger than pooled |
+| `unmet_mortgage_demand` | +0.707 | +0.709 | Size-related, and *correctly so* — see below |
+
+**Two of the five predictions above were wrong, and a third component turned
+out not to exist.** Recording that matters more than recording the hits: the
+predictions were plausible, specific, and stated in the right places, and they
+still did not survive measurement.
+
+### `competitor_saturation` — the fix is grain, not adjustment
+
+Neither banding nor regression is the answer here. The component is a
+**numerator/denominator grain mismatch**: competitor branches are counted
+within radius *R* of the tract centroid — a catchment quantity — while the
+denominator counts households **in the tract**. A small tract sits in the same
+catchment as a large one but divides by far fewer households, so the ratio
+inflates mechanically.
+
+Matching the denominator to the numerator's grain all but removes it:
+
+| Denominator | Pooled | Within | Median by household decile, smallest → largest |
+|---|---|---|---|
+| Households in the **tract** (as specified) | −0.404 | −0.449 | 524 → 263 → 204 → … → 88 → **74** |
+| Households in the **catchment** | **+0.064** | +0.204 | 5.2 → 6.4 → 7.4 → … → 6.9 → **7.2** |
+
+A **7-fold** monotone gradient becomes flat. The tract-household denominator
+was manufacturing essentially the whole signal: as specified, the component
+ranks tract size, not saturation.
+
+This is the project's own standing rule arriving in a new place — *validate at
+the grain the data arrives in* — and it is worth stating that the adjustment
+question was the wrong question. Looking for the right band boundaries or the
+right regression form would have produced a defensible-looking correction to a
+measure that should have been reformulated instead. **A residual remains**
+(within +0.204 against pooled +0.064) and is not being reported as cleared.
+
+### `unmet_mortgage_demand` — size-related by design, and left alone
+
+The strongest correlation in the table, and **not** a defect. Under the
+absolute basis this component answers a volume question, where a larger tract
+genuinely does present more unmet demand. Adjusting it away would delete real
+signal to satisfy a test. Within ≈ pooled says the relationship is uniform
+rather than a market effect, which is consistent with that reading.
+
+The equity consequence is already measured and logged, and is a matter for the
+basis decision, not for a scale adjustment. For the record, the same test on
+the alternatives: `basis_per_household` +0.150, `basis_per_application` +0.242.
+
+### `deposit_market_growth` — the prediction was wrong, and the real defect is worse
+
+The audit predicted small counties would be volatile by construction. **The
+data says the opposite**: standard deviation of county CAGR is **0.0256** in
+the smallest deposit quartile against **0.0407** in the largest — small
+counties are **0.63×** as dispersed, not more.
+
+The actual defect is that county-grain deposit CAGR is dominated by
+**booking-centre and institution-level events**, and the two most extreme
+counties in the footprint are both artifacts:
+
+| County | CAGR | What actually happened |
+|---|---|---|
+| McLean, IL | **−16.9%** | **State Farm Bank, F.S.B. held $11.39bn across 2 branches in 2020 and is absent from 2021** — 76% of the county's deposits, at two branches. One institution exiting, not a market declining |
+| Brown, WI | **+12.3%** | **Associated's own HQ booking**: $2.59bn → $7.38bn, +185%, in the subject bank's home county |
+
+Brown County is the same circularity that forced HQ exclusion in BQ-1, now
+entering through a component: the index would reward siting in Brown County
+**because the subject books deposits there**. McLean is the mirror image — the
+index would read the single largest deposit market in the footprint as its
+worst, on an event that says nothing about local demand.
+
+Correlation testing did not surface either, and could not have. The component
+passed the scale test cleanly and is still not usable in this form.
+
+### `median_income` — the exposure is real, but not the one predicted
+
+The prediction was that ACS margin of error would let small tracts populate
+both min-max tails. Partly borne out at the bottom — tracts in the bottom 2%
+of income carry a median **824** households against **1,517** overall, 0.55× —
+and barely at the top (1,348, 0.90×).
+
+The larger problem is that **min-max normalisation anchors on a censored
+value**. Exactly **17 tracts report `median_hh_income` of $250,001**, which is
+the ACS **top-code**: a bound meaning "at least", not a measurement. Under
+min-max every tract's normalised income is expressed as a fraction of a
+distance to a number that was never measured — and the lower anchor, $2,499 in
+an 802-household tract, is doing the same job at the other end.
+
+That is *a default standing in for a state* in the normalisation step rather
+than in the data, which is why no null check finds it. `z_score` is available
+in `config/index_weights.yaml` and does not anchor on the extremes;
+winsorising before min-max is the other option. Either is a decision to take
+deliberately.
+
+### Blocked: `household_growth` has no source, and it carries 20% of the weight
+
+Only **one ACS vintage was ever acquired** (`acs5_2024`), so there is no second
+point to compute growth from. `dim_tract` has no year dimension. The component
+cannot be built from what is in the warehouse.
+
+`competitor_saturation` has no committed source either —
+`bridge_branch_catchment` covers **subject** branches only (166 of 241), so
+competitor counts do not exist in the warehouse. The figures above come from a
+provisional computation at script 08's catchment definition, done so the
+component's behaviour could be tested at all.
+
+**Together these are 40% of the index weight.** Resolving `household_growth`
+means acquiring a second, non-overlapping ACS 5-year vintage (2015–2019
+against 2020–2024, which is the comparison Census itself sanctions) — or
+dropping the component and redistributing its weight, which changes
+`config/index_weights.yaml` and is not a call to make unilaterally.
+
 ## The equity result has now been protected three times, at three levels
 
 This deserves separating from the general wrong-population pattern, because
