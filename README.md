@@ -11,12 +11,19 @@ go, and which existing locations warrant review?**
 
 | Source | Vintage | What it provides |
 |---|---|---|
-| FDIC Summary of Deposits | 2019–2025 | Deposits at every branch of every insured institution |
-| HMDA Modified LAR | 2025 | Loan-level mortgage applications and outcomes by tract |
-| HMDA Public Panel | 2025 | Institution identifiers (the LEI ↔ RSSD bridge) |
-| FDIC Institutions | current | Institution attributes including RSSD |
-| ACS 5-year | 2020–2024 | Tract demographics, income, housing |
-| TIGER/Line | 2024 | Census tract geometry |
+| FDIC Summary of Deposits (REST API) | 2019–2025 | Deposits at every branch of every insured institution — 30,461 branch-years across WI+IL |
+| HMDA loan-level (FFIEC Data Browser) | 2025 | 700,896 mortgage applications and outcomes by tract |
+| HMDA filer list | 2025 | The 4,789 institutions that filed, by LEI |
+| FDIC Institutions | current | Institution attributes including `FED_RSSD` |
+| ACS 5-year, tract **and CBSA** | 2020–2024 | Tract demographics, income, housing, and the area-income denominator |
+| CBSA delineation (OMB/Census) | 2023 | County → CBSA, metro vs. micro |
+| TIGER/Line | 2024 | Census tract geometry — 4,807 tracts |
+
+Every endpoint above was verified against a live response on 2026-08-14.
+Several sources named in the design documents no longer exist in the form
+those documents assume, and one required bridge dataset has disappeared
+entirely. **[`docs/data_quality_log.md`](docs/data_quality_log.md) records
+what changed and what it costs** — read it before running anything.
 
 ## Setup
 
@@ -56,14 +63,31 @@ export CENSUS_API_KEY=your_key_here
 python scripts/01_download.py
 ```
 
+Requires **Python 3.14**. The dependency pins were raised on 2026-08-14 for it;
+the originals had no wheels for 3.14 and could not install.
+
 Downloads land in `data/raw/` alongside `manifest.json`, which records the
 source URL, retrieval timestamp, byte size, and SHA-256 of every file.
+Re-running is safe: files already present are skipped and keep their original
+retrieval timestamp rather than being restamped.
 
-**If a download fails**, the endpoint has likely moved. Several URLs in
-`scripts/01_download.py` are tagged `VERIFY` with their landing pages. Confirm
-the current pattern, correct it, and log the change in
+**If a download fails**, the endpoint has likely moved. Confirm the current
+pattern, correct it in `scripts/01_download.py`, and log the change in
 `docs/data_quality_log.md`. The script refuses to save an HTML landing page as
 data — a silent wrong download is worse than a loud failure.
+
+### A note on the HMDA file
+
+The full 2025 WI+IL loan-level extract is **266 MB**, over GitHub's 100 MiB
+per-file limit, so it is not committed. What is committed is
+`data/raw/hmda_tract_subset_2025_wi_il.csv.gz` — 12 MB, **all 700,896 rows**,
+21 of the 99 columns: everything needed to rebuild the tract-grain lending
+fact, plus HMDA's tract context. Columns were dropped; rows never were.
+Applicant-level demographics were deliberately left out — they are not inputs
+to the index, and the equity check runs on income class rather than race.
+
+The manifest pins the SHA-256 of the full file, and `01_download.py`
+reproduces it. This is the "documented subset" allowance in `08` §5.
 
 ## Running
 
@@ -73,11 +97,16 @@ must reproduce identical outputs (acceptance criterion AC-04).
 **Windows (PowerShell)**
 
 ```powershell
-Get-ChildItem scripts\[0-9]*.py | Sort-Object Name | ForEach-Object {
-    python $_.FullName
-    if ($LASTEXITCODE -ne 0) { Write-Host "Stopped at $($_.Name)"; break }
+foreach ($s in Get-ChildItem scripts\[0-9]*.py | Sort-Object Name) {
+    python $s.FullName
+    if ($LASTEXITCODE -ne 0) { Write-Host "Stopped at $($s.Name)"; break }
 }
 ```
+
+(`foreach` rather than `ForEach-Object`: `break` inside a `ForEach-Object`
+block has no enclosing loop to exit and terminates the whole pipeline
+instead, which is a well-known PowerShell trap. UAT-09 hands this procedure
+to another person to follow, so it needs to behave the way it reads.)
 
 **macOS / Linux**
 

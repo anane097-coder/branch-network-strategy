@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gzip
 import hashlib
 import json
 import os
@@ -301,14 +302,96 @@ def get_fdic_institutions(entries: list, failures: list) -> None:
     (entries if entry else failures).append(entry or "FDIC institutions")
 
 
+# Columns kept in the committed subset of the loan-level file. The full file
+# is 266 MB - over GitHub's 100 MB per-file limit - so what gets committed for
+# durability (05 s.1) is this reduced version, and the manifest pins the
+# SHA-256 of the full file it came from.
+#
+# The rule for what stays: everything needed to rebuild fact_tract_lending
+# (tract x lei x loan_purpose x action_taken) plus the tract-level context
+# HMDA supplies. Applicant-level demographics are deliberately NOT carried.
+# They are not inputs to the index, the equity check runs on income class
+# rather than race (05 s.4), and there is no reason to commit applicant
+# characteristics to a public repository to answer BQ-4 or BQ-6.
+#
+# tract_to_msa_income_percentage is the important one: it is the FFIEC's own
+# tract-income-to-area-income ratio, and below 80 IS the regulatory definition
+# of a low- or moderate-income tract. It is a better basis for lmi_flag than
+# anything reconstructed from ACS, because it is the figure examiners use.
+HMDA_SUBSET_COLUMNS = [
+    "activity_year", "lei", "derived_msa-md", "state_code", "county_code",
+    "census_tract", "derived_dwelling_category", "action_taken", "loan_type",
+    "loan_purpose", "lien_status", "business_or_commercial_purpose",
+    "loan_amount", "occupancy_type", "total_units", "denial_reason-1",
+    "tract_population", "tract_minority_population_percent",
+    "ffiec_msa_md_median_family_income", "tract_to_msa_income_percentage",
+    "tract_owner_occupied_units",
+]
+
+
+def write_hmda_subset(source: Path, dest: Path) -> dict | None:
+    """Reduce the loan-level file to committable size, streaming.
+
+    Row count is preserved - this drops columns, never rows. Dropping rows
+    would need to be asked about first, and would break the reproducibility
+    of the tract aggregation in script 06.
+    """
+    if dest.exists():
+        print(f"  [skip] {dest.name} already present")
+        return entry_for(dest, f"derived from {source.name}", "HMDA tract subset")
+    if not source.exists():
+        print(f"  [FAIL] cannot build subset: {source.name} not downloaded")
+        return None
+
+    print(f"  [make] {dest.name} <- {source.name}")
+    started = time.time()
+    rows = 0
+    # Written gzipped. Uncompressed the subset is ~95 MB, which clears
+    # GitHub's 100 MiB hard limit but only just, and the next vintage would
+    # not. gzip takes it to a size that will not become a problem later.
+    # pandas and DuckDB both read .csv.gz directly, so nothing downstream
+    # needs to decompress it first.
+    with source.open(newline="", encoding="utf-8") as src, \
+            gzip.open(dest, "wt", newline="", encoding="utf-8") as out:
+        reader = csv.reader(src)
+        header = next(reader)
+        missing = [c for c in HMDA_SUBSET_COLUMNS if c not in header]
+        if missing:
+            print(f"  [FAIL] columns absent from the source file: {missing}")
+            return None
+        keep = [header.index(c) for c in HMDA_SUBSET_COLUMNS]
+        writer = csv.writer(out)
+        writer.writerow(HMDA_SUBSET_COLUMNS)
+        for row in reader:
+            writer.writerow([row[i] for i in keep])
+            rows += 1
+
+    size = dest.stat().st_size
+    print(f"         {rows:,} rows, {len(HMDA_SUBSET_COLUMNS)} of {len(header)} "
+          f"columns, {size:,} bytes in {time.time() - started:.1f}s")
+    return {
+        "file": dest.name,
+        "url": f"derived locally from {source.name}",
+        "label": "HMDA tract subset (committed in place of the full file)",
+        "retrieved_utc": datetime.now(timezone.utc).isoformat(),
+        "bytes": size, "sha256": sha256(dest), "rows": rows,
+        "derived_from": source.name,
+        "columns_kept": HMDA_SUBSET_COLUMNS,
+    }
+
+
 def get_hmda(entries: list, failures: list) -> None:
     print("\nHMDA (loan-level + filer list)")
+    lar = RAW / f"hmda_lar_{HMDA_YEAR}_wi_il.csv"
     entry = fetch(
         HMDA_LAR_URL.format(year=HMDA_YEAR),
-        RAW / f"hmda_lar_{HMDA_YEAR}_wi_il.csv",
-        f"HMDA loan-level {HMDA_YEAR} WI+IL (~200 MB, be patient)",
+        lar,
+        f"HMDA loan-level {HMDA_YEAR} WI+IL (~266 MB, be patient)",
     )
     (entries if entry else failures).append(entry or "HMDA loan-level")
+
+    entry = write_hmda_subset(lar, RAW / f"hmda_tract_subset_{HMDA_YEAR}_wi_il.csv.gz")
+    (entries if entry else failures).append(entry or "HMDA subset")
 
     entry = fetch(
         HMDA_FILERS_URL.format(year=HMDA_YEAR),

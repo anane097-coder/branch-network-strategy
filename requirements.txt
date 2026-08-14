@@ -1,13 +1,24 @@
 # Pinned for reproducibility. Do not add dependencies without asking.
-requests==2.32.3
-pandas==2.2.3
-duckdb==1.1.3
-geopandas==1.0.1
-shapely==2.0.6
-pyproj==3.7.0
-PyYAML==6.0.2
+#
+# Raised 2026-08-14 for Python 3.14. The original pins (pandas 2.2.3,
+# shapely 2.0.6, pyproj 3.7.0) publish no cp314 wheels and cannot install.
+# Every version below was verified on Python 3.14.5: imports clean, GEOS
+# reprojection works, and geopandas reads the TIGER shapefile from the zip.
+#
+# NOTE: pandas is now 3.x, not 2.x. Copy-on-write is the default and the
+# default string dtype is `str` rather than `object`. The latter is quietly
+# helpful here - it makes GEOIDs and FIPS codes less likely to be coerced to
+# integers, which is trap #1 in CLAUDE.md. No pandas code predates this
+# change, so nothing needed migrating.
+requests==2.34.2
+pandas==3.0.5
+duckdb==1.5.5
+geopandas==1.1.4
+shapely==2.1.2
+pyproj==3.7.2
+PyYAML==6.0.3
 openpyxl==3.1.5
 
 # Exploration only
-jupyterlab==4.3.4
-matplotlib==3.9.3
+jupyterlab==4.6.3
+matplotlib==3.11.1
