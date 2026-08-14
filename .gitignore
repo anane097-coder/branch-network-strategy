@@ -13,6 +13,13 @@ data/outputs/*.pbix
 # scripts/01_download.py and its SHA-256 is pinned in data/raw/manifest.json.
 data/raw/hmda_lar_*.csv
 
+# Private working notes - scheduling, sequencing, and portfolio planning.
+# Kept locally because they are about how the work is being run rather than
+# about the analysis. The analytical decisions they contain (vintage count,
+# institution selection criteria, stage gates, acceptance criteria) are
+# restated in CLAUDE.md and docs/, which are the public record.
+planning/
+
 .env
 __pycache__/
 *.pyc

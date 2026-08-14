@@ -52,7 +52,7 @@ import requests
 RAW = Path(__file__).resolve().parents[1] / "data" / "raw"
 MANIFEST = RAW / "manifest.json"
 
-SOD_YEARS = range(2019, 2026)   # 7 vintages - see 09-project-a-decisions.md
+SOD_YEARS = range(2019, 2026)   # 7 vintages - spans post-2020 consolidation
 HMDA_YEAR = 2025
 ACS_YEAR = 2024                 # 2020-2024 5-year estimates
 TIGER_YEAR = 2024
