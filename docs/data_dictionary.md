@@ -6,25 +6,72 @@ Populated as tables are built. Every field in the warehouse appears here.
 
 | Field | Type | Source | Description | Notes |
 |---|---|---|---|---|
-| branch_id | TEXT | FDIC SOD | Unique branch identifier | |
-| cert | TEXT | FDIC SOD | FDIC certificate number | TEXT - leading zeros matter |
+| uninumbr | TEXT | FDIC SOD | Unique office number — the primary key | FDIC's stable branch identifier. **Persists across a change of ownership**, which is what lets script 02 separate transfers from openings and closings. The per-institution "branch number" is unique only within an institution and fails as a PK (A-06) |
+| cert | TEXT | FDIC SOD | FDIC certificate number | TEXT — leading zeros matter |
+| county_fips | TEXT | derived | 5-digit county FIPS | Assembled as `zfill(2) + zfill(3)` from `STNUMBR` and `CNTYNUMB`, which the API returns as **integers**. 859 of 1,295 WI county codes lose a digit without this |
 | tract_geoid | TEXT | derived | 11-digit census tract | Spatial join, script 07 |
+| state | TEXT | FDIC SOD `STALPBR` | State the branch is **physically in** | **Not `STALP`**, which is the institution's charter state. Filtering on the wrong one produces a plausible extract of the wrong population — see the quality log |
+
+## dim_institution
+
+| Field | Type | Source | Description | Notes |
+|---|---|---|---|---|
+| cert | TEXT | FDIC | Certificate number, PK | |
+| fed_rssd | TEXT | FDIC | Federal Reserve identifier | The bridge to HMDA. Joins to FFIEC `institutionId2017` |
+| attribute_as_of_date | DATE | derived | Vintage of the attributes on this row | **Required.** Institution attributes are current-vintage; branch and deposit data are as of 30 June of the SOD year. For the subject these straddle a completed acquisition (Associated closed American National 2026-04-01), so any ratio with an institution-level denominator over a branch-level numerator spans the gap unless forced to confront it |
+
+## dim_institution_crosswalk
+
+| Field | Type | Source | Description | Notes |
+|---|---|---|---|---|
+| lei | TEXT | HMDA | Legal Entity Identifier | Resolved via `FED_RSSD == institutionId2017`. **Never keyed on CERT** — the 2017 ARID's respondent ID meant cert, charter number, or RSSD depending on regulator, so a CERT join mis-resolves national banks and looks clean |
+| match_quality | TEXT | derived | Why the row did or did not resolve | `exact_rssd` · `no_lei_for_rssd` · `no_fed_rssd` · `not_in_fdic`. Never null — an unresolvable institution is a finding, not a gap |
+| match_method | TEXT | derived | How it resolved | `fed_rssd == institutionId2017`, or blank |
 
 ## dim_tract
 
 | Field | Type | Source | Description | Notes |
 |---|---|---|---|---|
-| tract_geoid | TEXT | ACS / TIGER | 11-digit GEOID | Primary key |
-| lmi_flag | BOOLEAN | derived | Low/moderate income tract | Define threshold in assumptions.md |
+| tract_geoid | TEXT | ACS / TIGER | 11-digit GEOID, PK | ACS and TIGER 2024 align exactly at 4,807 tracts, zero orphans either way |
+| tier | TEXT | derived | `metro` · `micro` · `rural` | Three tiers, not a binary urban split. Micropolitan branch spacing is 3.7× metro, so the binary rule understated those catchments roughly fourfold (A-01b) |
+| households | INTEGER | ACS B25003_001E | Occupied housing units | Any negative value is a suppression sentinel, not a count — see `tract_status` |
+| median_family_income | INTEGER | ACS B19113_001E | Median **family** income | Family, not household. The FFIEC LMI definition is family-based (A-03) |
+| tract_to_area_income_pct | REAL | HMDA / derived | Tract income as % of area income | Basis recorded in `lmi_basis` |
+| lmi_basis | TEXT | derived | Which source produced the ratio | `ffiec_ratio` (4,772) — the published figure examiners use · `acs_fallback` (4) — reconstructed for tracts with no lending activity, a different basis and labelled as one · empty (31) — no basis by either route, the AC-06 exceptions |
+| lmi_flag | BOOLEAN (nullable) | derived | Ratio < 80 | **Nullable.** A tract with no income basis is neither LMI nor non-LMI. Collapsing unknown into `false` would inflate the non-LMI count and quietly improve the BQ-6 equity result |
+| tract_status | TEXT | derived | Why a value is missing | Three distinct states — see below |
+| centroid_lat / centroid_lon | REAL | TIGER | Tract centroid | Computed in EPSG:5070, returned as WGS84 |
+
+### `tract_status` — missingness is three things
+
+A suppressed estimate, an unpopulated tract, and a water polygon all arrive as
+"no value" and are not the same fact. Each has its own handling rule.
+
+| Status | Count | Meaning | Handling |
+|---|---|---|---|
+| `ok` | 4,692 | Values present | Used normally |
+| `suppressed` | 84 | Census withheld the estimate; the sample was too small. A real, inhabited tract whose value is unknown | Excluded from averages. **Counted** in denominators meaning "tracts that exist" |
+| `water_or_special` | 28 | Tract codes `99xx` (water) and `98xx` (special land use). Not a residential geography | Excluded entirely. **Never counted as a coverage gap** — these are already enumerated on the AC-06 exception list and must not be re-admitted as a third flavour of missing |
+| `unpopulated` | 3 | Zero households. Nothing withheld; nothing to report | Excluded from averages **and** from rate denominators |
+
+**Suppression sentinels.** Census encodes suppression as large negative
+integers. Only `-666666666` occurs in this vintage (median household income
+54 tracts, median family income 114, median home value 101) — but the pipeline
+filters on **sign**, not on that value, because the sentinel set is not fixed
+and a different code would otherwise be admitted as a real negative income.
+Which codes appeared is logged rather than discarded: the code carries the
+reason.
 
 ## fact_branch_deposits
 
 | Field | Type | Source | Description | Notes |
 |---|---|---|---|---|
-| deposits | BIGINT | FDIC SOD | Branch deposits, whole dollars | SOD reports thousands - converted at staging |
+| uninumbr | TEXT | FDIC SOD | Branch, FK to dim_branch | |
+| deposits | BIGINT | FDIC SOD `DEPSUMBR` | Branch deposits, whole dollars | **SOD reports thousands** — converted once, at staging, explicitly |
 
 ## fact_tract_lending
 
 | Field | Type | Source | Description | Notes |
 |---|---|---|---|---|
-| lei | TEXT | HMDA | Legal Entity Identifier | Bridges to cert via RSSD |
+| tract_geoid | TEXT | HMDA | 11-digit tract | |
+| lei | TEXT | HMDA | Legal Entity Identifier | Bridges to cert via RSSD. Lenders that do not resolve still count toward tract totals; they simply cannot be named |
