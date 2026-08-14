@@ -1,0 +1,700 @@
+cert,institution_name,lei,match_quality,is_subject_bank
+10004,Ergo Bank,,no_lei_for_rssd,False
+10007,Partnership Bank,,no_lei_for_rssd,False
+10011,Woodford State Bank,254900B5PW4JPZAQI721,exact_rssd,False
+10012,The Portage County Bank,,no_lei_for_rssd,False
+10015,Security Bank,549300IPFYHYZ3L7UL18,exact_rssd,False
+10044,National Exchange Bank and Trust,5493006P0JVBBAHVXV08,exact_rssd,False
+10075,Peoples State Bank of Colfax,,no_lei_for_rssd,False
+10077,Farmers State Bank of Emden,,no_lei_for_rssd,False
+10080,Reynolds State Bank,,no_lei_for_rssd,False
+10159,First State Bank and Trust,549300AO417FCNJGKM49,exact_rssd,False
+1022,"Clare Bank, National Association",,no_lei_for_rssd,False
+10374,Banner Banks,,no_lei_for_rssd,False
+10375,Advantage Community Bank,,no_lei_for_rssd,False
+10378,The Bank of New Glarus,549300HZMPZC336WP721,exact_rssd,False
+10380,Oostburg State Bank,254900UDJNXYZSDOKI36,exact_rssd,False
+10382,Farmers & Merchants Bank & Trust,,no_lei_for_rssd,False
+10383,State Bank Financial,549300H8LM6VPYEHWU46,exact_rssd,False
+10384,Waumandee State Bank,,no_lei_for_rssd,False
+1039,The Bank of Edwardsville,,no_lei_for_rssd,False
+1040,Midland States Bank,549300U6DW7DX671T306,exact_rssd,False
+10434,State Bank of Graymont,,no_lei_for_rssd,False
+10437,First State Bank of Olmsted,,no_lei_for_rssd,False
+10438,Raritan State Bank,,no_lei_for_rssd,False
+10439,The Village Bank,,no_lei_for_rssd,False
+10446,"Frederick Community Bank, The",,no_lei_for_rssd,False
+10458,Farmers State Bank & Trust Co.,,no_lei_for_rssd,False
+10460,Town & Country Bank Midwest,,no_lei_for_rssd,False
+10463,Middletown State Bank,,no_lei_for_rssd,False
+10464,Federated Bank,,no_lei_for_rssd,False
+10467,The Gifford State Bank,549300W424PDJPNFLY60,exact_rssd,False
+10469,Farmers & Merchants Bank of Hutsonville,,no_lei_for_rssd,False
+1047,Bank & Trust Company,549300TFL8UPEHU61608,exact_rssd,False
+10471,Camp Grove State Bank,,no_lei_for_rssd,False
+10473,Ipava State Bank,5493005QZNPGRQNTRB15,exact_rssd,False
+10474,Citizens State Bank,,no_lei_for_rssd,False
+1049,First National Bank of Steeleville,,no_lei_for_rssd,False
+1073,Lindell Bank & Trust Company,254900BX43CTU32Z6G15,exact_rssd,False
+10734,Pioneer Bank,,no_lei_for_rssd,False
+10741,Independence State Bank,,no_lei_for_rssd,False
+10788,Illini State Bank,,no_lei_for_rssd,False
+10791,Community Bank,,no_lei_for_rssd,False
+10799,First State Bank of Campbell Hill,,no_lei_for_rssd,False
+10802,Farmers State Bank of Danforth,,no_lei_for_rssd,False
+10803,Dewey Bank,,no_lei_for_rssd,False
+10804,Du Quoin State Bank,,no_lei_for_rssd,False
+10809,First State Bank of Van Orin,,no_lei_for_rssd,False
+10816,Grand Rivers Community Bank,,no_lei_for_rssd,False
+10820,State Bank of Industry,,no_lei_for_rssd,False
+10821,Clay County State Bank,,no_lei_for_rssd,False
+10828,The Bank of Carbondale,,no_lei_for_rssd,False
+10829,"Petefish, Skiles & Co.",549300032FNX4IOT2T93,exact_rssd,False
+10831,"The First Trust and Savings Bank of Watseka, Illinois",,no_lei_for_rssd,False
+10840,Campus State Bank,,no_lei_for_rssd,False
+10843,Citizens Bank of Chatsworth,,no_lei_for_rssd,False
+10844,Buena Vista National Bank,549300CSKW4TNZHEOO36,exact_rssd,False
+10845,The Clay City Banking Co.,,no_lei_for_rssd,False
+10849,Tompkins State Bank,,no_lei_for_rssd,False
+10853,West Central Bank,25490076YOMAEM6W0N66,exact_rssd,False
+10855,State Bank of Bement,549300XPRIVI6I4YR959,exact_rssd,False
+10858,Anderson State Bank,,no_lei_for_rssd,False
+10860,Murphy-Wall State Bank and Trust Company,,no_lei_for_rssd,False
+10871,First State Bank of Beecher City,,no_lei_for_rssd,False
+10872,Chesterfield State Bank,,no_lei_for_rssd,False
+10878,Waterman Bank,,no_lei_for_rssd,False
+10879,First Farmers State Bank,,no_lei_for_rssd,False
+10883,Eagle Valley Bank,,no_lei_for_rssd,False
+10885,Bank of Chestnut,,no_lei_for_rssd,False
+10886,Legence Bank,549300OVUSU8E87XZV67,exact_rssd,False
+1100,Peoples State Bank of Plainview,2549009PBYH62M6NZK12,exact_rssd,False
+11063,First-Citizens Bank & Trust Company,L9VVX1KT5TFTKS0MLF66,exact_rssd,False
+11225,First Community Bank,549300BZ038VQFB4UY84,exact_rssd,False
+11228,First Citizens State Bank,,no_lei_for_rssd,False
+11232,Bank of Milton,254900FYMABY3EPG2K50,exact_rssd,False
+11235,Bonduel State Bank,,no_lei_for_rssd,False
+11236,Horicon Bank,549300GIXEN5875K5W17,exact_rssd,False
+11299,"Farmers State Bank of Alto Pass, Ill.",549300XOWUPV4E45EE89,exact_rssd,False
+11300,Oakdale State Bank,,no_lei_for_rssd,False
+11302,First State Bank of St. Peter,,no_lei_for_rssd,False
+11306,FNBC Bank & Trust,549300FQ2SN6TRRGB032,exact_rssd,False
+11307,Farmers State Bank,254900SRBPINTG8V7N66,exact_rssd,False
+11310,The Bank of Herrin,549300XYHH9IPC6FQW89,exact_rssd,False
+11311,State Bank of Cerro Gordo,,no_lei_for_rssd,False
+11317,The Iuka State Bank,,no_lei_for_rssd,False
+11319,Longview Community Bank,,no_lei_for_rssd,False
+11324,Farmers and Merchants State Bank of Bushnell,,no_lei_for_rssd,False
+11329,Farmers-Merchants Bank of Illinois,,no_lei_for_rssd,False
+11595,Community First Bank,,no_lei_for_rssd,False
+11601,Laona State Bank,549300ICVSTMS2XFXX81,exact_rssd,False
+11608,BLC Community Bank,549300WVVCPSUJMG9419,exact_rssd,False
+11623,The Greenwood's State Bank,2549006HGDHH72X1BE36,exact_rssd,False
+11667,Vermilion Valley Bank,549300U8Y61UKDC5ZF50,exact_rssd,False
+11669,First State Bank of Forrest,549300DNRGCN05KNA737,exact_rssd,False
+11670,Central Bank Illinois,549300ZM3TKJVUYB3676,exact_rssd,False
+11671,State Bank of Herscher,,no_lei_for_rssd,False
+11674,Warren-Boynton State Bank,54930035X20L4YB6HD91,exact_rssd,False
+11680,Farmers State Bank of Western Illinois,,no_lei_for_rssd,False
+11681,Anchor State Bank,,no_lei_for_rssd,False
+11682,Anna State Bank,,no_lei_for_rssd,False
+11686,State Bank of Cherry,,no_lei_for_rssd,False
+11699,Goodfield State Bank,2549002W5VVAQ5IH5726,exact_rssd,False
+11702,Shelby County State Bank,,no_lei_for_rssd,False
+11706,1st Community Bank,,no_lei_for_rssd,False
+11708,Teutopolis State Bank,,no_lei_for_rssd,False
+11711,Bank of Rantoul,,no_lei_for_rssd,False
+11715,Bank of Yates City,,no_lei_for_rssd,False
+11716,Hartsburg State Bank,,no_lei_for_rssd,False
+11719,Liberty Bank,,no_lei_for_rssd,False
+11722,"The Peoples State Bank of Newton, Illinois",,no_lei_for_rssd,False
+11726,Pioneer State Bank,,no_lei_for_rssd,False
+11729,CIBM Bank,549300RIPPSJXAQKZ383,exact_rssd,False
+11731,Fairview State Banking Company,,no_lei_for_rssd,False
+11732,Bank of Farmington,,no_lei_for_rssd,False
+11734,Flanagan State Bank,2549008LUH7QKMXQ8N53,exact_rssd,False
+11739,BankOrion,2138009TTY1M4OJRXV14,exact_rssd,False
+11741,Solutions Bank,,no_lei_for_rssd,False
+11746,Iroquois Farmers State Bank,,no_lei_for_rssd,False
+11747,The Farmers State Bank and Trust Company,,no_lei_for_rssd,False
+11750,Bank of Kampsville,254900PJUWNEQ2VZTG49,exact_rssd,False
+12086,Sainte Marie State Bank,,no_lei_for_rssd,False
+12087,Spring Valley City Bank,,no_lei_for_rssd,False
+12098,The First State Bank of Dongola,,no_lei_for_rssd,False
+12107,Farmers State Bank,,no_lei_for_rssd,False
+12113,Germantown Trust & Savings Bank,2549005HG8EMM4748S60,exact_rssd,False
+12121,Buckley State Bank,,no_lei_for_rssd,False
+12229,First Bank,549300DT7WZ1SOTNFJ62,exact_rssd,False
+12322,Chippewa Valley Bank,549300MPDN3KQZW68M43,exact_rssd,False
+12325,Bank of Cashton,,no_lei_for_rssd,False
+12327,Bank of Mauston,,no_lei_for_rssd,False
+12331,State Bank of Chilton,TSQQR4KZYLBZ0MLQ5D71,exact_rssd,False
+12349,Community Bank of Cameron,,no_lei_for_rssd,False
+12354,Hustisford State Bank,,no_lei_for_rssd,False
+12355,Farmers and Merchants Bank of Kendall,,no_lei_for_rssd,False
+12365,The First National Bank of Allendale,,no_lei_for_rssd,False
+12368,Regions Bank,EQTWLK1G7ODGC2MGLV11,exact_rssd,False
+12383,Carrollton Bank,549300CP7747DCRW6U68,exact_rssd,False
+12384,Jersey State Bank,254900BLPLW0LXHKFX20,exact_rssd,False
+12386,State Bank of Toulon,5493005OG185XV8M8N52,exact_rssd,False
+12388,Williamsville State Bank & Trust,5493003K5GJU8VB60Z66,exact_rssd,False
+12391,State Bank of Saunemin,,no_lei_for_rssd,False
+12395,Lena State Bank,,no_lei_for_rssd,False
+12396,State Bank of Lincoln,,no_lei_for_rssd,False
+12402,Exchange State Bank,,no_lei_for_rssd,False
+12406,Glenview State Bank,,no_lei_for_rssd,False
+12410,La Salle State Bank,,no_lei_for_rssd,False
+12511,Alliance Bank,,no_lei_for_rssd,False
+12512,Community First Bank,,no_lei_for_rssd,False
+12513,Partners Bank of Wisconsin,5493007D2VPXSKV4K019,exact_rssd,False
+12514,Ixonia Bank,549300T9P3WXNMXX0I34,exact_rssd,False
+12517,Bank Five Nine,254900DTLB5WWMBJAD86,exact_rssd,False
+12549,Bank of Calhoun County,5493007BMZRJFTKKNV74,exact_rssd,False
+12633,The Central Trust Bank,549300UF3FPC7U6RFC59,exact_rssd,False
+12661,GreenLeaf Bank,5493009WLD1EC45QKX71,exact_rssd,False
+12706,State Bank,254900CHU7PX7ZS6RI74,exact_rssd,False
+12781,Hometown Bank,,no_lei_for_rssd,False
+12788,Baraboo State Bank,54930065PWY9N8KCRQ96,exact_rssd,False
+12814,Peoples State Bank,,no_lei_for_rssd,False
+12815,"Home State Bank, National Association",549300AUFLERO59VGC71,exact_rssd,False
+12839,First Farmers Bank & Trust Co.,549300TWHZRVTZ8RYT46,exact_rssd,False
+12923,"Bremer Bank, National Association",54930082GM1TWV6QVI24,exact_rssd,False
+13023,Wisconsin Bank & Trust,,no_lei_for_rssd,False
+13025,Farmers Savings Bank,549300DDJMNOWGXL6236,exact_rssd,False
+13029,Mitchell Bank,,no_lei_for_rssd,False
+13030,Oakwood Bank,,no_lei_for_rssd,False
+13032,Citizens First Bank,,no_lei_for_rssd,False
+13033,The Farmers State Bank of Waupaca,,no_lei_for_rssd,False
+13046,Farmers & Merchants Bank,,no_lei_for_rssd,False
+13054,"Park Bank, National Association",254900SL0H3ZRSDNV180,exact_rssd,False
+13055,Citizens Bank,5493002FSR6V2NM1K863,exact_rssd,False
+13058,Hiawatha National Bank,549300K3JILC7UMYWR39,exact_rssd,False
+13080,Algonquin State Bank,,no_lei_for_rssd,False
+13240,Denmark State Bank,,no_lei_for_rssd,False
+13242,Farmers & Merchants State Bank,5493006S21NZTF9Y1L04,exact_rssd,False
+13264,Bank of Luxemburg,5493005JOVFFHEU5TF17,exact_rssd,False
+13380,Community Trust Bank,,no_lei_for_rssd,False
+13454,Royal Bank,549300YKMWXBZEEA1471,exact_rssd,False
+13565,Bank of Sun Prairie,6354007NTMKKVRFIIP73,exact_rssd,False
+13580,Union Bank of Blair,,no_lei_for_rssd,False
+13582,State Bank of Nauvoo,,no_lei_for_rssd,False
+13813,First National Bank in Pinckneyville,,no_lei_for_rssd,False
+13902,Farmers State Bank of Medora,,no_lei_for_rssd,False
+13983,The Granville National Bank,,no_lei_for_rssd,False
+1399,Frandsen Bank & Trust,549300ZZZUYWXK72JD21,exact_rssd,False
+14078,Blackhawk  Bank,,no_lei_for_rssd,False
+14222,Security Financial Bank,5493002T397LUNQ31179,exact_rssd,False
+14266,National Bank of Commerce,549300YSSK1TDPTWQ036,exact_rssd,False
+14316,The Benton State Bank,,no_lei_for_rssd,False
+14382,Fidelity Bank & Trust,549300P8W7NTNS3TVK84,exact_rssd,False
+14400,First National Bank in Tigerton,,no_lei_for_rssd,False
+14445,Farmers and Merchants Union Bank,549300YHR41F57LS0R28,exact_rssd,False
+14468,First National Bank at Darlington,,no_lei_for_rssd,False
+14492,HomeBank,549300DFV63SJPNIII97,exact_rssd,False
+14560,Union State Bank,54930000ZYOSM7IG6Q56,exact_rssd,False
+14567,First National Bank in Olney,,no_lei_for_rssd,False
+14660,Bank of Prairie du Sac,,no_lei_for_rssd,False
+14662,TrustBank,549300JMCI45DZ4YNK98,exact_rssd,False
+14674,The First National Bank in Amboy,,no_lei_for_rssd,False
+14761,1NB Bank,54930000REMJYLBAS614,exact_rssd,False
+14769,DMB Community Bank,549300LC0BP2X1F6BE13,exact_rssd,False
+14816,Mbank,,no_lei_for_rssd,False
+14843,MidWestOne Bank,549300LZLYU85WF65870,exact_rssd,False
+14857,State Street Bank and Trust Company,,no_lei_for_rssd,False
+14907,The International Bank of Amherst,,no_lei_for_rssd,False
+14911,Shell Lake State Bank,,no_lei_for_rssd,False
+14914,Collins State Bank,254900Z9CBWZF8ECUS45,exact_rssd,False
+14924,The First National Bank in Staunton,,no_lei_for_rssd,False
+14960,State Bank of Reeseville,,no_lei_for_rssd,False
+14994,State Bank of Arcadia,,no_lei_for_rssd,False
+14995,River Bank,5493008FT4WVSLWPKG77,exact_rssd,False
+15046,The Peoples Community Bank,549300HWFLUA8V78OT27,exact_rssd,False
+15091,Lake Ridge Bank,549300DZ25WXQZZ57J48,exact_rssd,False
+15092,Richland County Bank,,no_lei_for_rssd,False
+15121,Jackson County Bank,,no_lei_for_rssd,False
+15126,Farmers State Bank,,no_lei_for_rssd,False
+1513,Citizens State Bank of La Crosse,5493008L7BNNEPSS6V79,exact_rssd,False
+15136,Bank of Wisconsin Dells,549300SK86EFHGUY2C52,exact_rssd,False
+15146,Great North Bank,,no_lei_for_rssd,False
+15152,Black River Country Bank,,no_lei_for_rssd,False
+15158,Timberwood Bank,,no_lei_for_rssd,False
+1517,Markesan State Bank,,no_lei_for_rssd,False
+15173,"Farmers & Merchants Bank, of Orfordville",,no_lei_for_rssd,False
+15186,State Bank,,no_lei_for_rssd,False
+15228,The Bank of Kaukauna,549300VGTHKRGXF7GQ17,exact_rssd,False
+15229,First Business Bank,549300F247N2IU8SC024,exact_rssd,False
+15242,Northern State Bank,254900X5QCTPBYKG4S42,exact_rssd,False
+15271,First State Bank,,no_lei_for_rssd,False
+15423,American Bank of Freedom,549300YMEOE50UQ6NM87,exact_rssd,False
+1552,CBI Bank & Trust,5493003X0GM1DHJIWC22,exact_rssd,False
+15565,First Southern Bank,,no_lei_for_rssd,False
+15752,First State Bank,549300CQG2T7TCGY8Q67,exact_rssd,False
+15760,Citizens National Bank of Albion,,no_lei_for_rssd,False
+15763,FIRST NATIONAL BANK OF NOKOMIS,,no_lei_for_rssd,False
+15779,The Farmers & Merchants Bank,,no_lei_for_rssd,False
+15799,Premier Community Bank,549300WD04PCWCETKZ02,exact_rssd,False
+15873,Milledgeville State Bank,,no_lei_for_rssd,False
+15913,First Community Bank and Trust,,no_lei_for_rssd,False
+15928,Farmers National Bank of Griggsville,,no_lei_for_rssd,False
+15945,Forest Park National Bank and Trust Company,213800GF3VF8WSF5Q651,exact_rssd,False
+16160,Waukesha State Bank,5493003H8ECZKN77IZ88,exact_rssd,False
+16198,Mason City National Bank,,no_lei_for_rssd,False
+16249,Devon Bank,549300UV5JQXLGVWIP44,exact_rssd,False
+16250,Marquette Bank,549300QX0QWWJKEY4R28,exact_rssd,False
+16276,"Bank of Hillsboro, National Association",549300KTBKVRBY302A16,exact_rssd,False
+16318,Marseilles Bank,,no_lei_for_rssd,False
+16332,First State Bank and Trust,254900N4XMPM37K77D58,exact_rssd,False
+16344,The State Bank of Pearl City,,no_lei_for_rssd,False
+16375,HomeStar Bank and Financial Services,,no_lei_for_rssd,False
+16394,Table Grove State Bank,,no_lei_for_rssd,False
+16413,Bank of Stronghurst,,no_lei_for_rssd,False
+1643,Providence Bank,,no_lei_for_rssd,False
+16450,Busey Bank,549300O7SGM8FH65GQ47,exact_rssd,False
+16479,Longview Bank and Trust,,no_lei_for_rssd,False
+16483,The Poplar Grove State Bank,,no_lei_for_rssd,False
+16501,"First Bankers Trust Company, National Association",2549003SD8SH7JXN6S72,exact_rssd,False
+16571,BMO Bank National Association,3Y4U8VZURTYWI1W2K376,exact_rssd,False
+16585,Vermont State Bank,,no_lei_for_rssd,False
+16666,Itasca Bank & Trust Co.,254900UISKR0QR32CI62,exact_rssd,False
+16667,Washington State Bank,,no_lei_for_rssd,False
+16752,National Bank of St. Anne,5493005ITNB06W8ZHD39,exact_rssd,False
+16840,River Falls State Bank,549300RP0N2VARTRFQ77,exact_rssd,False
+16900,Princeville State Bank,,no_lei_for_rssd,False
+16982,Bank of Pontiac,,no_lei_for_rssd,False
+17128,Intercity State Bank,5493002JV15GSVFKZW34,exact_rssd,False
+17162,Dairy State Bank,2549006KT1XNB09W2M78,exact_rssd,False
+17208,TSB Bank,,no_lei_for_rssd,False
+17224,First Security Trust and Savings Bank,,no_lei_for_rssd,False
+17230,Albany Bank and Trust Company National Association,25490001F0A9F7BV6B05,exact_rssd,False
+17241,North Central Bank,,no_lei_for_rssd,False
+17320,Peoples Bank & Trust,,no_lei_for_rssd,False
+17401,Wenona State Bank,,no_lei_for_rssd,False
+17453,Apple River State Bank,,no_lei_for_rssd,False
+17470,First Bank Chicago,5493005SBCJ71Z4XVY11,exact_rssd,False
+17513,The Fisher National Bank,5493004LTLRA7Y5L3696,exact_rssd,False
+17514,Banterra Bank,549300NGCDNC9174EF79,exact_rssd,False
+17572,First National Bank in Taylorville,,no_lei_for_rssd,False
+17690,South Porte Bank,,no_lei_for_rssd,False
+17713,Durand State Bank,,no_lei_for_rssd,False
+17736,The Hometown Savings Bank,549300G2EZKPVQQ0D852,exact_rssd,False
+1781,First State Bank Shannon-Polo,,no_lei_for_rssd,False
+1786,Longview Bank,549300POCKENHFN8BN88,exact_rssd,False
+1787,Rochester State Bank,,no_lei_for_rssd,False
+1808,Better Banks,254900UAJ26M2YIF0822,exact_rssd,False
+18171,Bank of O'Fallon,549300ZJ52ZRS3Q0S589,exact_rssd,False
+18361,Coulee Bank,5493002B2O407LCTBX72,exact_rssd,False
+18402,Blackhawk Bank & Trust,5493002L7I6EYKW3NG91,exact_rssd,False
+18429,Morton Community Bank,549300SNZET0P5BZ3J56,exact_rssd,False
+18487,Town and Country Bank,,no_lei_for_rssd,False
+18503,Cathay Bank,FT6J43S06X6CLJ0R0B48,exact_rssd,False
+18509,West Suburban Bank,,no_lei_for_rssd,False
+18564,First National Bank of Brookfield,254900TO7P4MVLV70225,exact_rssd,False
+18566,Peoples Bank of Kankakee County,549300WXIUJ8ZTV7X921,exact_rssd,False
+18568,Community Bank of Easton,,no_lei_for_rssd,False
+18569,Peoples State Bank,549300RBWA4J4QTPSY69,exact_rssd,False
+18641,First Bank and Trust Company of Illinois,,no_lei_for_rssd,False
+18855,Colchester State Bank,,no_lei_for_rssd,False
+18889,Community Bank of Trenton,,no_lei_for_rssd,False
+18922,Tri City National Bank,549300OCKUW7YV0YNV03,exact_rssd,False
+19008,Parkway Bank and Trust Company,,no_lei_for_rssd,False
+19105,Peoples Bank of Macon,,no_lei_for_rssd,False
+19230,Community National Bank in Monmouth,,no_lei_for_rssd,False
+19333,Republic Bank of Chicago,5493002Q5MB21VG7B390,exact_rssd,False
+19459,United Community Bank,5493000XYE7QL54NMB52,exact_rssd,False
+19506,Bank of Springfield,549300XAJENHWRM32Z86,exact_rssd,False
+19512,Royal Banks of Missouri,,no_lei_for_rssd,False
+19536,"South Central Bank, National Association",,no_lei_for_rssd,False
+19573,Lakeside Bank,549300DUTN4RUBI81Z18,exact_rssd,False
+19608,The Park Bank,YQI2CPR3Z44KAR0HG822,exact_rssd,False
+19628,Midwest Community Bank,,no_lei_for_rssd,False
+19689,State Bank of Whittington,,no_lei_for_rssd,False
+19693,Texico State Bank,,no_lei_for_rssd,False
+19772,IncredibleBank,549300TV5ZED3EINI708,exact_rssd,False
+19795,AbbyBank,549300ZAI389CEN8VG51,exact_rssd,False
+19796,Midland Community Bank,,no_lei_for_rssd,False
+19842,Bank Leumi Usa,,no_lei_for_rssd,False
+20040,Merchants and Manufacturers Bank,,no_lei_for_rssd,False
+20081,The First National Bank of McHenry,,no_lei_for_rssd,False
+20250,Marine Bank,,no_lei_for_rssd,False
+20296,Johnson Bank,IWRZQFYIRJ0IMURZBB68,exact_rssd,False
+20369,Heartland Bank and Trust Company,EFBDHEMMHTWI378O4988,exact_rssd,False
+20454,Citizens Bank of Edinburg,,no_lei_for_rssd,False
+20624,Byline Bank,54930011HPXXLJN2D407,exact_rssd,False
+20666,Northwest Bank of Rockford,2138007DQF1WY8NDYM18,exact_rssd,False
+20769,Bank of Montgomery,,no_lei_for_rssd,False
+20856,Liberty Bank and Trust Company,549300OJTK0IPSNDA832,exact_rssd,False
+21085,Bank of Ontario,,no_lei_for_rssd,False
+21486,Crossroads Bank,,no_lei_for_rssd,False
+21635,The Bank of Bourbonnais,,no_lei_for_rssd,False
+21721,Heritage Bank of Schaumburg,,no_lei_for_rssd,False
+21952,Countryside Bank,,no_lei_for_rssd,False
+21988,Community State Bank of Rock Falls,,no_lei_for_rssd,False
+22034,First State Bank of Bloomington,,no_lei_for_rssd,False
+22282,First Nations Bank,,no_lei_for_rssd,False
+22312,Columbia National Bank,,no_lei_for_rssd,False
+22334,One Community Bank,549300CS1XP28EERR469,exact_rssd,False
+22434,"BankChampaign, National Association",549300OVNJWJXYPGIU28,exact_rssd,False
+22444,INLAND BANK & TRUST,,no_lei_for_rssd,False
+22536,First Secure Bank and Trust Co.,,no_lei_for_rssd,False
+22543,1st State Bank of Mason City,,no_lei_for_rssd,False
+22598,Flora Bank & Trust,,no_lei_for_rssd,False
+22811,Brickyard Bank,,no_lei_for_rssd,False
+22826,"Mufg Union Bank, National Association",,no_lei_for_rssd,False
+22838,Bank of Gibson City,549300JKZP45L168QC29,exact_rssd,False
+22874,Hickory Point Bank and Trust,549300NN5CG5Q640OV05,exact_rssd,False
+22971,First Secure State Bank,,no_lei_for_rssd,False
+23137,Charter Bank,,no_lei_for_rssd,False
+23220,Woodforest National Bank,,no_lei_for_rssd,False
+23244,North Adams State Bank,,no_lei_for_rssd,False
+23257,Community State Bank,254900MHEKUVX1BTCD10,exact_rssd,False
+23472,"The Bank of New York Mellon Trust Company, National Association",,no_lei_for_rssd,False
+23498,"TBK BANK, SSB",5493000B61DDZ2PG1515,exact_rssd,False
+23537,Bankers' Bank,549300EES32R2VOEK894,exact_rssd,False
+23546,Municipal Trust and Savings Bank,549300HC145ABINEFL26,exact_rssd,False
+23647,TIB National Association,,no_lei_for_rssd,False
+24170,Hanmi Bank,549300UIU6ZMTZ7XEW62,exact_rssd,False
+2455,The Bank of Brodhead,549300200TL6RMY5ZN25,exact_rssd,False
+2467,Citizens State Bank,254900JU2DYRJVDHMG47,exact_rssd,False
+2468,Northwestern Bank,254900YAD0R5TBY92Y41,exact_rssd,False
+2469,Badger Bank,5493003Q218ZJ8R1WN88,exact_rssd,False
+2476,McFarland State Bank,,no_lei_for_rssd,False
+2477,Bank of Deerfield,5493006ACVE4WEX8D790,exact_rssd,False
+2482,Nekoosa Port Edwards State Bank,,no_lei_for_rssd,False
+24998,Commerce Bank,7DMUJTL9FFTVIAG9H788,exact_rssd,False
+25883,First Eagle  Bank,549300DYVAMYTMH9UV09,exact_rssd,False
+25894,First National Bank,,no_lei_for_rssd,False
+26218,Park Bank,,no_lei_for_rssd,False
+26610,Bank of Hope,549300F570XAWYN8Z237,exact_rssd,False
+26689,Bank of Alma,,no_lei_for_rssd,False
+27052,"St. Charles Bank & Trust Company, National Association",549300UDBUNBNEKR8J69,exact_rssd,False
+27053,Community Financial Bank,,no_lei_for_rssd,False
+27074,State Bank of Texas,,no_lei_for_rssd,False
+27362,Prairie State Bank and Trust,2549001E11O22GGBEL86,exact_rssd,False
+27556,Burling Bank,,no_lei_for_rssd,False
+27589,"Lake Forest Bank & Trust Company, National Association",5493004MWCDBCBTXE044,exact_rssd,False
+27664,"Sterling Federal Bank, F.S.B.",,no_lei_for_rssd,False
+27683,North Shore Trust and Savings,549300WIE2SKOKI8PF63,exact_rssd,False
+27723,"Security Bank, s.b.",549300BGIT0LFI12Z304,exact_rssd,False
+27767,Union Federal Savings and Loan Association,254900TY6UTJ321IPS13,exact_rssd,False
+27909,BEST HOMETOWN BANK,,no_lei_for_rssd,False
+27910,"Central Savings, f.s.b.",,no_lei_for_rssd,False
+27989,OSB Community Bank,5493002OMAT2S3H4OF48,exact_rssd,False
+28068,Royal Savings Bank,,no_lei_for_rssd,False
+28103,Collinsville Building and Loan Association,549300QV6YJK6ZDZPV54,exact_rssd,False
+28105,"First Robinson Savings Bank, National Association",,no_lei_for_rssd,False
+28151,West Town Bank & Trust,,no_lei_for_rssd,False
+28302,Mutual Federal Bank,5493007XXF5AWOEWTU94,exact_rssd,False
+28330,TCF National Bank,,no_lei_for_rssd,False
+28332,Southern Bank,549300YKBMBBIIMQJS94,exact_rssd,False
+28384,Ben Franklin Bank of Illinois,,not_in_fdic,False
+28400,Westbury Bank,5493002XHCZ94X8YST31,exact_rssd,False
+28401,Eureka Savings Bank,,no_lei_for_rssd,False
+28425,Central Federal Savings and Loan Association,21380054U5NKZKBQ4128,exact_rssd,False
+28445,First Federal Savings Bank of Champaign Urbana,254900KX4PZDHAK8I871,exact_rssd,False
+28480,Columbia Savings and Loan Association,,no_lei_for_rssd,False
+28513,"WaterStone Bank, SSB",549300GDJSUYPH6UC416,exact_rssd,False
+28530,Forward Bank,254900IER2H3R8YLBW04,exact_rssd,False
+28611,Pulaski Savings Bank,,no_lei_for_rssd,False
+28614,"The Equitable Bank, S.S.B.",549300N24HTC7KQ3LC70,exact_rssd,False
+28679,North Shore Bank,254900PST6LLDPCKSN83,exact_rssd,False
+28723,First Savings Bank,,no_lei_for_rssd,False
+28747,Hoyne Savings Bank,549300B92DSVIKGP5T53,exact_rssd,False
+28774,Loomis Federal Savings and Loan Association,,no_lei_for_rssd,False
+28790,Superior Savings Bank,549300TSV5GUFPY3IT90,exact_rssd,False
+28808,"BankFinancial, National Association",54930061HIZ1MCMEOR72,exact_rssd,False
+28841,Community Savings Bank,254900XX2FPZR1Y4FO11,exact_rssd,False
+28924,First Federal Savings Bank,5493003617RJR4JUYT66,exact_rssd,False
+28925,Security Savings Bank,,no_lei_for_rssd,False
+28983,Ladysmith Federal Savings and Loan Association,,no_lei_for_rssd,False
+29009,Liberty Bank for Savings,5493000TY1MM1LLTM666,exact_rssd,False
+29042,Home Federal Savings Bank,,no_lei_for_rssd,False
+29120,"PyraMax Bank, FSB",549300A81K8K8KJR9759,exact_rssd,False
+29121,Union Savings Bank,549300OEWY869SOVHF18,exact_rssd,False
+29188,Fox Valley Savings Bank,254900VLNEK78XKF3M52,exact_rssd,False
+29224,Heritage State Bank,,no_lei_for_rssd,False
+29227,Washington Savings Bank,,no_lei_for_rssd,False
+29293,"Cumberland Federal Bank, FSB",,no_lei_for_rssd,False
+29294,Prevail Bank,254900OC13I9CJC7SD87,exact_rssd,False
+29384,Peru Federal Savings Bank,,no_lei_for_rssd,False
+29399,GN Bank,,no_lei_for_rssd,False
+29449,North Side Federal Savings and Loan Association of Chicago,254900S293MIVH34PR45,exact_rssd,False
+29523,Peoples Bank,549300Y7HCU10KIRLG30,exact_rssd,False
+29532,Nokomis Savings Bank,,no_lei_for_rssd,False
+29535,DeWitt Savings Bank,,no_lei_for_rssd,False
+29566,"United Fidelity Bank, fsb",549300RV3BMT6ES6TO70,exact_rssd,False
+29645,"First Federal Savings and Loan Association of Central Illinois, S.B.",,no_lei_for_rssd,False
+29657,"Great Midwest Bank, S.S.B.",254900AG9OLNQOYN9650,exact_rssd,False
+29675,Iroquois Federal Savings and Loan Association,54930084WKZ9NTQ0QS94,exact_rssd,False
+29676,"Paper City Savings Bank, S.A.",,no_lei_for_rssd,False
+29677,Nashville Savings Bank,,no_lei_for_rssd,False
+29691,KeySavings Bank,,no_lei_for_rssd,False
+29745,Marathon Bank,254900GG6WW4AAUFXJ50,exact_rssd,False
+29800,Lisle Savings Bank,549300C1KJJH2Y73E274,exact_rssd,False
+29809,First Savings Bank of Hegewisch,2549008F85XOERURYW13,exact_rssd,False
+29980,Midland Federal Savings and Loan Association,,no_lei_for_rssd,False
+29986,Guardian Savings Bank,,no_lei_for_rssd,False
+30043,Beardstown Savings s.b.,,no_lei_for_rssd,False
+30152,Milford Building and Loan Association,,no_lei_for_rssd,False
+30220,Chester National Bank,,no_lei_for_rssd,False
+30241,First Savanna Savings Bank,,no_lei_for_rssd,False
+30248,Home Savings Bank,,no_lei_for_rssd,False
+30313,East Wisconsin Savings Bank,254900FSTRXV05536767,exact_rssd,False
+30357,Streator Home Savings Bank,,no_lei_for_rssd,False
+30422,First Federal Bank of Wisconsin,,no_lei_for_rssd,False
+30516,Crossbridge Community Bank,,no_lei_for_rssd,False
+30585,Mayville Savings Bank,,no_lei_for_rssd,False
+30615,"Tempo Bank, A Federal Savings Bank",,no_lei_for_rssd,False
+30618,Wabash Savings Bank,,no_lei_for_rssd,False
+30656,North County Savings Bank,,no_lei_for_rssd,False
+30819,Community Partners Savings Bank,549300HXQLIV5UBQEF05,exact_rssd,False
+30864,McHenry Savings Bank,,no_lei_for_rssd,False
+30969,First FSB of Mascoutah,254900FTCNECUOWATD22,exact_rssd,False
+32541,"Flagstar Bank, National Association",,no_lei_for_rssd,False
+32574,Beal Bank,,no_lei_for_rssd,False
+33005,FCB Banks,549300L8JRY60EOROT34,exact_rssd,False
+33137,Cornerstone Community Bank,,no_lei_for_rssd,False
+33306,CIBC Bank USA,FDXQ75GPEQKRPWABYN63,exact_rssd,False
+33458,Monona Bank,,no_lei_for_rssd,False
+33664,State Bank of India,,no_lei_for_rssd,False
+33708,International Bank of Chicago,254900KI0CM65KPBM547,exact_rssd,False
+33753,Citizens Community Bank,254900L9ZR7FYE68H705,exact_rssd,False
+33758,Starion Bank,54930019RBT2SM6CQS78,exact_rssd,False
+33803,"Wheaton Bank & Trust, National Association",549300S5LHMBX3WRT314,exact_rssd,False
+33805,Community Bank of Elmhurst,,no_lei_for_rssd,False
+33812,American National Bank - Fox Cities,549300B63HUNVIWL5V50,exact_rssd,False
+33849,"Hinsdale Bank & Trust Company, National Association",9LIMABRJ9VPV74PBJB17,exact_rssd,False
+33867,Quad City Bank and Trust Company,549300DWS85AHLUZHB50,exact_rssd,False
+33880,Wisconsin River Bank,,no_lei_for_rssd,False
+33935,"Wintrust Bank, National Association",549300RAQJBTN6Z28096,exact_rssd,False
+34011,"Village Bank and Trust, National Association",549300P7J9S1WSW4VU68,exact_rssd,False
+34038,Time Bank,,no_lei_for_rssd,False
+34052,Bay Bank,254900ACGDT107SC5E82,exact_rssd,False
+34073,"Libertyville Bank & Trust Company, National Association",01ERPZV3DOLNXY2MLB90,exact_rssd,False
+34074,Capitol Bank,2549006SBIS8ROWE8X84,exact_rssd,False
+34076,Illinois Bank & Trust,,no_lei_for_rssd,False
+34089,Pacific Global Bank,,no_lei_for_rssd,False
+34108,Pan American Bank & Trust,,no_lei_for_rssd,False
+34162,West Pointe Bank,549300E0Q8JLIMURNH75,exact_rssd,False
+34240,Wolf River Community Bank,549300JCUSJMRA75V483,exact_rssd,False
+34295,Investors Community Bank,,no_lei_for_rssd,False
+34304,River Cities Bank,,no_lei_for_rssd,False
+34334,American Metro Bank,,no_lei_for_rssd,False
+34393,1st Equity Bank,,no_lei_for_rssd,False
+34395,"Barrington Bank & Trust Company, National Association",C398JSK21YCXWM603F55,exact_rssd,False
+34416,Northside Community Bank,,no_lei_for_rssd,False
+34526,Prairie Community Bank,,no_lei_for_rssd,False
+34617,"State Farm Bank, F.S.B.",,no_lei_for_rssd,False
+34681,"Crystal Lake Bank and Trust Company, National Association",3HICJPQ15PGZSBFDNJ82,exact_rssd,False
+34717,"Town Bank, National Association",54930037K28BC4GVBU20,exact_rssd,False
+34752,First Community Bank of Hillsboro,,no_lei_for_rssd,False
+34778,First Trust Bank of Illinois,549300T3MSPBPSPZLR85,exact_rssd,False
+34799,Thrivent Trust Company,,no_lei_for_rssd,False
+34900,Preferred Bank,,no_lei_for_rssd,False
+34955,"American Bank and Trust Company, National Association",549300AQ83ZR1PW5DB53,exact_rssd,False
+35043,Sunset Bank & Savings,,no_lei_for_rssd,False
+3510,"Bank of America, National Association",B4TYDEB6GKMZO031MB27,exact_rssd,False
+35109,SENB Bank,,no_lei_for_rssd,False
+3511,"Wells Fargo Bank, National Association",KB1H1DSPRFMYMCUFXT09,exact_rssd,False
+35131,Sauk Valley Bank & Trust Company,,no_lei_for_rssd,False
+3514,Bank of The West,,no_lei_for_rssd,False
+35169,State Bank,,no_lei_for_rssd,False
+35223,First Secure Community Bank,,no_lei_for_rssd,False
+35229,Southern Illinois Bank,,no_lei_for_rssd,False
+35230,Evergreen Bank Group,,no_lei_for_rssd,False
+35237,"John Deere Financial, f.s.b.",,no_lei_for_rssd,False
+35278,"Capital Bank, National Association",54930044OSTKOJMHF287,exact_rssd,False
+35333,Oak Bank,549300UXZ76FJVM3UC43,exact_rssd,False
+35393,United Trust Bank,,no_lei_for_rssd,False
+35412,American Community Bank & Trust,549300228GG3C6SV3C98,exact_rssd,False
+35422,The Leaders Bank,,no_lei_for_rssd,False
+35518,The Federal Savings Bank,,no_lei_for_rssd,False
+35602,Country Trust Bank,,no_lei_for_rssd,False
+3598,Arcola First Bank,,no_lei_for_rssd,False
+3599,The First National Bank of Arenzville,,no_lei_for_rssd,False
+3600,The First National Bank of Assumption,,no_lei_for_rssd,False
+3601,The Atlanta National Bank,,no_lei_for_rssd,False
+3603,Old Second National Bank,B94HV8SXGDD3J5XESU08,exact_rssd,False
+3607,The First National Bank of Beardstown,,no_lei_for_rssd,False
+3612,MidAmerica National Bank,,no_lei_for_rssd,False
+3614,Casey State Bank,,no_lei_for_rssd,False
+3615,Catlin Bank,,no_lei_for_rssd,False
+3639,First National Bank & Trust Company,,no_lei_for_rssd,False
+3657,First American Bank,XC7Z0BA39TU7L1AKOJ12,exact_rssd,False
+3661,Union National Bank and Trust Company of Elgin,,no_lei_for_rssd,False
+3664,"INB, National Association",549300HGDJQ37M5BE268,exact_rssd,False
+3674,Grand Ridge National Bank,,no_lei_for_rssd,False
+3677,The Havana National Bank,549300BO5UTSDB76V724,exact_rssd,False
+3688,The First National Bank of Lacon,,no_lei_for_rssd,False
+3691,Hometown National Bank,254900RAPDJZFI07WS81,exact_rssd,False
+3693,The Lemont National Bank,,no_lei_for_rssd,False
+3698,First Security Bank,,no_lei_for_rssd,False
+3701,"Resource Bank, National Association",254900ZOIZTP7ZF6AH17,exact_rssd,False
+3702,First Bank of Manhattan,549300VBLC1LTYHXGB54,exact_rssd,False
+3705,"First Mid Bank & Trust, National Association",549300XOTES5TCS8T794,exact_rssd,False
+3709,First Midwest Bank,,no_lei_for_rssd,False
+3711,Midwest Bank,254900YK0G0T2WULHK84,exact_rssd,False
+3713,Grundy Bank,549300F08RTZA4O1LF12,exact_rssd,False
+3719,"American Commercial Bank & Trust, National Association",549300DL7AWRPX6NXO12,exact_rssd,False
+3720,First National Bank of Pana,5493000EKZWTYZXUW582,exact_rssd,False
+3722,Prospect Bank,549300QWYPPH283K6R36,exact_rssd,False
+3732,Farmers National Bank,254900LD3DEBFTITLD76,exact_rssd,False
+3745,First Community Bank of Moultrie County,,no_lei_for_rssd,False
+3747,"First Neighbor Bank, National Association",,no_lei_for_rssd,False
+3749,The First National Bank in Tremont,54930041S7CZYMJ4CH46,exact_rssd,False
+3759,Anna-Jonesboro National Bank,,no_lei_for_rssd,False
+3761,The First National Bank of Ava,549300OZZQ1ZON9W1K45,exact_rssd,False
+3762,Great Rivers Bank,,no_lei_for_rssd,False
+3770,The First National Bank of Brownstown,,no_lei_for_rssd,False
+3775,"CNB Bank and Trust, N.A.",5493000BIR9N6Y5KFV24,exact_rssd,False
+3777,The First National Bank of Carmi,549300KH5RQTNDNNHM28,exact_rssd,False
+3787,Dieterich Bank,549300LTSES0DE01Z405,exact_rssd,False
+3792,The Fairfield National Bank,,no_lei_for_rssd,False
+3799,The Bradford National Bank of Greenville,549300BK51FTOVBDMC15,exact_rssd,False
+3805,Kinmundy Bank,,no_lei_for_rssd,False
+3807,The First National Bank of Litchfield,,no_lei_for_rssd,False
+3808,The Litchfield National Bank,,no_lei_for_rssd,False
+3809,"Peoples National Bank , N.A.",549300U8L31JJT1ZDP60,exact_rssd,False
+3814,The City National Bank of Metropolis,,no_lei_for_rssd,False
+3817,The First National Bank,,no_lei_for_rssd,False
+3818,The First Bank and Trust Company of Murphysboro,,no_lei_for_rssd,False
+3821,The Farmers and Merchants National Bank of Nashville,549300OA8B0OLDA16R42,exact_rssd,False
+3826,The First National Bank of Okawville,,no_lei_for_rssd,False
+3827,The Old Exchange National Bank of Okawville,,no_lei_for_rssd,False
+3830,The First National Bank of Raymond,549300ZK7EAZ7CRGCU94,exact_rssd,False
+3832,Old National Bank,549300AT7EB9FJAF0E61,exact_rssd,False
+3834,Midwest National Bank,,no_lei_for_rssd,False
+3837,The First National Bank of Sparta,,no_lei_for_rssd,False
+3840,The FNB Community Bank,549300CW5TQ2ILVQPH09,exact_rssd,False
+3842,First National Bank of Waterloo,5493002GOGIUXB84JB89,exact_rssd,False
+3845,Security National Bank,,no_lei_for_rssd,False
+3846,Community First Bank of the Heartland,,no_lei_for_rssd,False
+3850,"First Community Bank, Xenia-Flora",,no_lei_for_rssd,False
+3890,Simmons Bank,549300DPRWSBUY619V27,exact_rssd,False
+3931,"Alerus Financial, National Association",549300C4J510S9L1RF98,exact_rssd,False
+4365,First Merchants Bank,S0Q3AHZRL5K6VQE35M07,exact_rssd,False
+4382,"First Financial Bank, National Association",549300E0S1LZYZ9QNX81,exact_rssd,False
+4534,Central Bank of St. Louis,,no_lei_for_rssd,False
+4666,"Armed Forces Bank, National Association",5493007CLWQN2S6IZK91,exact_rssd,False
+5072,Range Bank,,no_lei_for_rssd,False
+5280,"WNB FINANCIAL, N.A.",,no_lei_for_rssd,False
+5283,American Bank of Beaver Dam,,no_lei_for_rssd,False
+5285,The First National Bank and Trust Company,5493001SSNVCONGBH947,exact_rssd,False
+5286,Fortifi Bank,254900TQL77TN5I01K05,exact_rssd,False
+5295,PremierBank,,no_lei_for_rssd,False
+5296,"Associated Bank, National Association",ZF85QS7OXKPBG52R7N18,exact_rssd,True
+5297,FORTE BANK,549300RTMAIJNRX52596,exact_rssd,False
+5304,"Bank First, N.A.",549300BRLQAIJ1LJA253,exact_rssd,False
+5306,The Stephenson National Bank and Trust,549300508JOHWSRFDR57,exact_rssd,False
+5317,The Peshtigo National Bank,549300LXCDKIWPEE4R73,exact_rssd,False
+5325,Union Bank of Sparta,,no_lei_for_rssd,False
+5331,NBW BANK,,no_lei_for_rssd,False
+5335,WOODTRUST BANK,5493000JCZ0GMM2WOD15,exact_rssd,False
+5336,Pillar Bank,549300PQ7WSN8JPB7M42,exact_rssd,False
+5337,The First National Bank of Bangor,549300C0NMWZNSX3W048,exact_rssd,False
+5347,Peoples Bank Midwest,,no_lei_for_rssd,False
+5357,First National Community Bank,549300Q26XXW77S35W27,exact_rssd,False
+5364,The First National Bank of River Falls,VUAW1MW1BHNL595RH698,exact_rssd,False
+5452,First National Bank of Omaha,LDVFX8JEECFFE8HRWA73,exact_rssd,False
+55130,"Servbank,sb",549300XRF9LCZ3RX3Q39,exact_rssd,False
+57038,Nicolet National Bank,38CFVD4YYFWD1FV7IM34,exact_rssd,False
+57061,Cornerstone National Bank & Trust Company,54930001LYHHRVGJ6B97,exact_rssd,False
+57082,"Northbrook Bank and Trust Company, National Association",CLHA5EVJO4FMZ2WOBV70,exact_rssd,False
+57093,Northwestern Mutual Wealth Management,,no_lei_for_rssd,False
+57103,"Schaumburg Bank & Trust Company, National Association",2I8LP0RLR14D1X6W0P51,exact_rssd,False
+5722,Philo Exchange Bank,,no_lei_for_rssd,False
+57265,Citizens Community Federal National Association,549300SUC4CLYKKZWS29,exact_rssd,False
+57295,AMG National Trust Bank,,no_lei_for_rssd,False
+5730,State Bank of St. Jacob,,no_lei_for_rssd,False
+57359,American Eagle Bank,,no_lei_for_rssd,False
+5740,State Bank of Davis,,no_lei_for_rssd,False
+5744,"State Bank of the Lakes, National Association",549300KX2KT8MOAS5Q71,exact_rssd,False
+57488,Metropolitan Capital Bank & Trust,,no_lei_for_rssd,False
+5749,Foresight Bank,549300ZTG888WY6L8M95,exact_rssd,False
+57512,Western Alliance Bank,,no_lei_for_rssd,False
+5753,Fidelity Bank,,no_lei_for_rssd,False
+5754,"First Trust & Savings Bank of Albany, Illinois",,no_lei_for_rssd,False
+57611,1st Equity Bank Northwest,,no_lei_for_rssd,False
+57701,"Beverly Bank & Trust Company, National Association",549300FOO7XNZ1564N12,exact_rssd,False
+57754,Providence Bank & Trust,549300GY0I1WYYWYFS47,exact_rssd,False
+57813,Sterling Bank,549300DNP4W96HB6LV07,exact_rssd,False
+57833,Beal Bank USA,,no_lei_for_rssd,False
+57897,SouthernTrust Bank,,no_lei_for_rssd,False
+57927,Rockford Bank and Trust Company,,no_lei_for_rssd,False
+57971,Lincolnway Community Bank,,no_lei_for_rssd,False
+58018,St. Louis Bank,5493008MLNFTWNSBXB88,exact_rssd,False
+58020,Commerce State Bank,,no_lei_for_rssd,False
+58039,First Resource Bank,,no_lei_for_rssd,False
+58114,Bank of Belleville,549300BY08MY8QNSPU50,exact_rssd,False
+58127,STC Capital Bank,,no_lei_for_rssd,False
+58158,"SmartBiz Bank, National Association",,no_lei_for_rssd,False
+58165,Belmont Bank & Trust Company,,no_lei_for_rssd,False
+58214,Town Center Bank,,no_lei_for_rssd,False
+58216,BMO Harris Central National Association,,no_lei_for_rssd,False
+58244,Choice Bank,,no_lei_for_rssd,False
+58264,Signature Bank,,no_lei_for_rssd,False
+58314,"Old Plank Trail Community Bank, National Association",54930010ZG6EHTCJ1L21,exact_rssd,False
+58348,Millennium Bank,,no_lei_for_rssd,False
+58458,HTLF Bank,,no_lei_for_rssd,False
+58514,American Eagle Bank of Chicago,,no_lei_for_rssd,False
+58556,Gold Coast Bank,5493003X9FWFI47DPO39,exact_rssd,False
+58579,Golden Eagle Community Bank,,no_lei_for_rssd,False
+58593,"First American Bank, N.A.",,no_lei_for_rssd,False
+58597,PeopleFirst Bank,,no_lei_for_rssd,False
+58651,Settlers Bank,,no_lei_for_rssd,False
+58780,Spring Bank,549300Z0DIN11QBU4C61,exact_rssd,False
+58816,Royal Business Bank,5493003B20KZ3DEZGB43,exact_rssd,False
+59195,FWBank,,no_lei_for_rssd,False
+6186,Citizens State Bank of Loyal,5493002PU0KOD7M34E71,exact_rssd,False
+6194,Citizens State Bank,,no_lei_for_rssd,False
+6195,Sterling Bank,,no_lei_for_rssd,False
+6198,Highland State Bank,,no_lei_for_rssd,False
+628,"JPMorgan Chase Bank, National Association",7H6GLXDRUGQFU57RNE97,exact_rssd,False
+6384,"PNC Bank, National Association",AD6GFRVSDT01YPT1CS68,exact_rssd,False
+6548,U.S. Bank National Association,6BYL5QZYBDK8S7L73M02,exact_rssd,False
+6560,The Huntington National Bank,2WHM8VNJH63UN14OL754,exact_rssd,False
+6600,First Financial Bank,MV4O55SH8HO6KQSGW013,exact_rssd,False
+6672,"Fifth Third Bank, National Association",QFROUN1UWUYU0DVIWD51,exact_rssd,False
+7213,"Citibank, National Association",E57ODZWZ7FF32TWEFA76,exact_rssd,False
+7946,"BNY Mellon, National Association",4EP6JBYBTPTQ47LZOB67,exact_rssd,False
+8273,"UMB Bank, National Association",VNOO6EITDJ2YUEBMSZ83,exact_rssd,False
+8487,Central State Bank,,no_lei_for_rssd,False
+8491,Scott State Bank,549300VJ2DUIQKBO9U08,exact_rssd,False
+8492,Glasford State Bank,,no_lei_for_rssd,False
+8693,Bluff View Bank,254900MY1ZANX8HECH55,exact_rssd,False
+8695,Bank of Lake Mills,,no_lei_for_rssd,False
+8698,The Port Washington State Bank,549300BPOIHOHG3TPP54,exact_rssd,False
+8700,Waldo State Bank,549300ALPT3HYIWS8833,exact_rssd,False
+8714,Unity Bank,549300K1K5K5L0W6QR97,exact_rssd,False
+8866,"Merchants Bank, National Association",549300OZIFHR7THILC90,exact_rssd,False
+899,The Gerber State Bank,,no_lei_for_rssd,False
+902,Byron Bank,254900KE9OJJUH139Q12,exact_rssd,False
+903,Amalgamated Bank of Chicago,,no_lei_for_rssd,False
+9035,Headwaters State Bank,,no_lei_for_rssd,False
+9036,Security State Bank,549300BUNVNXN3U3OF88,exact_rssd,False
+9037,Mound City Bank,549300C70VBQUGXHPR07,exact_rssd,False
+9079,The Harvard State Bank,549300TUISK0W7DE2464,exact_rssd,False
+9080,Holcomb Bank,549300JRDBJ5RPA6TY76,exact_rssd,False
+913,The Northern Trust Company,6PTKHDJ8HDUF78PFWH30,exact_rssd,False
+91325,CIBC National Trust Company,,no_lei_for_rssd,False
+920,Community Banks of Shelby County,,no_lei_for_rssd,False
+924,Farmers & Mechanics Bank,,no_lei_for_rssd,False
+925,The State Bank of Geneva,,no_lei_for_rssd,False
+9259,Farmers State Bank of Hoffman,549300KTI1WVD92EAK75,exact_rssd,False
+926,Peoples National Bank of Kewanee,549300K35KPBBS2J9A28,exact_rssd,False
+9260,Oxford Bank & Trust,,no_lei_for_rssd,False
+9263,Stillman BancCorp N.A.,2549006L3U88MNTL7K26,exact_rssd,False
+9264,H. F. Gehant Banking Co.,,no_lei_for_rssd,False
+9265,Rushville State Bank,,no_lei_for_rssd,False
+9273,Villa Grove State Bank,,no_lei_for_rssd,False
+9274,The Hill-Dodge Banking Company,,no_lei_for_rssd,False
+931,Citizens State Bank of Milford,,no_lei_for_rssd,False
+9369,The Bank of Advance,,no_lei_for_rssd,False
+938,Tnb Bank,,no_lei_for_rssd,False
+939,Citizens First State Bank of Walnut,,no_lei_for_rssd,False
+9396,Valley National Bank,KI0VI4JRMCIJ329YTN75,exact_rssd,False
+9517,Cleveland State Bank,549300O3HNZKCYCYJK98,exact_rssd,False
+9523,Bristol Morgan Bank,549300GNGK57UA6SFP52,exact_rssd,False
+9526,The Pineries Bank,,no_lei_for_rssd,False
+9529,State Bank of Newburg,254900KSSD1QWXBEPB68,exact_rssd,False
+9536,Community State Bank,54930098WTIWNSB1OV47,exact_rssd,False
+9631,Alliance Community Bank,549300FX3J95NB1UTP88,exact_rssd,False
+9632,Fortress Bank,5493003EAJYUK1F8B139,exact_rssd,False

@@ -1,0 +1,4 @@
+rule,tracts_covered,lmi_coverage_pct,non_lmi_coverage_pct,coverage_gap_pp,ac06_as_written,delta_lmi_pp,delta_non_lmi_pp,binding_test,non_lmi_growth_multiple
+current,1839,42.4944,38.7077,3.7868,PASS - value present (criterion cannot fail),0.0,0.0,,
+B_constrained,1850,42.8686,39.055,3.8136,PASS - value present (criterion cannot fail),0.3742,0.3473,PASS - expansion is proportional,0.93
+A_commercial,1858,42.5708,39.3495,3.2213,PASS - value present (criterion cannot fail),0.0764,0.6418,FAIL - non-LMI coverage grows faster,8.4

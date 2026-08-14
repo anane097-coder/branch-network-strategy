@@ -1,0 +1,269 @@
+// ===========================================================================
+// Measures — branch-network-strategy
+// ===========================================================================
+// Written to be read. Every measure that could be computed more than one way
+// says which way it computes and why, because the definitional choices in this
+// project are the analysis, not an implementation detail.
+//
+// Paste into Power BI Desktop via Modeling > New Measure, or into the TMDL
+// view. Table assignments are noted above each block.
+// ===========================================================================
+
+
+// ---------------------------------------------------------------------------
+// 1. Deposits and growth                          [table: fact_branch_deposits]
+// ---------------------------------------------------------------------------
+
+Total Deposits =
+SUM ( fact_branch_deposits[deposits] )
+
+
+// Deposits are stored in WHOLE DOLLARS. SOD publishes thousands; the
+// conversion happens once, in script 10, and is not repeated here. A second
+// conversion in DAX would be invisible and would show as a 1000x error only
+// where somebody compared two visuals.
+Total Deposits ($bn) =
+DIVIDE ( [Total Deposits], 1000000000 )
+
+
+// Deposit CAGR over whatever year range the filter context allows.
+// Endpoints are taken from the SELECTION, not hardcoded to 2019 and 2025, so
+// the measure stays correct when a slicer narrows the range - a CAGR computed
+// against a fixed endpoint under a filtered context is a common and silent
+// error, because it keeps returning a plausible number.
+Deposit CAGR % =
+VAR FirstYear = MIN ( dim_year[year] )
+VAR LastYear  = MAX ( dim_year[year] )
+VAR Span      = LastYear - FirstYear
+VAR StartDep  =
+    CALCULATE ( [Total Deposits], dim_year[year] = FirstYear )
+VAR EndDep    =
+    CALCULATE ( [Total Deposits], dim_year[year] = LastYear )
+RETURN
+    IF (
+        Span > 0 && NOT ISBLANK ( StartDep ) && StartDep > 0
+            && NOT ISBLANK ( EndDep ),
+        ( ( EndDep / StartDep ) ^ ( 1 / Span ) - 1 ) * 100
+    )
+    // No ELSE. A period with no starting deposits has NO growth rate, and
+    // returning 0 would put it in the middle of every ranking as though it
+    // had been measured. This is the same refusal the SQL applies.
+
+
+// ---------------------------------------------------------------------------
+// 2. Market share — the denominator is the whole measure
+// ---------------------------------------------------------------------------
+
+Subject Deposits =
+CALCULATE ( [Total Deposits], dim_institution[is_subject_bank] = TRUE )
+
+
+// ALL institutions in the current geography and year, with the institution
+// filter removed but geography and time INTACT. Using ALL() on the whole model
+// would compare a county's subject deposits against the entire footprint;
+// using no removal at all would return 100%. Both look plausible on a card.
+Market Deposits =
+CALCULATE (
+    [Total Deposits],
+    REMOVEFILTERS ( dim_institution )
+)
+
+Market Share % =
+DIVIDE ( [Subject Deposits], [Market Deposits] ) * 100
+
+
+// ---------------------------------------------------------------------------
+// 3. Branch performance                             [table: branch_performance]
+// ---------------------------------------------------------------------------
+
+// The SIZE-ADJUSTED index is the headline. The raw index fell mechanically as
+// catchment size rose - median 1.518 in the smallest catchment quartile
+// against 0.416 in the largest - which INVERTED the ranking of every market.
+// The raw measure is kept for audit and must not be the default on any visual.
+Performance Index =
+AVERAGE ( branch_performance[index_size_adjusted] )
+
+Performance Index (raw, do not rank) =
+AVERAGE ( branch_performance[index_vs_market] )
+
+Underperforming Branches =
+CALCULATE (
+    COUNTROWS ( branch_performance ),
+    branch_performance[index_size_adjusted] < 1,
+    // Limited-service facilities structurally book no deposits, so a zero
+    // reading is a fact about the facility type and not a measurement of it.
+    // Left in, they score 0.0000 and sort to the top of any review list.
+    branch_performance[service_type] IN { "11", "12" }
+)
+
+
+// ---------------------------------------------------------------------------
+// 4. LMI coverage and the equity check                   [table: lmi_coverage]
+// ---------------------------------------------------------------------------
+
+LMI Coverage % =
+CALCULATE (
+    MAX ( lmi_coverage[lmi_coverage_pct] ),
+    lmi_coverage[rule] = "current"
+)
+
+LMI Coverage % (recommended) =
+CALCULATE (
+    MAX ( lmi_coverage[lmi_coverage_pct] ),
+    lmi_coverage[rule] = "B_constrained"
+)
+
+
+// THE BINDING TEST. Both deltas are non-negative by construction - a branch
+// adds catchment area and removes none - so this compares their SIZES, not
+// their signs. AC-06 as written ("both values present") cannot fail; this can,
+// and did, for the unconstrained commercial set.
+Coverage Delta Gap (pp) =
+VAR Rule = SELECTEDVALUE ( lmi_coverage[rule], "B_constrained" )
+VAR CurLMI =
+    CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ),
+                ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
+VAR CurNon =
+    CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ),
+                ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
+VAR NewLMI =
+    CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ),
+                ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
+VAR NewNon =
+    CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ),
+                ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
+RETURN
+    ( NewLMI - CurLMI ) - ( NewNon - CurNon )
+
+Binding Test Result =
+IF (
+    ISBLANK ( [Coverage Delta Gap (pp)] ),
+    "NOT MEASURED",
+    IF ( [Coverage Delta Gap (pp)] >= 0,
+         "PASS — expansion is proportional",
+         "FAIL — non-LMI coverage grows faster" )
+)
+
+
+// LMI share of whatever set is currently selected. Used on the shortlist
+// visual against the 29.5% footprint baseline, at the point the shortlist is
+// read rather than in a limitations panel.
+LMI Share of Selection % =
+VAR Determined =
+    CALCULATE ( COUNTROWS ( dim_tract ),
+                NOT ISBLANK ( dim_tract[lmi_flag] ) )
+VAR IsLMI =
+    CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[lmi_flag] = TRUE )
+RETURN
+    DIVIDE ( IsLMI, Determined ) * 100
+    // Tracts with no LMI determination leave BOTH numerator and denominator.
+    // Counting them as non-LMI would inflate the denominator and quietly
+    // improve every equity figure on the page.
+
+
+// ---------------------------------------------------------------------------
+// 5. Capture rate and unmet demand                 [table: tract_capture_rate]
+// ---------------------------------------------------------------------------
+
+// Originations only, on BOTH sides. Purchased loans (action_taken = 6) were
+// bought on the secondary market and say nothing about serving a tract;
+// several lenders here exceed 88% purchased against the subject's 0.8%, so
+// including them would inflate competitors far more than the subject.
+Capture Rate % =
+DIVIDE (
+    SUM ( tract_capture_rate[subject_originations] ),
+    SUM ( tract_capture_rate[all_originations] )
+) * 100
+
+Unmet Originations =
+SUM ( tract_capture_rate[competitor_originations] )
+
+
+// ---------------------------------------------------------------------------
+// 6. THE WHAT-IF INDEX — FR-03 demonstrated rather than claimed
+// ---------------------------------------------------------------------------
+// Create five what-if parameters (Modeling > New parameter > Numeric range),
+// each 0 to 0.50, increment 0.05, named exactly:
+//
+//     w Household Growth      default 0.20
+//     w Median Income         default 0.15
+//     w Deposit Growth        default 0.25
+//     w Competitor Saturation default 0.20
+//     w Unmet Demand          default 0.20
+//
+// fact_index_components holds the z-scores in long form precisely so this
+// works. Contributions could not be used - the weight is already baked into
+// them, so a slider would have nothing to move.
+
+Weight Total =
+[w Household Growth Value] + [w Median Income Value]
+    + [w Deposit Growth Value] + [w Competitor Saturation Value]
+    + [w Unmet Demand Value]
+
+
+// Weights are RENORMALISED to sum to 1 so the score stays comparable as
+// sliders move. Without this, dragging every slider up would raise every
+// score and look like improvement.
+Selected Opportunity Score =
+VAR W = [Weight Total]
+VAR Contribution =
+    SUMX (
+        VALUES ( fact_index_components[component] ),
+        VAR C = fact_index_components[component]
+        VAR Z =
+            CALCULATE ( AVERAGE ( fact_index_components[z_score] ) )
+        VAR Weight =
+            SWITCH (
+                C,
+                "household_growth",      [w Household Growth Value],
+                "median_income",         [w Median Income Value],
+                "deposit_market_growth", [w Deposit Growth Value],
+                "competitor_saturation", [w Competitor Saturation Value],
+                "unmet_mortgage_demand", [w Unmet Demand Value],
+                0
+            )
+        RETURN Z * Weight
+    )
+RETURN
+    DIVIDE ( Contribution, W )
+    // DIVIDE, not "/". All five sliders at zero is a state a user can reach in
+    // one drag, and it must return blank rather than an error on the visual.
+
+
+// How far the live weighting has moved a tract from its published rank. This
+// is the honest companion to the slider: it shows that the ranking is NOT
+// invariant to weights, which the sensitivity analysis measured - under a
+// growth-led weighting, 39.7% of tracts move 500+ places and only 31 of the
+// top 50 survive.
+Rank Shift vs Published =
+VAR PublishedRank =
+    RANKX ( ALLSELECTED ( opportunity_index ),
+            CALCULATE ( AVERAGE ( opportunity_index[opportunity_score] ) ),
+            , DESC, DENSE )
+VAR LiveRank =
+    RANKX ( ALLSELECTED ( fact_index_components[tract_geoid] ),
+            [Selected Opportunity Score], , DESC, DENSE )
+RETURN
+    LiveRank - PublishedRank
+
+
+// ---------------------------------------------------------------------------
+// 7. Caveat measures — these belong ON the visuals, not in a footnote
+// ---------------------------------------------------------------------------
+
+// 62.0% of the top 50 carries a growth value measured on an overlap cluster
+// rather than on the tract, against 16.3% of all scored tracts. Tracts
+// fragment because they grow, so the shortlist rests disproportionately on the
+// weakest part of that component.
+Cluster-Measured Growth % =
+DIVIDE (
+    CALCULATE ( COUNTROWS ( dim_tract ),
+                dim_tract[growth_basis] <> "direct" ),
+    CALCULATE ( COUNTROWS ( dim_tract ),
+                NOT ISBLANK ( dim_tract[household_growth_pct] ) )
+) * 100
+
+Shortlist Caveat =
+"LMI " & FORMAT ( [LMI Share of Selection %], "0.0" ) & "% vs 29.5% footprint"
+    & "  ·  growth estimated for "
+    & FORMAT ( [Cluster-Measured Growth %], "0.0" ) & "% of these tracts"

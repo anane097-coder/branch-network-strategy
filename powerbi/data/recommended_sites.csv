@@ -1,0 +1,7 @@
+rule,tract_geoid,county_name,cbsa_title,tier,households,lmi_flag,opportunity_score,unmet_mortgage_demand,growth_is_estimated
+B_constrained,17093890402,Kendall County,"Chicago-Naperville-Elgin, IL-IN",metro,3738,False,2.6999,412.0,True
+B_constrained,17089850707,Kane County,"Chicago-Naperville-Elgin, IL-IN",metro,3571,False,2.0334,403.0,True
+B_constrained,55109120502,St. Croix County,"Minneapolis-St. Paul-Bloomington, MN-WI",metro,2705,False,1.7558,238.0,False
+A_commercial,17093890402,Kendall County,"Chicago-Naperville-Elgin, IL-IN",metro,3738,False,2.6999,412.0,True
+A_commercial,17093890105,Kendall County,"Chicago-Naperville-Elgin, IL-IN",metro,2700,False,2.3654,391.0,True
+A_commercial,17163503404,St. Clair County,"St. Louis, MO-IL",metro,2855,False,2.095,329.0,False
