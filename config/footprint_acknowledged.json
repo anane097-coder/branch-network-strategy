@@ -1,0 +1,33 @@
+{
+  "_comment": [
+    "Footprint movements that have been reviewed and accepted, so the FR-06",
+    "guard in scripts/02_profile_sod.py will proceed past them.",
+    "",
+    "Adding an entry here is a deliberate, reviewable act. Each one records",
+    "what moved, what was found on investigation, and why it does not",
+    "invalidate the analysis. An unexplained step change must halt the",
+    "pipeline instead - that is the whole point of the guard.",
+    "",
+    "'year' is the LATER year of the transition."
+  ],
+  "accepted": [
+    {
+      "cert": "24998",
+      "year": 2025,
+      "institution": "Commerce Bank",
+      "movement": "14 -> 10 branches in Illinois (-29%)",
+      "finding": "Organic branch closures, not a merger. The certificate has declined steadily across the whole window (16, 17, 17, 16, 16, 14, 10) and the institution remains active with $35.5B in assets. All 2024 branch numbers that survive into 2025 remain under the same certificate.",
+      "impact": "None. Consistent with the sector-wide consolidation this analysis measures.",
+      "reviewed": "2026-08-14"
+    },
+    {
+      "cert": "58458",
+      "year": 2025,
+      "institution": "HTLF Bank",
+      "movement": "17 -> 0 branches (-100%), certificate exits the footprint",
+      "finding": "Acquisition. FDIC lists the certificate as inactive, and every one of its 2024 branch numbers reappears in the 2025 vintage under CERT 8273, UMB Bank, National Association. UMB acquired Heartland Financial USA. The branches transferred; they did not close.",
+      "impact": "Material for survivor-bias handling. These 17 branches must be read as a transfer, not 17 closures, or the consolidation rate is overstated. They are the reason UMB appears in the two-state field with only 18 branches. Counted in the 'transferred' column of docs/sod_content_profile.md.",
+      "reviewed": "2026-08-14"
+    }
+  ]
+}

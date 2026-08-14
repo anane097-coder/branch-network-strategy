@@ -1,4 +1,4 @@
-"""
+﻿"""
 02_profile_sod.py — load all seven SOD vintages and profile CONTENT drift.
 
 Writes docs/sod_content_profile.md and data/staging/sod_all.csv.gz.
@@ -29,6 +29,7 @@ BQ-2 needs it, instead of being rediscovered later.
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -133,17 +134,28 @@ def transitions(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     by_year = {y: set(g["UNINUMBR"].dropna())
                for y, g in df.groupby("_year")}
+    # Keyed a second way, on (CERT, UNINUMBR). UNINUMBR persists across a
+    # change of ownership, so a branch that is sold appears under a new cert
+    # while keeping its number. Global keying therefore ignores transfers and
+    # counts only true openings and closings; per-cert keying counts a
+    # transfer as both an appearance and a disappearance. The difference
+    # between the two IS the number of branches that changed hands, which is
+    # what separates consolidation from closure.
+    per_cert = {y: set(zip(g["CERT"], g["UNINUMBR"]))
+                for y, g in df.groupby("_year")}
     rows = []
     detail = []
     years = sorted(by_year)
     for prev, cur in zip(years, years[1:]):
         gone = by_year[prev] - by_year[cur]
         new = by_year[cur] - by_year[prev]
+        pc_new = len(per_cert[cur] - per_cert[prev])
         rows.append({
             "transition": f"{prev}->{cur}",
             "carried_over": len(by_year[prev] & by_year[cur]),
-            "disappeared": len(gone),
-            "appeared": len(new),
+            "closed": len(gone),
+            "opened": len(new),
+            "transferred": pc_new - len(new),
             "net": len(by_year[cur]) - len(by_year[prev]),
         })
         for label, ids, year in (("appeared", new, cur), ("disappeared", gone, prev)):
@@ -197,9 +209,98 @@ def md_table(df: pd.DataFrame, floatfmt: str = "{:,.0f}") -> str:
     return "\n".join(lines)
 
 
+def check_scope(df: pd.DataFrame) -> None:
+    """Every row must be a branch physically located in WI or IL.
+
+    Guards the STALP/STALPBR confusion. `STALP` is the institution's charter
+    state; `STALPBR` is where the branch actually is. Filtering on the former
+    silently produces a nationwide extract for in-state-chartered banks while
+    dropping in-state branches of out-of-state banks. It looks plausible -
+    row counts are the right order of magnitude - so nothing catches it
+    downstream. Fail here instead.
+    """
+    if "STALPBR" not in df.columns:
+        raise SystemExit("STALPBR absent - cannot verify geographic scope.")
+    out = df.loc[~df["STALPBR"].isin(["WI", "IL"]), "STALPBR"].value_counts()
+    if len(out):
+        print("\n  [FAIL] rows outside WI/IL by branch location:")
+        print(out.head(12).to_string())
+        raise SystemExit(
+            f"{int(out.sum()):,} of {len(df):,} rows are branches outside the "
+            "footprint. The download filtered on STALP (charter state) rather "
+            "than STALPBR (branch state). Fix scripts/01_download.py, delete "
+            "data/raw/fdic_sod_*.csv, and re-run it."
+        )
+    print(f"  [ok  ] scope: all {len(df):,} rows are branches in WI or IL")
+
+
+FOOTPRINT_CHANGE_LIMIT = 0.20
+ACK = ROOT / "config" / "footprint_acknowledged.json"
+
+
+def check_footprint_change(df: pd.DataFrame) -> None:
+    """FR-06 guard: halt if a new vintage changes the footprint's shape.
+
+    The refresh procedure promises the retail team can re-run this against a
+    new SOD vintage without an analyst. That promise is only safe if the tool
+    refuses to run when the ground moves under it.
+
+    It will move. Associated closed its acquisition of American National on
+    2026-04-01 and was converting branches in Q3 2026, so the 2026 vintage
+    will carry Omaha and Twin Cities branches inside Associated's certificate
+    - new states, outside the configured scope, arriving as a step change. A
+    tool that silently absorbs that produces a confident wrong answer.
+
+    Two tests on the newest transition:
+      - any branch in a state outside the configured scope
+      - any institution whose branch count moves more than 20% year over year
+
+    Known and accepted movements are recorded in
+    config/footprint_acknowledged.json, so acknowledging a change is a
+    deliberate, reviewable act rather than an edit to this file.
+    """
+    years = sorted(df["_year"].unique())
+    if len(years) < 2:
+        return
+    prev, cur = years[-2], years[-1]
+
+    acked = set()
+    if ACK.exists():
+        payload = json.loads(ACK.read_text(encoding="utf-8"))
+        acked = {(str(e["cert"]), int(e["year"])) for e in payload.get("accepted", [])}
+
+    counts = (df[df["_year"].isin([prev, cur])]
+              .groupby(["CERT", "_year"])["UNINUMBR"].nunique().unstack(fill_value=0))
+    counts = counts[counts[prev] >= 10]          # ignore noise at tiny institutions
+    counts["change"] = (counts[cur] - counts[prev]) / counts[prev]
+
+    breaches = counts[counts["change"].abs() > FOOTPRINT_CHANGE_LIMIT]
+    breaches = breaches[[(c, cur) not in acked for c in breaches.index]]
+
+    if len(breaches):
+        names = (df[df["_year"] == cur].drop_duplicates("CERT")
+                 .set_index("CERT")["NAMEFULL"])
+        print(f"\n  [HALT] {len(breaches)} institution(s) moved more than "
+              f"{FOOTPRINT_CHANGE_LIMIT:.0%} between {prev} and {cur}:")
+        for cert, row in breaches.iterrows():
+            print(f"         CERT {cert} {str(names.get(cert, ''))[:38]:38s} "
+                  f"{int(row[prev]):>4} -> {int(row[cur]):>4}  "
+                  f"({row['change']:+.0%})")
+        raise SystemExit(
+            "Footprint changed materially in the newest vintage. Review each "
+            "movement above, then either correct the scope or record the "
+            f"accepted changes in {ACK.relative_to(ROOT)} and re-run. The "
+            "pipeline will not proceed on an unexplained step change."
+        )
+    print(f"  [ok  ] footprint stable {prev}->{cur} "
+          f"(no institution moved >{FOOTPRINT_CHANGE_LIMIT:.0%})")
+
+
 def main() -> int:
     print("Loading SOD vintages")
     df = load_all()
+    check_scope(df)
+    check_footprint_change(df)
     df["_county_fips"] = county_fips(df)
     print(f"\nCombined: {len(df):,} branch-year rows, {len(df.columns)} columns")
 
@@ -275,6 +376,12 @@ Proportion of rows where the field is non-null. The API normalizes field
 
 ## 4. Branch transitions between vintages
 
+Keyed two ways. `UNINUMBR` persists when a branch changes owner, so keying
+globally on it counts **only true openings and closings**; keying on
+(CERT, UNINUMBR) counts a sale as both an appearance and a disappearance.
+The difference is `transferred` — branches that changed hands rather than
+opening or closing.
+
 {md_table(trans)}
 
 Material movements (25 or more branches at one certificate):
@@ -296,7 +403,8 @@ first, or it will read acquisitions as growth and divestitures as decline.
 - Distinct institutions: **{df['CERT'].nunique():,}**
 - Distinct branches: **{df['UNINUMBR'].nunique():,}**
 - Staged output: `data/staging/sod_all.csv.gz`
-""")
+""", encoding="utf-8")   # explicit: Windows defaults to cp1252, which cannot
+                         # encode the characters used above
 
     print(f"\nBranch counts by year:\n{counts.to_string()}")
     print(f"\nTransitions:\n{trans.to_string(index=False)}")

@@ -77,6 +77,17 @@ PRIOR: dict[str, dict] = {}
 # DEPSUMBR is branch deposits IN THOUSANDS. UNINUMBR is the stable unique
 # branch identifier and is the real primary key for dim_branch - the "branch
 # number" named in the design docs is only unique within an institution.
+#
+# FILTER ON STALPBR, NOT STALP. This is not a detail.
+#   STALP   = the INSTITUTION's charter/home state
+#   STALPBR = the state the BRANCH is physically located in
+# Filtering on STALP returns every branch of every institution chartered in
+# that state, nationwide, and omits every branch located in the state whose
+# institution is chartered elsewhere. Both directions are wrong for this
+# project: it pulled BMO Harris's California branches into the "Illinois"
+# extract (BMO is Chicago-chartered) while dropping all 263 of JPMorgan
+# Chase's actual Illinois branches (Chase is Ohio-chartered). Competitor
+# saturation in BQ-1 is measured from exactly those missing rows.
 SOD_API = "https://api.fdic.gov/banks/sod"
 
 # FDIC institutions, REST API. FED_RSSD confirmed present and populated.
@@ -278,12 +289,12 @@ def fetch_fdic_paged(api: str, filters: str, dest: Path, label: str,
 
 
 def get_sod(entries: list, failures: list) -> None:
-    print("\nFDIC Summary of Deposits, 7 vintages, WI+IL (REST API)")
+    print("\nFDIC Summary of Deposits, 7 vintages, branches LOCATED in WI+IL")
     for year in SOD_YEARS:
         for state in STATE_FIPS:
             entry = fetch_fdic_paged(
                 SOD_API,
-                f"STALP:{state} AND YEAR:{year}",
+                f"STALPBR:{state} AND YEAR:{year}",   # branch state - see above
                 RAW / f"fdic_sod_{year}_{state.lower()}.csv",
                 f"SOD {year} {state}",
             )
@@ -461,8 +472,8 @@ def main() -> int:
     RAW.mkdir(parents=True, exist_ok=True)
 
     if MANIFEST.exists():
-        PRIOR.update({e["file"]: e
-                      for e in json.loads(MANIFEST.read_text()).get("files", [])})
+        PRIOR.update({e["file"]: e for e in json.loads(
+            MANIFEST.read_text(encoding="utf-8")).get("files", [])})
 
     entries: list = []
     failures: list = []
@@ -491,7 +502,7 @@ def main() -> int:
                     "files": files,
                 },
                 indent=2,
-            ))
+            ), encoding="utf-8")
             print(f"\nManifest: {MANIFEST}")
 
     print(f"\n{'=' * 60}")
