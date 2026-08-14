@@ -59,11 +59,31 @@ The audience is a **hiring manager**, not a production system. That single fact 
 
 FDIC keys institutions on CERT. HMDA keys them on LEI. There is no shared key. The designed bridge ran CERT → FED_RSSD (FDIC institutions API) → RSSD → LEI (HMDA public panel).
 
-**As of 2026-08-14 the second half of that bridge has no working source.** The panel ZIP returns S3 `AccessDenied`, the Federal Reserve NPW bulk download is CAPTCHA-walled, and the FFIEC institutions API returns `rssd: -1` for every institution tested. `FED_RSSD` from FDIC is fine; there is nothing to join it *to*. Do not paper over this with name matching without saying so loudly — an unflagged fuzzy match between two federal datasets is exactly the kind of silent error this project is meant to demonstrate avoiding. Any name- or tax-ID-based match must carry `match_method` and `match_quality` and be manually verified for the subject bank.
+The published panel ZIP is gone (S3 `AccessDenied`) and the Federal Reserve NPW bulk download is CAPTCHA-walled, so the originally designed route is closed.
 
-**Decided 2026-08-14 — build the crosswalk for a shortlist, by hand, and verify it.** Do not attempt a programmatic match across all 622 certs. Script 04 builds `dim_institution_crosswalk` only for the institutions that survive selection criteria 1–3 (roughly 20), matching on name + city + tax ID, with `match_method` and `match_quality` populated on **every** row and the subject bank's match verified by hand against both agencies' public records. A set that small can be defended line by line in an interview; hundreds of unverifiable fuzzy matches cannot.
+**The bridge still exists, as an exact ID join.** The FFIEC per-institution endpoint
 
-Write up the disappearance itself. "The two datasets shared no key, and partway through the project the bridge dataset was withdrawn, so I built a smaller one and verified it by hand" is a better story than the one originally planned, and it is true.
+```
+https://ffiec.cfpb.gov/v2/public/institutions/{lei}/year/2025
+```
+
+returns `rssd: -1` — the documented field is not populated — but the same payload carries **`institutionId2017`, which is the institution's RSSD**. Verified 2026-08-14 against FDIC `FED_RSSD` across the 18 highest-volume WI+IL lenders: **6 of 6 FDIC-insured banks matched exactly**. The 12 that did not match are credit unions and independent mortgage companies, which hold no FDIC certificate and correctly cannot resolve.
+
+So script 04 builds `dim_institution_crosswalk` on:
+
+```
+FDIC CERT → FED_RSSD  ==  institutionId2017 ← HMDA LEI
+```
+
+No name matching, no city disambiguation, no manual adjudication. Still populate `match_method` and `match_quality` on every row: non-bank lenders genuinely do not resolve, and that has to be visible in the data rather than absent from it.
+
+Two things to hold onto:
+- **Work from the LEIs that actually lend in the footprint** — 1,431 in WI+IL, against 4,789 filers nationally.
+- **Sanity-check every match against origination volume.** A $5B bank with 40 applications in the file means the wrong entity was matched. Holding company versus bank subsidiary is where this goes wrong.
+
+If a name is ever genuinely ambiguous, GLEIF's public API (`api.gleif.org`) returns the LEI registrant's legal name and registered address without a CAPTCHA.
+
+**Apply selection criteria against name variants and the loan-level file, not a single string search.** Johnson Financial Group returns zero hits in the filer list because it files as "Johnson Bank" — one exact-match search would have dropped a valid candidate on a false negative.
 
 If the subject bank cannot be resolved to an LEI present in the 2025 data, **stop and reassess the subject institution** — BQ-4 depends on it and a different institution may be required.
 
@@ -143,7 +163,7 @@ HMDA is pre-aggregated to `fact_tract_lending` in staging. Loan-level rows never
 | Script | Does | Exit condition |
 |---|---|---|
 | `01_download.py` | Fetch all sources, write manifest with SHA-256 | All files present, manifest written |
-| `02_profile_sod.py` | Load 7 SOD vintages, profile drift, build column mapping | Profile written (see quality log — this gate needs revising) |
+| `02_profile_sod.py` | Load 7 SOD vintages, profile **content** drift and branch transitions | `docs/sod_content_profile.md` written; county FIPS malformed = 0 |
 | `03_select_institution.py` | Apply selection criteria, profile candidates | Subject chosen, rationale in `docs/institution_selection.md` |
 | `04_crosswalk.py` | CERT ↔ RSSD ↔ LEI | Subject's LEI confirmed in 2025 data (UAT-10) |
 | `05_stage_acs.py` | ACS API pull, tract attributes | Staging table complete |

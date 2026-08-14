@@ -11,7 +11,7 @@ go, and which existing locations warrant review?**
 
 | Source | Vintage | What it provides |
 |---|---|---|
-| FDIC Summary of Deposits (REST API) | 2019–2025 | Deposits at every branch of every insured institution — 30,461 branch-years across WI+IL |
+| FDIC Summary of Deposits (REST API) | 2019–2025 | Deposits at every branch of every insured institution — 31,461 branch-years across WI+IL |
 | HMDA loan-level (FFIEC Data Browser) | 2025 | 700,896 mortgage applications and outcomes by tract |
 | HMDA filer list | 2025 | The 4,789 institutions that filed, by LEI |
 | FDIC Institutions | current | Institution attributes including `FED_RSSD` |
@@ -21,9 +21,10 @@ go, and which existing locations warrant review?**
 
 Every endpoint above was verified against a live response on 2026-08-14.
 Several sources named in the design documents no longer exist in the form
-those documents assume, and one required bridge dataset has disappeared
-entirely. **[`docs/data_quality_log.md`](docs/data_quality_log.md) records
-what changed and what it costs** — read it before running anything.
+those documents assume — including the published panel file that was meant to
+bridge FDIC and HMDA institution identifiers.
+**[`docs/data_quality_log.md`](docs/data_quality_log.md) records every change,
+what it cost, and what replaced it** — read it before running anything.
 
 ## Setup
 
