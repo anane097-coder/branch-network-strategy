@@ -1,6 +1,6 @@
 {
   "project": "branch-network-strategy",
-  "written_utc": "2026-08-14T18:24:39.928712+00:00",
+  "written_utc": "2026-08-14T21:46:19.906535+00:00",
   "files": [
     {
       "file": "acs5_2024_cbsa.json",
@@ -168,6 +168,15 @@
       "bytes": 920155,
       "sha256": "14ec96b5826c44e669bb5c709abc5736837519db3a5897486a35634d1a7eeef9",
       "rows": 1644
+    },
+    {
+      "file": "fdic_sod_state_totals.csv",
+      "url": "https://api.fdic.gov/banks/sod (agg_by=STALPBR, agg_sum_fields=DEPSUMBR)",
+      "label": "FDIC SOD state totals - AC-01 reference",
+      "retrieved_utc": "2026-08-14T21:46:19.882534+00:00",
+      "bytes": 376,
+      "sha256": "8fae3ecc57a9bef2e7e090a5e3775eecd43e57e8bfaf5ab6c8d3445df1147031",
+      "rows": 14
     },
     {
       "file": "hmda_filers_2025.json",

@@ -301,6 +301,62 @@ def get_sod(entries: list, failures: list) -> None:
             (entries if entry else failures).append(entry or f"SOD {year} {state}")
 
 
+def get_sod_state_totals(entries: list, failures: list) -> None:
+    """FDIC's own server-side aggregate of SOD deposits by state and year.
+
+    This is the AC-01 reference. It is computed by FDIC over the full source
+    table, not by us over our extract, so agreement proves the pipeline is
+    lossless across download, paging, CSV round-trip, staging, type coercion
+    and warehouse load - every step where a row or a digit could go missing.
+
+    NOTE ON WHAT THIS IS NOT. The FDIC `/banks/summary` endpoint also publishes
+    a state DEP figure, and it is NOT comparable: it reports deposits of
+    institutions HEADQUARTERED in the state, from Call Reports, whereas SOD
+    allocates deposits to the BRANCH's location. For 2024 the two differ by
+    50% in Wisconsin and 15% in Illinois. Reconciling against it would produce
+    a large discrepancy that looks like a failure and is really a definitional
+    mismatch - the same wrong-population error this project keeps finding.
+    """
+    print("\nFDIC SOD state totals (the AC-01 reference)")
+    dest = RAW / "fdic_sod_state_totals.csv"
+    if dest.exists():
+        print(f"  [skip] {dest.name} already present")
+        entry = entry_for(dest, SOD_API, "SOD state totals")
+        entries.append(entry)
+        return
+
+    rows = []
+    try:
+        for year in SOD_YEARS:
+            for state in STATE_FIPS:
+                resp = requests.get(SOD_API, timeout=TIMEOUT, params={
+                    "filters": f"STALPBR:{state} AND YEAR:{year}",
+                    "agg_by": "STALPBR", "agg_sum_fields": "DEPSUMBR",
+                    "limit": 1, "format": "json"})
+                resp.raise_for_status()
+                d = resp.json()["data"][0]["data"]
+                rows.append({"year": year, "state": state,
+                             "branches": d["count"],
+                             "deposits_thousands": d["sum_DEPSUMBR"]})
+    except (requests.RequestException, KeyError, IndexError) as exc:
+        print(f"  [FAIL] SOD state totals: {exc}")
+        failures.append("SOD state totals")
+        return
+
+    with dest.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=["year", "state", "branches",
+                                           "deposits_thousands"])
+        w.writeheader()
+        w.writerows(rows)
+    size = dest.stat().st_size
+    print(f"         {len(rows)} state-years, {size:,} bytes")
+    entries.append({
+        "file": dest.name, "url": f"{SOD_API} (agg_by=STALPBR, agg_sum_fields=DEPSUMBR)",
+        "label": "FDIC SOD state totals - AC-01 reference",
+        "retrieved_utc": datetime.now(timezone.utc).isoformat(),
+        "bytes": size, "sha256": sha256(dest), "rows": len(rows)})
+
+
 def get_fdic_institutions(entries: list, failures: list) -> None:
     print("\nFDIC institutions, all states (for the RSSD crosswalk)")
     entry = fetch_fdic_paged(
@@ -457,6 +513,7 @@ def get_geography(entries: list, failures: list) -> None:
 
 SOURCES = {
     "sod": get_sod,
+    "sodtotals": get_sod_state_totals,
     "fdic": get_fdic_institutions,
     "hmda": get_hmda,
     "acs": get_acs,
