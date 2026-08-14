@@ -8,7 +8,7 @@
 # NOTE: pandas is now 3.x, not 2.x. Copy-on-write is the default and the
 # default string dtype is `str` rather than `object`. The latter is quietly
 # helpful here - it makes GEOIDs and FIPS codes less likely to be coerced to
-# integers, which is trap #1 in CLAUDE.md. No pandas code predates this
+# integers, which is trap #1 in docs/project-guide.md. No pandas code predates this
 # change, so nothing needed migrating.
 requests==2.34.2
 pandas==3.0.5

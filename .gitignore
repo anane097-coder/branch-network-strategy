@@ -17,7 +17,7 @@ data/raw/hmda_lar_*.csv
 # Kept locally because they are about how the work is being run rather than
 # about the analysis. The analytical decisions they contain (vintage count,
 # institution selection criteria, stage gates, acceptance criteria) are
-# restated in CLAUDE.md and docs/, which are the public record.
+# restated in docs/project-guide.md, which is the public record.
 planning/
 
 .env

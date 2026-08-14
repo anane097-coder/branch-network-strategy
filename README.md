@@ -159,5 +159,6 @@ stress-tested against alternative weightings.
 ## Documentation
 
 Design rationale, business requirements, KPI definitions, and the UAT log live
-in `docs/`. `CLAUDE.md` carries working instructions for AI-assisted
-development.
+in `docs/`. [`docs/project-guide.md`](docs/project-guide.md) is the working
+reference: scope rules, data model, script sequence, acceptance criteria, and
+the known traps in this kind of data.
