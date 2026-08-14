@@ -5,6 +5,14 @@ data/warehouse/*.duckdb
 data/outputs/*.pbix
 !data/**/.gitkeep
 
+# The HMDA loan-level extract is ~200 MB for WI+IL, which is over GitHub's
+# 100 MB per-file hard limit. Excluded for now so a first push cannot fail
+# and so a file this size is never written into history, where removing it
+# is painful. This needs a deliberate decision: Git LFS, or the "documented
+# subset" escape hatch in 08 s.5. Until then the file is reproducible from
+# scripts/01_download.py and its SHA-256 is pinned in data/raw/manifest.json.
+data/raw/hmda_lar_*.csv
+
 .env
 __pycache__/
 *.pyc

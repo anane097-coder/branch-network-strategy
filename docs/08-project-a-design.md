@@ -2,6 +2,20 @@
 
 **Phase 4 deliverable. No implementation until this is reviewed.**
 
+> **Partially superseded.** `09` supersedes more than its own header claims — not
+> just the open decisions in this document but several statements in its body.
+> Where they conflict, `09` and `10` win:
+> - §4 "Pull ~5 years for trend" and the `fdic_sod_2021_2025.csv` example in §5 →
+>   **seven vintages, 2019–2025** (`09` §1, §3).
+> - §0's open question on real vs. composite institution → **real, named,
+>   outside-in** (`09` §1).
+> - §6 "branch number (PK)" → the primary key is **`UNINUMBR`**, FDIC's unique
+>   office number. A per-institution branch number collides across institutions
+>   (assumption A-06).
+>
+> Several endpoints and one whole data source assumed by this design have since
+> changed. Read `docs/data_quality_log.md` before implementing any of it.
+
 ---
 
 ## 0. One decision to make before anything else

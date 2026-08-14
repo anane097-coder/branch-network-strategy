@@ -47,6 +47,8 @@ Both P1 and P2 use HMDA and census-tract demographics. These are the exact data 
 
 Related, smaller: don't publish an analysis framed as insider strategy for a real named company. Use a realistic composite institution.
 
+> **Superseded — 2026-08-14.** The composite-institution recommendation in the paragraph above was reversed by `08` §0 and locked by `09` §1. The project uses a **real, named institution analyzed outside-in from public filings only**. The concern behind the original wording still stands and is handled by the guardrails in `08` §0: state on page one that only public data was used and that there is no relationship with the institution, and frame closures as *"candidates for review"* rather than "close these." The rest of this section — the redlining risk, the CRA framing, the limits of the public HMDA file — is **not** superseded and remains the governing guidance.
+
 ## 5. Scope and completion risk
 
 The brief already identifies this as the main danger and it's correct. Specific tripwires for this set of projects:

@@ -1,0 +1,181 @@
+{
+  "project": "branch-network-strategy",
+  "written_utc": "2026-08-14T17:23:44.046269+00:00",
+  "files": [
+    {
+      "file": "cbsa_delineation_2023.xlsx",
+      "url": "https://www2.census.gov/programs-surveys/metro-micro/geographies/reference-files/2023/delineation-files/list1_2023.xlsx",
+      "label": "CBSA delineation 2023",
+      "retrieved_utc": "2026-08-14T17:21:33.451893+00:00",
+      "bytes": 143798,
+      "sha256": "952c4b1e78acbb54e6ec9412434b7602fedacbf021736351a63c181bdb753629"
+    },
+    {
+      "file": "fdic_institutions_all.csv",
+      "url": "https://api.fdic.gov/banks/institutions?filters=CERT:[0 TO 1000000]",
+      "label": "FDIC institutions (all)",
+      "retrieved_utc": "2026-08-14T17:20:53.892071+00:00",
+      "bytes": 1938001,
+      "sha256": "98f97e2b20033edfbb04a3f89003986907b4ea2f79fe7342d6424a99fbbc5d85",
+      "rows": 27836
+    },
+    {
+      "file": "fdic_sod_2019_il.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:IL AND YEAR:2019",
+      "label": "SOD 2019 IL",
+      "retrieved_utc": "2026-08-14T17:21:06.754444+00:00",
+      "bytes": 1827968,
+      "sha256": "6095fea8c1c370d9b09ba8a205a3dfd5a6b7e6795460b17154d906df8f20b113",
+      "rows": 3133
+    },
+    {
+      "file": "fdic_sod_2019_wi.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:WI AND YEAR:2019",
+      "label": "SOD 2019 WI",
+      "retrieved_utc": "2026-08-14T17:21:05.547427+00:00",
+      "bytes": 818041,
+      "sha256": "beebc9d2b5f5788fa668a5d407b796e9957b65f94652f45421ff1351dfcd9e45",
+      "rows": 1463
+    },
+    {
+      "file": "fdic_sod_2020_il.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:IL AND YEAR:2020",
+      "label": "SOD 2020 IL",
+      "retrieved_utc": "2026-08-14T17:21:08.965259+00:00",
+      "bytes": 1771485,
+      "sha256": "01ad6e896122b1a8b7fe8986ab7705966a22e2d4dd6f09c0b967f9ac2327c379",
+      "rows": 3071
+    },
+    {
+      "file": "fdic_sod_2020_wi.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:WI AND YEAR:2020",
+      "label": "SOD 2020 WI",
+      "retrieved_utc": "2026-08-14T17:21:07.589901+00:00",
+      "bytes": 807545,
+      "sha256": "acbfcf2f71a54ade783f1542bcabe32f221429aeee03eea412b9b76355ac3f06",
+      "rows": 1462
+    },
+    {
+      "file": "fdic_sod_2021_il.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:IL AND YEAR:2021",
+      "label": "SOD 2021 IL",
+      "retrieved_utc": "2026-08-14T17:21:11.037026+00:00",
+      "bytes": 1724399,
+      "sha256": "802627e504dc88f0c807563eb9c7989065169886a51ddd73ae26e93de414d98b",
+      "rows": 2994
+    },
+    {
+      "file": "fdic_sod_2021_wi.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:WI AND YEAR:2021",
+      "label": "SOD 2021 WI",
+      "retrieved_utc": "2026-08-14T17:21:09.739189+00:00",
+      "bytes": 770828,
+      "sha256": "4ef50438323cbe30e4acb34637aa0315cd53cc52ea11eb29e3a35e2c0cdcec81",
+      "rows": 1396
+    },
+    {
+      "file": "fdic_sod_2022_il.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:IL AND YEAR:2022",
+      "label": "SOD 2022 IL",
+      "retrieved_utc": "2026-08-14T17:21:12.968890+00:00",
+      "bytes": 1597374,
+      "sha256": "aa395714374adcb71269618685944257c9e12053ae304985c8ca8b54024b184b",
+      "rows": 2801
+    },
+    {
+      "file": "fdic_sod_2022_wi.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:WI AND YEAR:2022",
+      "label": "SOD 2022 WI",
+      "retrieved_utc": "2026-08-14T17:21:11.821993+00:00",
+      "bytes": 753219,
+      "sha256": "9941eaa56a5983cfbce30ea6a4b12125a7925d877ea551f112235e508a6058d6",
+      "rows": 1375
+    },
+    {
+      "file": "fdic_sod_2023_il.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:IL AND YEAR:2023",
+      "label": "SOD 2023 IL",
+      "retrieved_utc": "2026-08-14T17:21:14.977325+00:00",
+      "bytes": 1916268,
+      "sha256": "9f3d62c87d5e382aca4072a693335fa2cde1156a369bb13e25ff06b5d85d4296",
+      "rows": 3307
+    },
+    {
+      "file": "fdic_sod_2023_wi.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:WI AND YEAR:2023",
+      "label": "SOD 2023 WI",
+      "retrieved_utc": "2026-08-14T17:21:13.815207+00:00",
+      "bytes": 735126,
+      "sha256": "4d487339ab3325a9c9112245ee0f8ce544eb0b04fa5f550f25b1e1c3e15f3707",
+      "rows": 1328
+    },
+    {
+      "file": "fdic_sod_2024_il.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:IL AND YEAR:2024",
+      "label": "SOD 2024 IL",
+      "retrieved_utc": "2026-08-14T17:21:17.157834+00:00",
+      "bytes": 1894741,
+      "sha256": "81137802116d748c8013bdde417623f39227db5643a8d53f78b93b271502b839",
+      "rows": 3280
+    },
+    {
+      "file": "fdic_sod_2024_wi.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:WI AND YEAR:2024",
+      "label": "SOD 2024 WI",
+      "retrieved_utc": "2026-08-14T17:21:15.774157+00:00",
+      "bytes": 714261,
+      "sha256": "a9043232374864f81b17afebc38281e42ef5798aa90b9329e340cd285ed6ed3e",
+      "rows": 1289
+    },
+    {
+      "file": "fdic_sod_2025_il.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:IL AND YEAR:2025",
+      "label": "SOD 2025 IL",
+      "retrieved_utc": "2026-08-14T17:21:19.184633+00:00",
+      "bytes": 1880153,
+      "sha256": "be8071ea4a097bed28978b6ac7dc5932725aa60a2444dd4de6f08c610ca91765",
+      "rows": 3267
+    },
+    {
+      "file": "fdic_sod_2025_wi.csv",
+      "url": "https://api.fdic.gov/banks/sod?filters=STALP:WI AND YEAR:2025",
+      "label": "SOD 2025 WI",
+      "retrieved_utc": "2026-08-14T17:21:17.954199+00:00",
+      "bytes": 715585,
+      "sha256": "3d3d65c504cb9c97e2655312a103c29840c55038b68cfaca64a09439777320e8",
+      "rows": 1295
+    },
+    {
+      "file": "hmda_filers_2025.json",
+      "url": "https://ffiec.cfpb.gov/v2/reporting/filers/2025",
+      "label": "HMDA filer list 2025",
+      "retrieved_utc": "2026-08-14T17:22:12.802496+00:00",
+      "bytes": 383827,
+      "sha256": "be38384fd51d8b148e53d6e267c93bf3b9e4cb301a3dbe531b944da6aa774f86"
+    },
+    {
+      "file": "hmda_lar_2025_wi_il.csv",
+      "url": "https://ffiec.cfpb.gov/v2/data-browser-api/view/csv?states=WI,IL&years=2025",
+      "label": "HMDA loan-level 2025 WI+IL (~200 MB, be patient)",
+      "retrieved_utc": "2026-08-14T17:22:11.988648+00:00",
+      "bytes": 266022320,
+      "sha256": "a80813c126e397ca1c37f52e579f4e1f8f87ee60a58b02931518a760c7e573a2"
+    },
+    {
+      "file": "tl_2024_17_tract.zip",
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/TRACT/tl_2024_17_tract.zip",
+      "label": "TIGER tracts IL",
+      "retrieved_utc": "2026-08-14T17:21:34.218466+00:00",
+      "bytes": 10021807,
+      "sha256": "f15b8619338d563bfeac49c5777dd46afd55a5d6557bf5c88fd63faf5c042f81"
+    },
+    {
+      "file": "tl_2024_55_tract.zip",
+      "url": "https://www2.census.gov/geo/tiger/TIGER2024/TRACT/tl_2024_55_tract.zip",
+      "label": "TIGER tracts WI",
+      "retrieved_utc": "2026-08-14T17:21:33.818097+00:00",
+      "bytes": 7642880,
+      "sha256": "313c378d7fa173bf653381d644d8ded7b4f6241b2065d2b890e1fccccaab5de5"
+    }
+  ]
+}
