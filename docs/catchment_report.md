@@ -43,6 +43,44 @@ required tie-breaking**, so the assignment rule is doing more work than the
 radius is — which is worth stating plainly, because it means a change to the
 tie-break would move results more than a modest change to the radius.
 
+## Tie-break sensitivity — the model is NOT robust to this choice
+
+Coverage cannot move under a different tie-break; membership is fixed by the
+radius. What moves is which branch **owns** which tract, and that is the input
+to BQ-3's catchment potential.
+
+Tested against an alternative rule — largest-deposit branch wins rather than
+nearest:
+
+| | |
+|---|---|
+| Covered tracts changing primary | **449 (24.3%)** |
+| Contested tracts changing primary | **449 (59.8%)** |
+| Median change in per-branch catchment households | **31.8%** |
+| Branches changing more than 25% | 91 of 166 |
+| Branches changing more than 100% | 16 of 166 |
+
+Total households inside catchments is identical under both rules, confirming
+this is a redistribution rather than a change in coverage.
+
+**This is a limitation, not a robustness result, and it is stated as one.**
+Nearly 60% of contested tracts change hands, and the median branch sees its
+catchment household base move by roughly a third. BQ-3's performance index
+depends materially on a choice that geography alone does not force.
+
+**Why `nearest_branch` is nevertheless the right rule** — and the reason is
+stronger than convention. The alternative tested is *circular for BQ-3*:
+assigning tracts by deposit size, then comparing actual deposits against
+deposits predicted from the catchment, builds the outcome into the input.
+`nearest_branch` uses only geography and no outcome variable, which is the
+independence property the performance index requires. The alternative is not
+merely different, it is inadmissible for the question the catchments exist to
+answer.
+
+The fragility remains real and belongs in the case study beside the index
+weight sensitivity in script 11. Both are free choices in the model; both
+should be shown rather than defended.
+
 ## Tracts in no catchment — a finding, not a residue
 
 2,958 of 4,807 tracts (61.5%) sit
@@ -53,6 +91,12 @@ the nearest branch, demographics and LMI status attached.
 This set is the raw material for **BQ-4 unmet mortgage demand** and **BQ-1
 expansion candidates**. It is produced deliberately rather than being whatever
 survives a join.
+
+**Reconciliation.** Coverage of 38.5% matches the 38.5%
+computed independently during radius selection, before this rule existed —
+that estimate came from a standalone spacing analysis, this one from the
+implemented rule applied to the staged data. Two derivations reaching the same
+figure is a reconciliation, not a coincidence.
 
 | | Covered | Uncovered |
 |---|---|---|

@@ -69,6 +69,55 @@ reason.
 | uninumbr | TEXT | FDIC SOD | Branch, FK to dim_branch | |
 | deposits | BIGINT | FDIC SOD `DEPSUMBR` | Branch deposits, whole dollars | **SOD reports thousands** — converted once, at staging, explicitly |
 
+## bridge_branch_catchment
+
+**Grain: `uninumbr` × `tract_geoid`.**
+
+### ⚠ Scope rule: this table covers the SUBJECT INSTITUTION ONLY
+
+This is a stated design decision, not an artefact of the data.
+
+| Table | Population |
+|---|---|
+| `dim_branch` | **All** 6,467 branches in the footprint |
+| `fact_branch_deposits` | **All** branches, all vintages |
+| `bridge_branch_catchment` | **Associated Bank only** — 167 branches |
+
+Competitor branches are **counted, not analysed**. BQ-1 needs them present to
+compute competitor saturation within the subject's catchments, and market
+share needs them in the denominator — but BQ-3's performance index and BQ-4's
+capture rate are subject-only by construction. Building catchments for 6,300
+competitor branches would be roughly 40× the computation for something no
+business question consumes.
+
+**The trap:** a query joining through this bridge and expecting full branch
+coverage gets a silently subject-only result. That is the same shape as every
+near-miss in this project — plausible output, wrong population. `is_subject_bank`
+is carried on every row so a query that forgets the scope is at least
+inspectable rather than silently narrowed.
+
+| Field | Type | Source | Description | Notes |
+|---|---|---|---|---|
+| uninumbr | TEXT | derived | Branch, FK to dim_branch | Subject institution only |
+| tract_geoid | TEXT | derived | Tract, FK to dim_tract | |
+| distance_miles | REAL | derived | Branch to tract centroid, straight line | Computed in EPSG:5070 |
+| is_primary | BOOLEAN | derived | Nearest branch wins the tract | AC-03: at most one primary per tract |
+| is_subject_bank | BOOLEAN | derived | Always true — the scope guard | Present so the subject-only scope is queryable, not just documented |
+
+### ⚠ The tie-break moves results more than the radius does
+
+**40.6% of covered tracts (751 of 1,849) fall inside more than one catchment**
+and are resolved by `is_primary`. Under an alternative tie-break —
+largest-deposit branch rather than nearest — **59.8% of contested tracts change
+hands**, and the median branch's catchment household base moves by **31.8%**.
+
+So the model is **not robust to this choice**, and BQ-3's performance index
+depends on it materially. `nearest_branch` is nevertheless correct, for a
+reason stronger than convention: assigning tracts by deposit size and then
+comparing actual deposits against catchment-predicted deposits is **circular**.
+`nearest_branch` uses only geography and no outcome variable, which is the
+independence property the performance index requires.
+
 ## fact_tract_lending
 
 **Grain: `tract_geoid` × `lei` × `loan_purpose` × `action_taken`.**
