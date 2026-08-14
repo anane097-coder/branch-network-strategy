@@ -195,6 +195,57 @@ indexed AS (
     JOIN market m ON m.market = coalesce(dt.cbsa, 'RURAL-' || e.state)
     LEFT JOIN trajectory t USING (uninumbr)
     CROSS JOIN network n
+),
+
+-- ============================================================================
+-- THE RAW INDEX PENALISES LARGE CATCHMENTS MECHANICALLY. ADJUST FOR IT.
+-- ============================================================================
+-- predicted_deposits is PROPORTIONAL to catchment potential, which assumes a
+-- branch captures a constant share of the demand around it. It does not. A
+-- branch has finite capacity, so one with 27,670 households in range cannot
+-- convert them at the rate one with 5,283 does.
+--
+-- Measured across metro branches -- median index by catchment-size quartile:
+--     Q1  5,283 households -> 1.518
+--     Q2  9,702            -> 0.784
+--     Q3 16,061            -> 0.592
+--     Q4 27,670            -> 0.416
+-- A 3.6x decline, and the correlation holds WITHIN every market (Spearman
+-- -0.53 to -0.75, mean -0.649) more strongly than pooled (-0.589). Within-
+-- market persistence is the signature of a mechanical relationship rather
+-- than a difference between markets.
+--
+-- THE CONSEQUENCE IS NOT COSMETIC. On the raw index Chicago is the weakest
+-- metro market at 0.564 and reads as a conversion problem. Adjusted for
+-- catchment size it is the STRONGEST at 1.357, and Milwaukee becomes the
+-- weakest at 0.829. The raw reading reverses.
+--
+-- Left uncorrected this would tilt BQ-5 toward rural sites, where small
+-- catchments produce high indices by construction -- an artifact of the
+-- catchment rule presented as a finding about where deposits are available.
+--
+-- Both columns ship. The adjusted index is the like-for-like comparison; the
+-- raw index is retained because catchment size is itself a real feature of a
+-- branch's position, not only a measurement problem.
+size_bands AS (
+    SELECT
+        uninumbr,
+        ntile(4) OVER (PARTITION BY tier ORDER BY households) AS size_quartile,
+        tier
+    FROM indexed i
+    JOIN (SELECT b.uninumbr AS u, t.tier
+          FROM dim_branch b JOIN dim_tract t ON b.tract_geoid = t.tract_geoid) x
+      ON x.u = i.uninumbr
+    WHERE households IS NOT NULL AND households > 0
+),
+
+band_median AS (
+    SELECT
+        s.tier,
+        s.size_quartile,
+        median(i.actual_deposits / nullif(i.predicted_deposits, 0)) AS band_index
+    FROM size_bands s JOIN indexed i USING (uninumbr)
+    GROUP BY 1, 2
 )
 
 SELECT
@@ -209,6 +260,11 @@ SELECT
     -- The index. Below 1.0: the branch holds less than its catchment supports.
     round(actual_deposits / nullif(predicted_deposits, 0), 4)
                                                             AS performance_index,
+    -- PRIMARY comparison: this branch against peers with catchments of
+    -- similar size in the same tier. 1.0 = typical for its size band.
+    round((actual_deposits / nullif(predicted_deposits, 0))
+          / nullif(bm.band_index, 0), 4)                    AS index_size_adjusted,
+    sb.size_quartile,
     round(cagr_pct, 2)                                      AS cagr_3y_pct,
     -- LEVEL and TRAJECTORY reported side by side, never blended.
     -- An unknown trajectory is its own state. A branch too new to have three
@@ -245,4 +301,7 @@ SELECT
     -- serving its catchment.
     (actual_deposits > 20 * median_branch_deposits)         AS booking_concentration
 FROM indexed
-ORDER BY performance_index;
+LEFT JOIN size_bands sb USING (uninumbr)
+LEFT JOIN band_median bm ON bm.tier = sb.tier
+                        AND bm.size_quartile = sb.size_quartile
+ORDER BY index_size_adjusted;
