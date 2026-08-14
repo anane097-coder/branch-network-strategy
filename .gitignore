@@ -2,6 +2,8 @@
 # Exclude only what is regenerable or oversized.
 data/staging/*
 data/warehouse/*.duckdb
+data/warehouse/*.duckdb.wal
+data/warehouse/*.duckdb.tmp/
 data/outputs/*.pbix
 !data/**/.gitkeep
 
