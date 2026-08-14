@@ -34,10 +34,12 @@ Then the join, then the county cross-check.
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
 import geopandas
+import numpy as np
 import pandas as pd
 from shapely.geometry import Point
 
@@ -56,21 +58,77 @@ LAT_MIN, LAT_MAX = 36.0, 47.5
 LON_MIN, LON_MAX = -93.5, -86.0
 
 
+ABBR = {"street": "st", "road": "rd", "drive": "dr", "avenue": "ave",
+        "boulevard": "blvd", "highway": "hwy", "north": "n", "south": "s",
+        "east": "e", "west": "w", "suite": "ste", "lane": "ln", "court": "ct",
+        "place": "pl", "parkway": "pkwy", "circle": "cir", "trail": "trl"}
+
+
+def norm_address(a) -> str:
+    """Normalise an address so a formatting change is not read as a move.
+
+    '105 West Main Street' and '105 W Main St' are the same place, and FDIC
+    reformats addresses between vintages. Without this, every reformat would
+    look like a relocation.
+    """
+    s = re.sub(r"[^a-z0-9 ]", " ", str(a).lower())
+    return " ".join(ABBR.get(t, t) for t in s.split())
+
+
 def build_dim_branch(sod: pd.DataFrame) -> pd.DataFrame:
     """One row per UNINUMBR, using its most recent observation.
 
-    Also records whether the branch's reported coordinates moved across
-    vintages. A branch that relocates is legitimate; a branch whose
-    coordinates jump several miles and back is a data problem.
+    COORDINATE VALIDITY IS CHECKED IN EVERY VINTAGE, NOT JUST THE LATEST.
+    A branch can carry garbage coordinates in earlier years and a clean one
+    now; checking only the current row passes it. Exactly that happens here -
+    one branch reports (0, 0) for 2019 through 2022 and a valid position in
+    2025. Invalid vintages are excluded from the drift measurement, because
+    otherwise a null island produces a 6,000-mile "relocation".
+
+    Drift is then classified by whether the ADDRESS changed, which is a
+    sharper test than distance or monotonicity:
+        address changed, position moved  -> relocation
+        address SAME,    position moved  -> re-geocode, NOT a move
+    The subject's largest apparent move, 7.4 miles, is a re-geocode: the
+    address string is identical in all seven vintages. Treating it as a
+    relocation would flag a branch that never moved.
     """
-    sod = sod.sort_values("_year")
+    sod = sod.sort_values("_year").copy()
+    sod["coord_valid"] = (
+        sod["SIMS_LATITUDE"].between(LAT_MIN, LAT_MAX)
+        & sod["SIMS_LONGITUDE"].between(LON_MIN, LON_MAX)
+        & ~((sod["SIMS_LATITUDE"] == 0) & (sod["SIMS_LONGITUDE"] == 0)))
+
     latest = sod.drop_duplicates("UNINUMBR", keep="last").set_index("UNINUMBR")
     span = sod.groupby("UNINUMBR")["_year"].agg(first_year="min", last_year="max")
-    drift = (sod.groupby("UNINUMBR")
-                .agg(lat_range=("SIMS_LATITUDE", lambda s: s.max() - s.min()),
-                     lon_range=("SIMS_LONGITUDE", lambda s: s.max() - s.min())))
-    out = latest.join(span).join(drift)
-    out["coord_drift_deg"] = out[["lat_range", "lon_range"]].max(axis=1)
+    bad_vintages = (sod.loc[~sod["coord_valid"] & sod["SIMS_LATITUDE"].notna()]
+                       .groupby("UNINUMBR").size().rename("invalid_vintages"))
+
+    ok = sod[sod["coord_valid"]].copy()
+    ok["_addr"] = ok["ADDRESBR"].map(norm_address)
+    pts = geopandas.GeoDataFrame(
+        ok, geometry=geopandas.points_from_xy(
+            ok["SIMS_LONGITUDE"], ok["SIMS_LATITUDE"]),
+        crs="EPSG:4326").to_crs("EPSG:5070")
+    ok["_x"], ok["_y"] = pts.geometry.x.values, pts.geometry.y.values
+
+    rows = []
+    for uni, grp in ok.groupby("UNINUMBR"):
+        if len(grp) < 2:
+            rows.append((uni, 0.0, False, "single_vintage"))
+            continue
+        xy = grp[["_x", "_y"]].to_numpy()
+        net = float(np.linalg.norm(xy[-1] - xy[0]) / 1609.344)
+        moved_addr = grp["_addr"].nunique() > 1
+        kind = ("stable" if net <= 0.1
+                else ("relocation" if moved_addr else "regeocode"))
+        rows.append((uni, net, moved_addr, kind))
+    drift = pd.DataFrame(rows, columns=["UNINUMBR", "position_drift_miles",
+                                        "address_changed", "drift_kind"]
+                         ).set_index("UNINUMBR")
+
+    out = latest.join(span).join(drift).join(bad_vintages)
+    out["invalid_vintages"] = out["invalid_vintages"].fillna(0).astype(int)
     return out.reset_index()
 
 
@@ -148,7 +206,8 @@ def main() -> int:
     cols = ["UNINUMBR", "CERT", "NAMEFULL", "ADDRESBR", "CITYBR", "STALPBR",
             "sod_county", "geo_county", "tract_geoid", "SIMS_LATITUDE",
             "SIMS_LONGITUDE", "BRSERTYP", "BKMO", "first_year", "last_year",
-            "coord_drift_deg", "validity", "county_agrees"]
+            "position_drift_miles", "drift_kind", "address_changed",
+            "invalid_vintages", "validity", "county_agrees"]
     dim = joined[[c for c in cols if c in joined.columns]].copy()
     # Carry the invalid ones through so dim_branch is complete and the
     # exceptions are visible in the table, not only in a report.
@@ -161,7 +220,7 @@ def main() -> int:
     STAGING.mkdir(parents=True, exist_ok=True)
     dim.to_csv(OUT, index=False)
 
-    drift = branches[branches["coord_drift_deg"] > 0.05]      # ~3.5 miles
+    drift = branches[branches["drift_kind"] == "relocation"]
     ac02_pass = int(unmatched.sum()) == 0 and int(vc.get("ok", 0)) == len(branches)
 
     # How wrong is each mismatch? Adjacent counties mean the point sits near a
@@ -285,7 +344,7 @@ A branch whose reported coordinates move between vintages either relocated or
 was re-geocoded. Branches moving more than ~0.05° (roughly 3.5 miles):
 **{len(drift):,}**.
 
-{md(drift.nlargest(10, "coord_drift_deg")[["NAMEFULL", "CITYBR", "coord_drift_deg"]].set_index(drift.nlargest(10, "coord_drift_deg")["UNINUMBR"]), "{:.3f}") if len(drift) else "_None._"}
+{md(drift.nlargest(10, "position_drift_miles")[["NAMEFULL", "CITYBR", "position_drift_miles"]].round(2).set_index(drift.nlargest(10, "position_drift_miles")["UNINUMBR"]), "{}") if len(drift) else "_None._"}
 """, encoding="utf-8")
 
     print(f"\nWrote {OUT.relative_to(ROOT)}")

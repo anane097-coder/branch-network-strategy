@@ -102,17 +102,17 @@ simply sits in the wrong market.
 
 A branch whose reported coordinates move between vintages either relocated or
 was re-geocoded. Branches moving more than ~0.05° (roughly 3.5 miles):
-**95**.
+**399**.
 
-| UNINUMBR | NAMEFULL | CITYBR | coord_drift_deg |
+| UNINUMBR | NAMEFULL | CITYBR | position_drift_miles |
 |---|---|---|---|
-| 557506 | BMO Bank National Association | Chicago | 87.632 |
-| 2349 | Grand Ridge National Bank | Wheaton | 0.688 |
-| 41234 | Westbury Bank | Waukesha | 0.369 |
-| 3921 | Foresight Bank | Winnebago | 0.233 |
-| 6965 | Eagle Valley Bank | Griggsville | 0.190 |
-| 429670 | SouthernTrust Bank | Marion | 0.180 |
-| 11652 | SouthernTrust Bank | Goreville | 0.180 |
-| 2450 | Dieterich Bank | Effingham | 0.158 |
-| 278138 | First-Citizens Bank & Trust Company | Milwaukee | 0.142 |
-| 432684 | Town Bank, National Association | Madison | 0.138 |
+| 2349 | Grand Ridge National Bank | Wheaton | 55.9 |
+| 41234 | Westbury Bank | Waukesha | 25.6 |
+| 429670 | SouthernTrust Bank | Marion | 12.7 |
+| 3921 | Foresight Bank | Winnebago | 12.68 |
+| 11652 | SouthernTrust Bank | Goreville | 12.68 |
+| 6965 | Eagle Valley Bank | Griggsville | 10.47 |
+| 278138 | First-Citizens Bank & Trust Company | Milwaukee | 9.84 |
+| 2450 | Dieterich Bank | Effingham | 9.82 |
+| 3925 | Fidelity Bank | Savanna | 9.8 |
+| 13317 | Fidelity Bank | Thompson | 9.79 |
