@@ -17,7 +17,7 @@
 -- identifiable rather than being silently absorbed.
 --
 -- Deposits are WHOLE DOLLARS here. SOD reports thousands; the conversion
--- happens once, at load, in 09_build_warehouse.py.
+-- happens once, at load, in 10_build_warehouse.py.
 
 WITH branch_county AS (
     SELECT

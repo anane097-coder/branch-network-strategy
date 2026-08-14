@@ -180,7 +180,7 @@ HMDA is pre-aggregated to `fact_tract_lending` in staging. Loan-level rows never
 | `06_stage_hmda.py` | Filter WI/IL, aggregate to tract grain | `fact_tract_lending` staged |
 | `07_spatial_join.py` | Branch coordinates → tract polygons | Zero unmatched, or all exceptions enumerated |
 | `08_catchments.py` | Distance matrix, radius rule, bridge table | Every tract in ≤1 primary catchment (AC-03) |
-| `09_build_warehouse.py` | Load DuckDB dimensional model | All tables present, row counts logged |
+| `10_build_warehouse.py` | Load DuckDB dimensional model | All tables present, row counts logged |
 | `10_index.py` | Composite index from `config/index_weights.yaml` | Index computed, reproducible |
 | `11_sensitivity.py` | N alternative weightings, ranking stability | Stability report written |
 | `12_qa_report.py` | Reconciliation, nulls, unmatched lists | AC-01 reconciliation within 0.1% |

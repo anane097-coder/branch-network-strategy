@@ -1,5 +1,5 @@
 """
-09_build_warehouse.py — load the dimensional model into DuckDB.
+10_build_warehouse.py — load the dimensional model into DuckDB.
 
 Writes data/warehouse/branch_analysis.duckdb and docs/warehouse_load.md.
 
@@ -79,6 +79,42 @@ def main() -> int:
                         dtype={"CERT": "string", "fed_rssd": "string",
                                "lei": "string"})
 
+    # Index components from script 09. REQUIRED, not optional - a warehouse
+    # missing them still loads, still passes every assertion, and produces an
+    # opportunity index silently short of two of its five components. A
+    # conditional that skips quietly is indistinguishable from one that ran.
+    for name in ("fact_tract_competition.csv", "fact_county_deposit_growth.csv"):
+        if not (STAGING / name).exists():
+            raise SystemExit(
+                f"Missing {name}. Run scripts/09_index_components.py first - "
+                "it builds the two components the warehouse cannot derive.")
+    # Index weights, loaded FROM THE CONFIG FILE into the warehouse so SQL-12
+    # can join to them instead of hardcoding numbers a reader would have to
+    # trust. FR-03 requires weights adjustable without rebuilding the model;
+    # a literal 0.25 inside a query would break that quietly, and worse, would
+    # let the config and the query disagree with nothing to detect it.
+    import yaml
+    iw = yaml.safe_load((ROOT / "config" / "index_weights.yaml")
+                        .read_text(encoding="utf-8"))
+    inverted = set(iw.get("inverted", []))
+    wrows = [{"scenario": "primary", "component": k, "weight": float(v),
+              "inverted": k in inverted} for k, v in iw["weights"].items()]
+    for sc, ws in (iw.get("scenarios") or {}).items():
+        wrows += [{"scenario": sc, "component": k, "weight": float(v),
+                   "inverted": k in inverted} for k, v in ws.items()]
+    index_weights = pd.DataFrame(wrows)
+    index_weights["normalization"] = iw["normalization"]
+    for sc, grp in index_weights.groupby("scenario"):
+        total = grp["weight"].sum()
+        if abs(total - 1.0) > 1e-9:
+            raise SystemExit(f"Weights for scenario {sc!r} sum to {total}, not 1.0.")
+
+    competition = pd.read_csv(STAGING / "fact_tract_competition.csv",
+                              dtype={"tract_geoid": "string", "tier": "string"})
+    county_growth = pd.read_csv(STAGING / "fact_county_deposit_growth.csv",
+                                dtype={"county_fips": "string",
+                                       "retail_basis_status": "string"})
+
     # --- dim_year --------------------------------------------------------
     dim_year = pd.DataFrame({"year": list(SOD_AS_OF),
                              "sod_as_of_date": list(SOD_AS_OF.values())})
@@ -154,6 +190,41 @@ def main() -> int:
             "tract_geoid TEXT, uninumbr TEXT, branch_tier TEXT, "
             "distance_miles DOUBLE, is_primary BOOLEAN, is_subject_bank BOOLEAN",
             bridge),
+        # Tract-grain competitive pressure. NOT a catchment bridge: no branch
+        # identifier, because competitor branches have no catchments here.
+        "fact_tract_competition": (
+            "tract_geoid TEXT, tier TEXT, radius_miles DOUBLE, "
+            "competitor_branches BIGINT, subject_branches BIGINT, "
+            "catchment_tracts BIGINT, catchment_households DOUBLE, "
+            "tract_households DOUBLE, "
+            "competitor_per_10k_catchment_hh DOUBLE, "
+            # Pre-correction series, retained for audit. Never rank on it.
+            "competitor_per_10k_tract_hh_UNADJUSTED DOUBLE", competition),
+        "fact_county_deposit_growth": (
+            "county_fips TEXT, "
+            "deposits_2019_total DOUBLE, deposits_2025_total DOUBLE, "
+            "branches_2019_total BIGINT, branches_2025_total BIGINT, "
+            "cagr_pct_total DOUBLE, "
+            "deposits_2019_retail DOUBLE, deposits_2025_retail DOUBLE, "
+            "branches_2019_retail BIGINT, branches_2025_retail BIGINT, "
+            "cagr_pct_retail DOUBLE, "
+            "deposits_2019_excl_hq DOUBLE, deposits_2025_excl_hq DOUBLE, "
+            "branches_2019_excl_hq BIGINT, branches_2025_excl_hq BIGINT, "
+            "cagr_pct_excl_hq DOUBLE, "
+            "excluded_branches_2019 DOUBLE, excluded_deposits_2019 DOUBLE, "
+            "excluded_branch_share_2019 DOUBLE, "
+            "excluded_deposit_share_2019 DOUBLE, "
+            "excluded_branches_2025 DOUBLE, excluded_deposits_2025 DOUBLE, "
+            "excluded_branch_share_2025 DOUBLE, "
+            "excluded_deposit_share_2025 DOUBLE, "
+            "excluded_branches DOUBLE, excluded_deposit_share DOUBLE, "
+            "excluded_branch_share DOUBLE, cagr_shift_pp DOUBLE, "
+            "retail_basis_status TEXT", county_growth),
+        # Weights as data, from config/index_weights.yaml. SQL-12 joins to
+        # this rather than carrying literals.
+        "ref_index_weights": (
+            "scenario TEXT, component TEXT, weight DOUBLE, inverted BOOLEAN, "
+            "normalization TEXT", index_weights),
         # The AC-01 reference: FDIC's own server-side aggregate over the full
         # SOD source table. Not a re-sum of our extract.
         "ref_sod_state_totals": (
@@ -210,6 +281,27 @@ def main() -> int:
             "SELECT count(*) FROM dim_branch d "
             "LEFT JOIN dim_tract t USING (tract_geoid) "
             "WHERE d.tract_geoid IS NOT NULL AND t.tract_geoid IS NULL",
+        # The index components. Both join into the opportunity index, so a
+        # break here silently drops tracts from a ranking rather than
+        # raising - the component simply arrives NULL and the tract scores
+        # short. Checked in BOTH directions for the same reason: a component
+        # covering fewer tracts than dim_tract is as damaging as one covering
+        # tracts that do not exist, and only one of those is an orphan.
+        "fact_tract_competition.tract_geoid -> dim_tract":
+            "SELECT count(*) FROM fact_tract_competition f "
+            "LEFT JOIN dim_tract t USING (tract_geoid) WHERE t.tract_geoid IS NULL",
+        "dim_tract -> fact_tract_competition (coverage)":
+            "SELECT count(*) FROM dim_tract t "
+            "LEFT JOIN fact_tract_competition f USING (tract_geoid) "
+            "WHERE f.tract_geoid IS NULL",
+        "fact_county_deposit_growth.county_fips -> dim_tract":
+            "SELECT count(*) FROM fact_county_deposit_growth g "
+            "WHERE NOT EXISTS (SELECT 1 FROM dim_tract t "
+            "                  WHERE t.county_fips = g.county_fips)",
+        "dim_tract.county_fips -> fact_county_deposit_growth (coverage)":
+            "SELECT count(DISTINCT t.county_fips) FROM dim_tract t "
+            "WHERE NOT EXISTS (SELECT 1 FROM fact_county_deposit_growth g "
+            "                  WHERE g.county_fips = t.county_fips)",
     }
     ri = {}
     for label, sql in checks.items():
@@ -265,7 +357,7 @@ def main() -> int:
 
     REPORT.write_text(f"""# Warehouse Load
 
-Generated by `scripts/09_build_warehouse.py` into
+Generated by `scripts/10_build_warehouse.py` into
 `data/warehouse/branch_analysis.duckdb`. The database is dropped and rebuilt
 on every run, which is what AC-04 requires.
 

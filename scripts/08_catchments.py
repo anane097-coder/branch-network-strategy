@@ -365,7 +365,7 @@ before any index is applied:
     print(f"Wrote {BRIDGE_OUT.relative_to(ROOT)}")
     print(f"Wrote {UNCOVERED_OUT.relative_to(ROOT)}")
     print(f"Wrote {REPORT.relative_to(ROOT)}")
-    print("\nNext: python scripts/09_build_warehouse.py")
+    print("\nNext: python scripts/10_build_warehouse.py")
     return 0
 
 
