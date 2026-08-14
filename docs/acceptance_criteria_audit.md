@@ -228,6 +228,52 @@ of seven were consequential enough to change a reported result.
 
 ---
 
+## Open decisions for SQL-12 and script 11 — settle before, not after
+
+**1. Every index component is scale-exposed, four of five as ratios or rates.**
+The performance index's scale bias inverted a market ranking; the same test
+must run on all five opportunity-score components before they are combined,
+because a composite inherits every component's scale relationship at once.
+
+| Component | Exposure |
+|---|---|
+| `competitor_saturation` | Branches ÷ households — the same shape that failed |
+| `unmet_mortgage_demand` | Scales with tract size unless normalised |
+| `deposit_market_growth` | County CAGR; small counties volatile by construction |
+| `household_growth` | Rate over a small denominator: 200→240 households reads +20%, 2,000→2,300 reads +15%, and the first outranks the second on an opportunity an order of magnitude smaller |
+| `median_income` | Not a ratio, but a **derived level** whose ACS margin of error scales inversely with tract sample size. Precision varies systematically across the thing being ranked, so small-sample tracts populate both tails more readily than their true values warrant — which inflates their weight specifically under **min-max** normalisation, the method `config/index_weights.yaml` currently sets |
+
+**2. The adjustment method is itself a free choice, and this model has already
+been bitten twice by those.** Size-banding must not be traded for a new
+artifact: if the relationship is smooth, band boundaries create discontinuities
+where two nearly identical tracts land either side and receive different
+adjustments. **Look at the scatter first.** If the relationship is continuous,
+a regression-based adjustment has no boundary to defend and is cleaner; if
+banding is used, the bands must be derived by a stated rule — as the catchment
+radii were — rather than drawn to look reasonable.
+
+**3. Script 11's sensitivity must vary weights across the ADJUSTED components,
+not the raw ones.** Otherwise it reports the robustness of a model that is not
+the one shipping. Obvious written down, and exactly the kind of thing that goes
+wrong when two corrections land in different scripts. Noted here because this
+document is read before both.
+
+**4. The `unmet_mortgage_demand` component test and the SQL-11 basis decision
+must not cross.** SQL-11 emits four ranking bases and adopts none; whichever it
+feeds forward is the series the component scale test will actually be testing.
+So the order is fixed: **settle the basis, then scale-test the series that
+ships.** If the basis changes after the test has run, the test is void and must
+be rerun — a scale result computed on `basis_absolute` says nothing about
+`basis_per_application`, which is size- and affluence-neutral by construction
+and may well need no adjustment at all.
+
+This is the same failure shape as item 3: two corrections landing in different
+artifacts with neither aware of the other. Item 3 is a script-to-script version;
+this is a query-to-script version. Both are recorded here because this document
+is read before either.
+
+---
+
 ## The equity result has now been protected three times, at three levels
 
 This deserves separating from the general wrong-population pattern, because
