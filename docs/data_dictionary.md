@@ -71,7 +71,60 @@ reason.
 
 ## fact_tract_lending
 
+**Grain: `tract_geoid` × `lei` × `loan_purpose` × `action_taken`.**
+
 | Field | Type | Source | Description | Notes |
 |---|---|---|---|---|
 | tract_geoid | TEXT | HMDA | 11-digit tract | |
 | lei | TEXT | HMDA | Legal Entity Identifier | Bridges to cert via RSSD. Lenders that do not resolve still count toward tract totals; they simply cannot be named |
+| loan_purpose | TEXT | HMDA | Purpose code | `1` Home purchase · `2` Home improvement · `31` Refinancing · `32` Cash-out refinancing · `4` Other · `5` Not applicable |
+| action_taken | TEXT | HMDA | Outcome code — **part of the grain, deliberately** | See mapping below. Kept in the grain so no query can count originations without naming `action_taken = 1`; a pre-filtered fact table would hide that choice inside staging where no reviewer sees it |
+| record_count | INTEGER | derived | Rows at this grain | Deliberately minimal. Every meaningful ratio is defined in SQL against explicit codes |
+| total_amount | BIGINT | derived | Sum of `loan_amount` | HMDA rounds amounts to midpoints — see A-03 constraints on the public file |
+
+### `action_taken` — code to meaning
+
+| Code | Meaning | Class | Share |
+|---|---|---|---|
+| 1 | Loan originated | origination | 55.7% |
+| 2 | Application approved but not accepted | application | 2.9% |
+| 3 | Application denied | application | 14.1% |
+| 4 | Application withdrawn by applicant | application | 12.2% |
+| 5 | File closed for incompleteness | application | 4.4% |
+| **6** | **Purchased loan — bought, NOT originated** | purchased | 10.5% |
+| 7 | Preapproval request denied | preapproval | 0.1% |
+| 8 | Preapproval request approved but not accepted | preapproval | 0.2% |
+
+**Originations are `action_taken = 1` only.** Including code 6 overstates
+lending by 18.9%; no filter at all overstates it by 81.0%. The distortion is
+uneven — Associated is 0.8% purchased while several lenders exceed 88% — so
+including it would inflate competitors far more than the subject.
+
+### ⚠ Known bias: tract-level denial rates read low
+
+**Any tract-level denial-rate measure built on this table carries a known
+downward bias.** 1.9% of denials are geographically unattributable against
+0.3% of originations, so denials are systematically under-represented at tract
+grain by roughly a factor of six.
+
+The mechanism is not mysterious: applications denied early — incomplete files,
+credit-based denials reached before a property is identified — may never
+acquire a property address to geocode. It is the same reason preapprovals
+dominate the untracted set (50.3% of code-7 and 71.6% of code-8 records lack a
+tract).
+
+This is recorded here, against the table, rather than only in prose, because a
+prose caveat separates from the number it qualifies the moment someone copies
+a chart into a deck. See assumption **A-07**.
+
+### ⚠ Known gap: three lenders report no geography at all
+
+Three LEIs report a null census tract on **100% of their records** (751, 706,
+and 278 records; 1,735 combined). They are invisible to any tract-level
+competitive analysis, which touches **BQ-1 competitor saturation** and **BQ-4
+unmet demand**.
+
+**Direction of bias matters here:** a market missing lenders looks *less*
+competitive than it is, which biases toward recommending expansion into it.
+Small in volume, but pointed the wrong way for the decision this project
+exists to make.
