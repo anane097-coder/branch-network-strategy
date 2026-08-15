@@ -81,13 +81,39 @@ table recommendation_sets
 
 		annotation SummarizationSetBy = Automatic
 
+	column centroid_lat
+		dataType: double
+		dataCategory: Latitude
+		lineageTag: 0fefac74-3844-50ef-b53f-2694ae32760f
+		summarizeBy: none
+		sourceColumn: centroid_lat
+
+		annotation SummarizationSetBy = Automatic
+
+	column centroid_lon
+		dataType: double
+		dataCategory: Longitude
+		lineageTag: 14ac5c3d-e3a5-55d0-93da-ca88d12ca4f3
+		summarizeBy: none
+		sourceColumn: centroid_lon
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_fips
+		dataType: string
+		lineageTag: 7ba1fe76-47bb-54fb-8a45-2c77aa9ea737
+		summarizeBy: none
+		sourceColumn: county_fips
+
+		annotation SummarizationSetBy = Automatic
+
 	partition recommendation_sets = m
 		mode: import
 		source =
 			let
 			    Source = Csv.Document(File.Contents(DataFolder & "\recommendation_sets.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
 			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-			    Typed = Table.TransformColumnTypes(Promoted, {{"rule", type text}, {"tract_geoid", type text}, {"county_name", type text}, {"cbsa_title", type text}, {"tier", type text}, {"households", Int64.Type}, {"lmi_flag", type logical}, {"opportunity_score", type number}, {"unmet_mortgage_demand", type number}, {"growth_is_estimated", type logical}})
+			    Typed = Table.TransformColumnTypes(Promoted, {{"rule", type text}, {"tract_geoid", type text}, {"county_name", type text}, {"cbsa_title", type text}, {"tier", type text}, {"households", Int64.Type}, {"lmi_flag", type logical}, {"opportunity_score", type number}, {"unmet_mortgage_demand", type number}, {"growth_is_estimated", type logical}, {"centroid_lat", type number}, {"centroid_lon", type number}, {"county_fips", type text}})
 			in
 			    Typed
 

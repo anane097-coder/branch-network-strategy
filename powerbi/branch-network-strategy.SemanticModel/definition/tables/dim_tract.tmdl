@@ -139,6 +139,7 @@ table dim_tract
 
 	column centroid_lat
 		dataType: double
+		dataCategory: Latitude
 		lineageTag: e8953dd1-a928-5c5a-a7b3-ce3d0e08490a
 		summarizeBy: none
 		sourceColumn: centroid_lat
@@ -147,9 +148,28 @@ table dim_tract
 
 	column centroid_lon
 		dataType: double
+		dataCategory: Longitude
 		lineageTag: 0264607f-7678-5820-a10c-752a91ee0d0e
 		summarizeBy: none
 		sourceColumn: centroid_lon
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_name
+		dataType: string
+		dataCategory: StateOrProvince
+		lineageTag: 50740996-d786-589d-b94a-bad454e89b30
+		summarizeBy: none
+		sourceColumn: state_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_full
+		dataType: string
+		dataCategory: Place
+		lineageTag: 7b101303-424b-5ddf-83c8-bbaa55f8c5dd
+		summarizeBy: none
+		sourceColumn: county_full
 
 		annotation SummarizationSetBy = Automatic
 
@@ -208,7 +228,7 @@ table dim_tract
 			let
 			    Source = Csv.Document(File.Contents(DataFolder & "\dim_tract.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
 			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"county_fips", type text}, {"county_name", type text}, {"cbsa", type text}, {"cbsa_title", type text}, {"tier", type text}, {"population", Int64.Type}, {"households", Int64.Type}, {"household_growth_pct", type number}, {"growth_basis", type text}, {"median_hh_income", type number}, {"median_family_income", type number}, {"median_home_value", type number}, {"tract_to_area_income_pct", type number}, {"lmi_flag", type logical}, {"lmi_basis", type text}, {"tract_status", type text}, {"centroid_lat", type number}, {"centroid_lon", type number}, {"in_catchment", type logical}})
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"county_fips", type text}, {"county_name", type text}, {"cbsa", type text}, {"cbsa_title", type text}, {"tier", type text}, {"population", Int64.Type}, {"households", Int64.Type}, {"household_growth_pct", type number}, {"growth_basis", type text}, {"median_hh_income", type number}, {"median_family_income", type number}, {"median_home_value", type number}, {"tract_to_area_income_pct", type number}, {"lmi_flag", type logical}, {"lmi_basis", type text}, {"tract_status", type text}, {"centroid_lat", type number}, {"centroid_lon", type number}, {"state_name", type text}, {"county_full", type text}, {"in_catchment", type logical}})
 			in
 			    Typed
 

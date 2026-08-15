@@ -84,6 +84,19 @@ def main() -> int:
                t.median_family_income, t.median_home_value,
                t.tract_to_area_income_pct, t.lmi_flag, t.lmi_basis,
                t.tract_status, t.centroid_lat, t.centroid_lon,
+               -- COUNTY NAME ALONE IS NOT A PLACE. "Adams County" exists in
+               -- around twenty states, and Power BI geocodes the string it is
+               -- given: a filled map keyed on county_name lights up counties
+               -- from Washington to Florida. The state has to be IN the value,
+               -- because a slicer on state filters the data without telling
+               -- the geocoder anything.
+               CASE substr(t.county_fips, 1, 2)
+                    WHEN '17' THEN 'Illinois' WHEN '55' THEN 'Wisconsin'
+               END AS state_name,
+               t.county_name || ', ' ||
+               CASE substr(t.county_fips, 1, 2)
+                    WHEN '17' THEN 'Illinois' WHEN '55' THEN 'Wisconsin'
+               END AS county_full,
                EXISTS (SELECT 1 FROM bridge_branch_catchment b
                        WHERE b.tract_geoid = t.tract_geoid) AS in_catchment
         FROM dim_tract t
@@ -146,6 +159,9 @@ def main() -> int:
         comp[SHORT[c]] = (scored[f"contrib_{c}"] / primary[c]).round(6).to_numpy()
     comp["opportunity_score"] = scored["opportunity_score"].to_numpy()
     comp["county_name"] = scored["county_name"].to_numpy()
+    cent = con.execute(
+        "SELECT tract_geoid, centroid_lat, centroid_lon FROM dim_tract").df()
+    comp = comp.merge(cent, on="tract_geoid", how="left")
     comp["lmi_flag"] = scored["lmi_flag"].to_numpy()
     comp["growth_is_estimated"] = scored["growth_is_estimated"].to_numpy()
 
@@ -158,9 +174,14 @@ def main() -> int:
     exports["index_components"] = comp
 
     # --- the recommendation ------------------------------------------------
-    exports["recommendation_sets"] = pd.read_csv(
-        ROOT / "data" / "staging" / "ref_recommended_sites.csv",
-        dtype={"tract_geoid": "string"})
+    # Plotted as points, so they need coordinates. A tract GEOID is not a
+    # geocodable place - Power BI would silently plot nothing.
+    sites = pd.read_csv(ROOT / "data" / "staging" / "ref_recommended_sites.csv",
+                        dtype={"tract_geoid": "string"})
+    exports["recommendation_sets"] = sites.merge(
+        con.execute("SELECT tract_geoid, centroid_lat, centroid_lon, county_fips "
+                    "FROM dim_tract").df(),
+        on="tract_geoid", how="left")
     cov = pd.read_csv(ROOT / "data" / "staging" / "ref_recommended_coverage.csv",
                       dtype={"tract_geoid": "string"})
     exports["recommended_coverage"] = cov

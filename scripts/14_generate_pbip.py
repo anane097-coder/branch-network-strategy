@@ -121,6 +121,26 @@ BOOL_LITERALS = {True, False, "True", "False", "true", "false"}
 # nothing.
 DATE_TABLE, DATE_COLUMN = "dim_year", "date"
 
+# GEOGRAPHIC DATA CATEGORIES. Without these Power BI guesses from the column
+# name, and it guesses badly: a filled map keyed on an uncategorised
+# "county_name" geocoded the string against every state in the union and
+# shaded counties from Washington to Florida. Latitude and longitude need no
+# geocoding at all, which is why the point layers use them.
+DATA_CATEGORY = {
+    ("dim_tract", "county_full"): "Place",
+    ("dim_tract", "state_name"): "StateOrProvince",
+    ("dim_tract", "centroid_lat"): "Latitude",
+    ("dim_tract", "centroid_lon"): "Longitude",
+    ("index_components", "centroid_lat"): "Latitude",
+    ("index_components", "centroid_lon"): "Longitude",
+    ("recommendation_sets", "centroid_lat"): "Latitude",
+    ("recommendation_sets", "centroid_lon"): "Longitude",
+    ("dim_branch", "latitude"): "Latitude",
+    ("dim_branch", "longitude"): "Longitude",
+    ("dim_branch", "state"): "StateOrProvince",
+    ("dim_branch", "city"): "City",
+}
+
 
 def pbi_types(df: pd.DataFrame, table: str):
     """(tmdl dataType, M type) per column, identifiers forced to text."""
@@ -180,6 +200,9 @@ def table_tmdl(table: str, df: pd.DataFrame, measures: str = "") -> str:
         lines += [f"\tcolumn {col}", f"\t\tdataType: {dt}"]
         if is_date_key:
             lines += ["\t\tisKey", "\t\tformatString: General Date"]
+        cat = DATA_CATEGORY.get((table, col))
+        if cat:
+            lines.append(f"\t\tdataCategory: {cat}")
         lines += [
             f"\t\tlineageTag: {tag('col', table, col)}",
             "\t\tsummarizeBy: none",
@@ -816,7 +839,8 @@ def build_report():
             run("Recommendation and equity check", "20pt", True, INK)]),
         # BAND 1 - both site sets, over the existing footprint.
         visual("map", 16, 54, 620, 250,
-               {"Category": ["recommendation_sets:tract_geoid"],
+               {"Latitude": ["recommendation_sets:centroid_lat"],
+                "Longitude": ["recommendation_sets:centroid_lon"],
                 "Series": ["recommendation_sets:rule"],
                 "Size": ["recommendation_sets:opportunity_score"]},
                "Rule A (commercial) and Rule B (constrained), both shown"),
@@ -898,14 +922,20 @@ def build_report():
                "Tract coverage %"),
         # County choropleth rather than 4,807 tract polygons: 174 counties
         # render fast and read clearly, which is the entire reason for it.
-        visual("filledMap", 16, 152, 600, 320,
-               {"Category": ["dim_tract:county_name"],
+        # county_full is "Adams County, Illinois", categorised as Place. The
+        # bare county name geocodes against every state that has one.
+        visual("filledMap", 16, 152, 300, 320,
+               {"Category": ["dim_tract:county_full"],
                 "Y": ["measure:Published Opportunity Score"]},
                "Counties by mean opportunity score"),
-        visual("map", 16, 152, 600, 320,
-               {"Category": ["index_components:tract_geoid"],
+        # Coordinates, not names: exact, and needs no geocoding. Beside the
+        # choropleth rather than stacked on it - two map visuals at the same
+        # position simply hide one another.
+        visual("map", 324, 152, 292, 320,
+               {"Latitude": ["index_components:centroid_lat"],
+                "Longitude": ["index_components:centroid_lon"],
                 "Size": ["measure:Weighted Score"]},
-               "Top-50 tracts", z=1),
+               "Top tracts by weighted score"),
         # The composition flags ARE the point of this table: a reader should
         # see 4.0% LMI and 62% estimated growth without being told.
         visual("tableEx", 628, 152, 636, 320, {"Values": [

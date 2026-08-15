@@ -65,6 +65,24 @@ table index_components
 
 		annotation SummarizationSetBy = Automatic
 
+	column centroid_lat
+		dataType: double
+		dataCategory: Latitude
+		lineageTag: 6fb9fd67-6937-564b-a476-0c288003cea9
+		summarizeBy: none
+		sourceColumn: centroid_lat
+
+		annotation SummarizationSetBy = Automatic
+
+	column centroid_lon
+		dataType: double
+		dataCategory: Longitude
+		lineageTag: 0e53c63a-84ec-54b8-926e-1048eeeff9d3
+		summarizeBy: none
+		sourceColumn: centroid_lon
+
+		annotation SummarizationSetBy = Automatic
+
 	column lmi_flag
 		dataType: boolean
 		lineageTag: 35768960-f0f8-5012-ae86-28e7e29c3a75
@@ -135,7 +153,7 @@ table index_components
 			let
 			    Source = Csv.Document(File.Contents(DataFolder & "\index_components.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
 			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"household_growth_z", type number}, {"median_income_z", type number}, {"deposit_growth_z", type number}, {"competitor_saturation_z", type number}, {"unmet_demand_z", type number}, {"opportunity_score", type number}, {"county_name", type text}, {"lmi_flag", type logical}, {"growth_is_estimated", type logical}})
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"household_growth_z", type number}, {"median_income_z", type number}, {"deposit_growth_z", type number}, {"competitor_saturation_z", type number}, {"unmet_demand_z", type number}, {"opportunity_score", type number}, {"county_name", type text}, {"centroid_lat", type number}, {"centroid_lon", type number}, {"lmi_flag", type logical}, {"growth_is_estimated", type logical}})
 			in
 			    Typed
 

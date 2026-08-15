@@ -35,6 +35,7 @@ table dim_branch
 
 	column city
 		dataType: string
+		dataCategory: City
 		lineageTag: a7abb7b8-baec-5989-ba2a-3a833c05cf79
 		summarizeBy: none
 		sourceColumn: city
@@ -43,6 +44,7 @@ table dim_branch
 
 	column state
 		dataType: string
+		dataCategory: StateOrProvince
 		lineageTag: 77594619-4f47-580e-b437-67387ecfa084
 		summarizeBy: none
 		sourceColumn: state
@@ -59,6 +61,7 @@ table dim_branch
 
 	column latitude
 		dataType: double
+		dataCategory: Latitude
 		lineageTag: fc98a3f4-0b19-578a-91f1-1b1b308167ea
 		summarizeBy: none
 		sourceColumn: latitude
@@ -67,6 +70,7 @@ table dim_branch
 
 	column longitude
 		dataType: double
+		dataCategory: Longitude
 		lineageTag: 309ef5fd-b4fc-5669-8e5b-3365bf836d1d
 		summarizeBy: none
 		sourceColumn: longitude
