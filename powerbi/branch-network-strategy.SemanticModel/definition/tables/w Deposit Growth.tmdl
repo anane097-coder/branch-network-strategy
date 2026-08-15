@@ -1,0 +1,20 @@
+table 'w Deposit Growth'
+	lineageTag: 1de9c2c4-965a-5876-84c2-d3453e1889bf
+
+	column 'w Deposit Growth'
+		dataType: double
+		lineageTag: 46b39a79-d9ae-531f-b875-587800c06eec
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'w Deposit Growth Value' = SELECTEDVALUE ( 'w Deposit Growth'[w Deposit Growth], 0.25 )
+		lineageTag: 5e77e6a5-cb5c-560e-bfe3-a532622824cd
+		formatString: #,0.00
+
+	partition 'w Deposit Growth' = calculated
+		mode: import
+		source = GENERATESERIES ( 0, 0.5, 0.05 )
+
+	annotation PBI_Id = ParameterTable

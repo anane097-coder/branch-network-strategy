@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "branch-network-strategy"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "853f3480-b610-51f6-9d03-52fdecf03e2e"
+  }
+}

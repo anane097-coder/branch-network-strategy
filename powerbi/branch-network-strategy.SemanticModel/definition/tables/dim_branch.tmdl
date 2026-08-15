@@ -1,0 +1,150 @@
+table dim_branch
+	lineageTag: 62c95e1f-de0e-5fa3-979f-67a37dbb02a9
+
+	column uninumbr
+		dataType: string
+		lineageTag: a77c1bd8-596d-5519-b4f2-5c057a07771f
+		summarizeBy: none
+		sourceColumn: uninumbr
+
+		annotation SummarizationSetBy = Automatic
+
+	column cert
+		dataType: string
+		lineageTag: 0e27775b-1644-5ad9-be39-f6968c22b876
+		summarizeBy: none
+		sourceColumn: cert
+
+		annotation SummarizationSetBy = Automatic
+
+	column institution_name
+		dataType: string
+		lineageTag: 4a5237a1-9610-5120-8939-f0f50a79e6e2
+		summarizeBy: none
+		sourceColumn: institution_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column address
+		dataType: string
+		lineageTag: fb83927d-a036-5c08-a0e4-0352be15b663
+		summarizeBy: none
+		sourceColumn: address
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: a7abb7b8-baec-5989-ba2a-3a833c05cf79
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: 77594619-4f47-580e-b437-67387ecfa084
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_fips
+		dataType: string
+		lineageTag: adb945c4-6fde-5bab-a706-08ff4d5f65ef
+		summarizeBy: none
+		sourceColumn: county_fips
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: double
+		lineageTag: fc98a3f4-0b19-578a-91f1-1b1b308167ea
+		summarizeBy: none
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column longitude
+		dataType: double
+		lineageTag: 309ef5fd-b4fc-5669-8e5b-3365bf836d1d
+		summarizeBy: none
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column tract_geoid
+		dataType: string
+		lineageTag: 8440c799-7ed3-53e8-aff8-3f7a4589bdab
+		summarizeBy: none
+		sourceColumn: tract_geoid
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_type
+		dataType: string
+		lineageTag: 6d413cbd-0398-5f95-9185-54dfc6ae3c17
+		summarizeBy: none
+		sourceColumn: service_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_main_office
+		dataType: string
+		lineageTag: db3dd8fb-5a65-5ca3-963c-c6c92f8cb9ed
+		summarizeBy: none
+		sourceColumn: is_main_office
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_year
+		dataType: int64
+		lineageTag: a934a051-4ac6-5f0d-8508-4dad141deddf
+		summarizeBy: none
+		sourceColumn: first_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_year
+		dataType: int64
+		lineageTag: 8fcb9416-29fa-52d2-a0ce-ce1884cda0a2
+		summarizeBy: none
+		sourceColumn: last_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column drift_kind
+		dataType: string
+		lineageTag: 6c39aa89-caff-545a-9915-9486e2b23aff
+		summarizeBy: none
+		sourceColumn: drift_kind
+
+		annotation SummarizationSetBy = Automatic
+
+	column validity
+		dataType: string
+		lineageTag: 0c89b412-7404-52ea-b400-b79734a787c2
+		summarizeBy: none
+		sourceColumn: validity
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_subject_bank
+		dataType: boolean
+		lineageTag: 84ecfbb2-41b0-5390-83c3-14c81fab87d2
+		summarizeBy: none
+		sourceColumn: is_subject_bank
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_branch = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\dim_branch.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"uninumbr", type text}, {"cert", type text}, {"institution_name", type text}, {"address", type text}, {"city", type text}, {"state", type text}, {"county_fips", type text}, {"latitude", type number}, {"longitude", type number}, {"tract_geoid", type text}, {"service_type", type text}, {"is_main_office", type text}, {"first_year", Int64.Type}, {"last_year", Int64.Type}, {"drift_kind", type text}, {"validity", type text}, {"is_subject_bank", type logical}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

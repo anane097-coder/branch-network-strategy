@@ -1,0 +1,20 @@
+table 'w Household Growth'
+	lineageTag: 733155d1-bb2b-5439-bf01-282c7ec0dce9
+
+	column 'w Household Growth'
+		dataType: double
+		lineageTag: da91ded5-2a00-5009-9498-707cba77f515
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'w Household Growth Value' = SELECTEDVALUE ( 'w Household Growth'[w Household Growth], 0.2 )
+		lineageTag: 9df1e688-16fc-54f3-b0e9-74233088339d
+		formatString: #,0.00
+
+	partition 'w Household Growth' = calculated
+		mode: import
+		source = GENERATESERIES ( 0, 0.5, 0.05 )
+
+	annotation PBI_Id = ParameterTable

@@ -1,0 +1,70 @@
+table fact_tract_competition
+	lineageTag: cd32b326-e7cb-56b7-9165-496e71d8ed4b
+
+	column tract_geoid
+		dataType: string
+		lineageTag: 3cbbd8bf-8089-5674-9072-19fbd707a46a
+		summarizeBy: none
+		sourceColumn: tract_geoid
+
+		annotation SummarizationSetBy = Automatic
+
+	column tier
+		dataType: string
+		lineageTag: f2a2630a-7b19-5a11-8b3c-60f6b00b4c32
+		summarizeBy: none
+		sourceColumn: tier
+
+		annotation SummarizationSetBy = Automatic
+
+	column radius_miles
+		dataType: double
+		lineageTag: 4ecdb075-24b3-52ba-89dc-ff3b325bdc15
+		summarizeBy: none
+		sourceColumn: radius_miles
+
+		annotation SummarizationSetBy = Automatic
+
+	column competitor_branches
+		dataType: int64
+		lineageTag: 065b5eed-d46d-51e8-acd8-27f3b3eb042b
+		summarizeBy: none
+		sourceColumn: competitor_branches
+
+		annotation SummarizationSetBy = Automatic
+
+	column subject_branches
+		dataType: int64
+		lineageTag: 17c9206f-a689-5c49-acf6-187c3854e241
+		summarizeBy: none
+		sourceColumn: subject_branches
+
+		annotation SummarizationSetBy = Automatic
+
+	column catchment_households
+		dataType: double
+		lineageTag: 30738e37-8ada-53ab-a9ce-1f77f3cc34a1
+		summarizeBy: none
+		sourceColumn: catchment_households
+
+		annotation SummarizationSetBy = Automatic
+
+	column competitor_per_10k_catchment_hh
+		dataType: double
+		lineageTag: 81dad982-9eb4-58c9-842f-ec2a8c78c057
+		summarizeBy: none
+		sourceColumn: competitor_per_10k_catchment_hh
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_tract_competition = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\fact_tract_competition.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"tier", type text}, {"radius_miles", type number}, {"competitor_branches", Int64.Type}, {"subject_branches", Int64.Type}, {"catchment_households", type number}, {"competitor_per_10k_catchment_hh", type number}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

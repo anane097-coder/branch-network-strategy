@@ -1,0 +1,187 @@
+table branch_performance
+	lineageTag: 7057c156-203c-5b58-aa9e-b9e9e7dac8ea
+
+	column uninumbr
+		dataType: string
+		lineageTag: 882f8ce9-f5be-58d4-957a-58d8c87d14fd
+		summarizeBy: none
+		sourceColumn: uninumbr
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 75a1cc76-8818-59cb-b915-cedae7d45ca2
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: a499f1d0-a983-500e-a7da-f2a65cd8b646
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column tracts
+		dataType: int64
+		lineageTag: 2bcc6d5e-a9d1-5794-909b-eb087d8f17dd
+		summarizeBy: none
+		sourceColumn: tracts
+
+		annotation SummarizationSetBy = Automatic
+
+	column tracts_suppressed
+		dataType: int64
+		lineageTag: 0135f055-eb05-572b-a6e5-d3d8939da0df
+		summarizeBy: none
+		sourceColumn: tracts_suppressed
+
+		annotation SummarizationSetBy = Automatic
+
+	column households
+		dataType: double
+		lineageTag: ecb74785-d479-5e2b-9e04-0766cf7380f8
+		summarizeBy: none
+		sourceColumn: households
+
+		annotation SummarizationSetBy = Automatic
+
+	column actual_deposits
+		dataType: int64
+		lineageTag: d610dcc7-0611-518b-9887-7f868dd99abf
+		summarizeBy: none
+		sourceColumn: actual_deposits
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted_deposits
+		dataType: double
+		lineageTag: 5f3edbdb-85a1-5216-bee2-4aeab257e569
+		summarizeBy: none
+		sourceColumn: predicted_deposits
+
+		annotation SummarizationSetBy = Automatic
+
+	column performance_index
+		dataType: double
+		lineageTag: 41ef72ea-292a-5ce4-9bd2-d52d1064b77f
+		summarizeBy: none
+		sourceColumn: performance_index
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_size_adjusted
+		dataType: double
+		lineageTag: 3c4d08b5-a340-5fe5-8e16-958f060ddc76
+		summarizeBy: none
+		sourceColumn: index_size_adjusted
+
+		annotation SummarizationSetBy = Automatic
+
+	column size_quartile
+		dataType: string
+		lineageTag: fc69a777-dab2-5c8c-8b1c-66f5dd8f919f
+		summarizeBy: none
+		sourceColumn: size_quartile
+
+		annotation SummarizationSetBy = Automatic
+
+	column cagr_3y_pct
+		dataType: double
+		lineageTag: c5a81cb7-fae0-5701-bb05-4c2f347c0a82
+		summarizeBy: none
+		sourceColumn: cagr_3y_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column diagnosis
+		dataType: string
+		lineageTag: a5d6cd5a-24e2-53fe-8df0-10a60b7caaad
+		summarizeBy: none
+		sourceColumn: diagnosis
+
+		annotation SummarizationSetBy = Automatic
+
+	column market
+		dataType: string
+		lineageTag: e59ae123-6433-5724-861b-d1fbe1d9a1d3
+		summarizeBy: none
+		sourceColumn: market
+
+		annotation SummarizationSetBy = Automatic
+
+	column market_branch_count
+		dataType: int64
+		lineageTag: 7365673c-99ba-5ae4-8145-7647f103e937
+		summarizeBy: none
+		sourceColumn: market_branch_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_vs_network
+		dataType: double
+		lineageTag: 44e5ac09-7fb9-54ce-b0dd-cbccd54d1c17
+		summarizeBy: none
+		sourceColumn: index_vs_network
+
+		annotation SummarizationSetBy = Automatic
+
+	column catchment_partly_unmeasured
+		dataType: boolean
+		lineageTag: e495a6d8-7153-53a6-93e3-49fdeab04722
+		summarizeBy: none
+		sourceColumn: catchment_partly_unmeasured
+
+		annotation SummarizationSetBy = Automatic
+
+	column branch_relocated
+		dataType: boolean
+		lineageTag: 0086d873-859d-5712-a04a-97079c29f43a
+		summarizeBy: none
+		sourceColumn: branch_relocated
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_disputed
+		dataType: boolean
+		lineageTag: d332023b-a3d5-5184-9303-9126189954f0
+		summarizeBy: none
+		sourceColumn: county_disputed
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_concentration
+		dataType: boolean
+		lineageTag: e15622ef-d139-5547-b988-3eb9d9ae3d47
+		summarizeBy: none
+		sourceColumn: booking_concentration
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Performance Index' =
+			AVERAGE ( branch_performance[index_size_adjusted] )
+		lineageTag: cfb2a007-2493-5e85-99ff-b379765bd785
+		formatString: #,0.000
+	measure 'Performance Index (raw, do not rank)' =
+			AVERAGE ( branch_performance[performance_index] )
+		lineageTag: a54b8654-9dd6-5bc4-8a31-e74a4de000c5
+		formatString: #,0.000
+	measure 'Underperforming Branches' =
+			CALCULATE ( COUNTROWS ( branch_performance ), branch_performance[index_size_adjusted] < 1 )
+		lineageTag: bd876174-7090-5083-ba52-11c925604474
+		formatString: #,0
+
+	partition branch_performance = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\branch_performance.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"uninumbr", type text}, {"city", type text}, {"state", type text}, {"tracts", Int64.Type}, {"tracts_suppressed", Int64.Type}, {"households", type number}, {"actual_deposits", Int64.Type}, {"predicted_deposits", type number}, {"performance_index", type number}, {"index_size_adjusted", type number}, {"size_quartile", type text}, {"cagr_3y_pct", type number}, {"diagnosis", type text}, {"market", type text}, {"market_branch_count", Int64.Type}, {"index_vs_network", type number}, {"catchment_partly_unmeasured", type logical}, {"branch_relocated", type logical}, {"county_disputed", type logical}, {"booking_concentration", type logical}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

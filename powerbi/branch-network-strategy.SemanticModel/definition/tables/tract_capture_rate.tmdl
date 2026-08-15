@@ -1,0 +1,151 @@
+table tract_capture_rate
+	lineageTag: c376600d-aafe-5385-88d1-2b70d2d8a714
+
+	column tract_geoid
+		dataType: string
+		lineageTag: d0353ca1-ffda-5c45-8ea9-145f4102edf6
+		summarizeBy: none
+		sourceColumn: tract_geoid
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_name
+		dataType: string
+		lineageTag: e7ca73e6-3a59-539c-bd17-14ffa2381f23
+		summarizeBy: none
+		sourceColumn: county_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column tier
+		dataType: string
+		lineageTag: 36afe82a-9581-579a-b814-d7831c999fc6
+		summarizeBy: none
+		sourceColumn: tier
+
+		annotation SummarizationSetBy = Automatic
+
+	column households
+		dataType: int64
+		lineageTag: 2aa8edc5-bafb-511d-9bf5-f7c9a9d2512a
+		summarizeBy: none
+		sourceColumn: households
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_flag
+		dataType: boolean
+		lineageTag: 459d6add-5a6a-5466-9e28-56e2623bfc7d
+		summarizeBy: none
+		sourceColumn: lmi_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_basis
+		dataType: string
+		lineageTag: 2cbe1412-8dbf-59d6-833c-9ed347c65d7b
+		summarizeBy: none
+		sourceColumn: lmi_basis
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_in_catchment
+		dataType: boolean
+		lineageTag: 9098c44d-0895-5280-aeae-09c5bde016c2
+		summarizeBy: none
+		sourceColumn: is_in_catchment
+
+		annotation SummarizationSetBy = Automatic
+
+	column lenders_originating
+		dataType: int64
+		lineageTag: 224816a7-94c1-5c7e-a8c0-d7fa05fd0adf
+		summarizeBy: none
+		sourceColumn: lenders_originating
+
+		annotation SummarizationSetBy = Automatic
+
+	column all_applications
+		dataType: double
+		lineageTag: ed30d600-3c44-5227-b223-8e84be4da20f
+		summarizeBy: none
+		sourceColumn: all_applications
+
+		annotation SummarizationSetBy = Automatic
+
+	column all_originations
+		dataType: double
+		lineageTag: 6f4c906e-59fb-5745-b762-950503487b4f
+		summarizeBy: none
+		sourceColumn: all_originations
+
+		annotation SummarizationSetBy = Automatic
+
+	column all_origination_amt
+		dataType: double
+		lineageTag: 44929556-2ca1-5803-929f-3587dee1b8e0
+		summarizeBy: none
+		sourceColumn: all_origination_amt
+
+		annotation SummarizationSetBy = Automatic
+
+	column subject_originations
+		dataType: double
+		lineageTag: 74b70ce4-78e0-56f5-a127-33c29a0a6f39
+		summarizeBy: none
+		sourceColumn: subject_originations
+
+		annotation SummarizationSetBy = Automatic
+
+	column subject_origination_amt
+		dataType: double
+		lineageTag: 1871ab31-8753-56c1-b8de-d2d9a5e65449
+		summarizeBy: none
+		sourceColumn: subject_origination_amt
+
+		annotation SummarizationSetBy = Automatic
+
+	column capture_rate_pct
+		dataType: double
+		lineageTag: 8704ad29-f4b4-5139-bedb-d02b0b7670cb
+		summarizeBy: none
+		sourceColumn: capture_rate_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column competitor_originations
+		dataType: double
+		lineageTag: 9fd57893-bab1-5406-88a4-57738da88150
+		summarizeBy: none
+		sourceColumn: competitor_originations
+
+		annotation SummarizationSetBy = Automatic
+
+	column competitor_origination_amt
+		dataType: double
+		lineageTag: 988f8de2-6d1b-503f-bc96-5f76f70d4a29
+		summarizeBy: none
+		sourceColumn: competitor_origination_amt
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Capture Rate %' =
+			DIVIDE ( SUM ( tract_capture_rate[subject_originations] ), SUM ( tract_capture_rate[all_originations] ) ) * 100
+		lineageTag: fd8f7f26-f276-5194-8c95-578b090c5be8
+		formatString: #,0.00
+	measure 'Unmet Originations' =
+			SUM ( tract_capture_rate[competitor_originations] )
+		lineageTag: 883882cf-7a3b-539a-a397-8dcf2711bc36
+		formatString: #,0
+
+	partition tract_capture_rate = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\tract_capture_rate.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"county_name", type text}, {"tier", type text}, {"households", Int64.Type}, {"lmi_flag", type logical}, {"lmi_basis", type text}, {"is_in_catchment", type logical}, {"lenders_originating", Int64.Type}, {"all_applications", type number}, {"all_originations", type number}, {"all_origination_amt", type number}, {"subject_originations", type number}, {"subject_origination_amt", type number}, {"capture_rate_pct", type number}, {"competitor_originations", type number}, {"competitor_origination_amt", type number}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

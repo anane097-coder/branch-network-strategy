@@ -1,0 +1,62 @@
+table bridge_branch_catchment
+	lineageTag: f9e47ba9-22fc-5184-95dc-cdf87d9b4ade
+
+	column tract_geoid
+		dataType: string
+		lineageTag: 3c4710d3-ff3d-55bf-9383-3fb32e1dec5e
+		summarizeBy: none
+		sourceColumn: tract_geoid
+
+		annotation SummarizationSetBy = Automatic
+
+	column uninumbr
+		dataType: string
+		lineageTag: 1b31d149-22dd-59f7-af49-c2a82fd5c228
+		summarizeBy: none
+		sourceColumn: uninumbr
+
+		annotation SummarizationSetBy = Automatic
+
+	column branch_tier
+		dataType: string
+		lineageTag: d98518b8-cfa7-547b-a4ab-3cdda2d0b0f9
+		summarizeBy: none
+		sourceColumn: branch_tier
+
+		annotation SummarizationSetBy = Automatic
+
+	column distance_miles
+		dataType: double
+		lineageTag: cefffd01-e526-5f8e-80dd-adf2bff438fd
+		summarizeBy: none
+		sourceColumn: distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_primary
+		dataType: boolean
+		lineageTag: 5f0abbfd-d7ac-5bf4-a601-31699bf28a3e
+		summarizeBy: none
+		sourceColumn: is_primary
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_subject_bank
+		dataType: boolean
+		lineageTag: 10bbcf39-b21f-5a47-a726-faff2fd8b996
+		summarizeBy: none
+		sourceColumn: is_subject_bank
+
+		annotation SummarizationSetBy = Automatic
+
+	partition bridge_branch_catchment = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\bridge_branch_catchment.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"uninumbr", type text}, {"branch_tier", type text}, {"distance_miles", type number}, {"is_primary", type logical}, {"is_subject_bank", type logical}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

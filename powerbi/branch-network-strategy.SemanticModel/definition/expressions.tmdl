@@ -1,0 +1,6 @@
+expression DataFolder = "C:\Users\nekka\Portfolio_Project\branch-network-strategy\powerbi\data" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: b82f99e4-ad8c-50ed-884e-a2eab9d61bde
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text

@@ -1,0 +1,38 @@
+table recommended_coverage
+	lineageTag: 99ae4011-46fd-5621-becc-b18451d1f1f7
+
+	column rule
+		dataType: string
+		lineageTag: 5e187800-5f1b-5bfc-be18-eec378c03970
+		summarizeBy: none
+		sourceColumn: rule
+
+		annotation SummarizationSetBy = Automatic
+
+	column tract_geoid
+		dataType: string
+		lineageTag: b3b35e77-e97d-5e18-9518-322024f3a622
+		summarizeBy: none
+		sourceColumn: tract_geoid
+
+		annotation SummarizationSetBy = Automatic
+
+	column newly_covered
+		dataType: boolean
+		lineageTag: 23d06523-6dbd-57b3-aab0-87f8a223e4ff
+		summarizeBy: none
+		sourceColumn: newly_covered
+
+		annotation SummarizationSetBy = Automatic
+
+	partition recommended_coverage = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\recommended_coverage.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"rule", type text}, {"tract_geoid", type text}, {"newly_covered", type logical}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

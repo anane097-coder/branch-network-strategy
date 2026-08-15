@@ -1,0 +1,20 @@
+table 'w Unmet Demand'
+	lineageTag: c1597d18-2e6c-5d75-b51a-6f24cd2364ae
+
+	column 'w Unmet Demand'
+		dataType: double
+		lineageTag: 550867b9-deeb-5789-a0c5-4ae9ffcd2786
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'w Unmet Demand Value' = SELECTEDVALUE ( 'w Unmet Demand'[w Unmet Demand], 0.2 )
+		lineageTag: 3d148a6b-c79e-56c1-aeb1-97d7664d96e7
+		formatString: #,0.00
+
+	partition 'w Unmet Demand' = calculated
+		mode: import
+		source = GENERATESERIES ( 0, 0.5, 0.05 )
+
+	annotation PBI_Id = ParameterTable

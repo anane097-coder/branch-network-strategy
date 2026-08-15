@@ -1,0 +1,20 @@
+table 'w Competitor Saturation'
+	lineageTag: 611f8779-78e8-5356-9fb8-df0a017cbda7
+
+	column 'w Competitor Saturation'
+		dataType: double
+		lineageTag: dd8763a9-01d7-5de3-836e-c63f49e7158a
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'w Competitor Saturation Value' = SELECTEDVALUE ( 'w Competitor Saturation'[w Competitor Saturation], 0.2 )
+		lineageTag: b661572b-212d-503d-90b4-f86fc3ab195e
+		formatString: #,0.00
+
+	partition 'w Competitor Saturation' = calculated
+		mode: import
+		source = GENERATESERIES ( 0, 0.5, 0.05 )
+
+	annotation PBI_Id = ParameterTable

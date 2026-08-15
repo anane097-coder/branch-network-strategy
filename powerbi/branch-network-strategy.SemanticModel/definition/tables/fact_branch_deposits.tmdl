@@ -1,0 +1,84 @@
+table fact_branch_deposits
+	lineageTag: c6d05379-2d40-5316-90cd-212ee000e03d
+
+	column uninumbr
+		dataType: string
+		lineageTag: 6efc89c3-3744-50b0-a8fb-1991b83aeba1
+		summarizeBy: none
+		sourceColumn: uninumbr
+
+		annotation SummarizationSetBy = Automatic
+
+	column cert
+		dataType: string
+		lineageTag: 4d5af2a4-fd1d-5c6f-968f-b5f417ee9247
+		summarizeBy: none
+		sourceColumn: cert
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		lineageTag: cd686251-c467-513e-8130-f069250231ed
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column deposits
+		dataType: int64
+		lineageTag: a800403a-e05a-5df7-85e3-3e23bf917505
+		summarizeBy: none
+		sourceColumn: deposits
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Total Deposits' =
+			SUM ( fact_branch_deposits[deposits] )
+		lineageTag: 8102efcb-15c0-5f24-a463-a0ac50d425e1
+		formatString: #,0
+	measure 'Total Deposits ($bn)' =
+			DIVIDE ( [Total Deposits], 1000000000 )
+		lineageTag: 6ef373b6-28d5-58d4-9ce5-5ffb4d78a1c3
+		formatString: #,0.00
+	measure 'Branch Count' =
+			DISTINCTCOUNT ( fact_branch_deposits[uninumbr] )
+		lineageTag: 9851878b-954b-5c1c-b369-872b9ae15e87
+		formatString: #,0
+	measure 'Subject Deposits' =
+			CALCULATE ( [Total Deposits], dim_institution[is_subject_bank] = TRUE )
+		lineageTag: cf561ace-0208-58e7-89a3-75fdc1c5f75d
+		formatString: #,0
+	measure 'Market Deposits' =
+			CALCULATE ( [Total Deposits], REMOVEFILTERS ( dim_institution ) )
+		lineageTag: 2a8d68e0-5b65-513f-923a-fbe2b2b3d31b
+		formatString: #,0
+	measure 'Market Share %' =
+			DIVIDE ( [Subject Deposits], [Market Deposits] ) * 100
+		lineageTag: 3d2aaf0e-5c28-5028-9a41-d16474941419
+		formatString: #,0.00
+	measure 'Deposit CAGR %' =
+			VAR FirstYear = MIN ( dim_year[year] )
+			VAR LastYear = MAX ( dim_year[year] )
+			VAR Span = LastYear - FirstYear
+			VAR StartDep = CALCULATE ( [Total Deposits], dim_year[year] = FirstYear )
+			VAR EndDep = CALCULATE ( [Total Deposits], dim_year[year] = LastYear )
+			RETURN
+			    IF (
+			        Span > 0 && NOT ISBLANK ( StartDep ) && StartDep > 0 && NOT ISBLANK ( EndDep ),
+			        ( ( EndDep / StartDep ) ^ ( 1 / Span ) - 1 ) * 100
+			    )
+		lineageTag: db59584f-8396-5c11-ae1f-51ebdf2f07d9
+		formatString: #,0.00
+
+	partition fact_branch_deposits = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\fact_branch_deposits.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"uninumbr", type text}, {"cert", type text}, {"year", Int64.Type}, {"deposits", Int64.Type}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

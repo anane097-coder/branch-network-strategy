@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "branch-network-strategy"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7eec9263-38d2-52fd-a9bb-bd87a883ae27"
+  }
+}

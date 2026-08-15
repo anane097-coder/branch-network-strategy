@@ -1,0 +1,184 @@
+table dim_tract
+	lineageTag: a6877c39-5588-5124-aa16-4657902e0e7f
+
+	column tract_geoid
+		dataType: string
+		lineageTag: 365f8d22-5ba0-5bd2-ba8e-6f04f5260b61
+		summarizeBy: none
+		sourceColumn: tract_geoid
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_fips
+		dataType: string
+		lineageTag: 37aefc6f-d656-5a39-bf5c-6f31c2531672
+		summarizeBy: none
+		sourceColumn: county_fips
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_name
+		dataType: string
+		lineageTag: 698cc60e-c73c-5fea-a259-20ca366cd522
+		summarizeBy: none
+		sourceColumn: county_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column cbsa
+		dataType: string
+		lineageTag: 1ded6c51-eb50-54ab-b6df-9db82f3c3c55
+		summarizeBy: none
+		sourceColumn: cbsa
+
+		annotation SummarizationSetBy = Automatic
+
+	column cbsa_title
+		dataType: string
+		lineageTag: 83a23854-a84e-5115-8adb-5b8ea9caaed6
+		summarizeBy: none
+		sourceColumn: cbsa_title
+
+		annotation SummarizationSetBy = Automatic
+
+	column tier
+		dataType: string
+		lineageTag: 4b06178b-52e3-53de-abaa-7db686dd1dea
+		summarizeBy: none
+		sourceColumn: tier
+
+		annotation SummarizationSetBy = Automatic
+
+	column population
+		dataType: int64
+		lineageTag: 847abcd6-7c3f-57ac-b8e3-d8e665e48dbf
+		summarizeBy: none
+		sourceColumn: population
+
+		annotation SummarizationSetBy = Automatic
+
+	column households
+		dataType: int64
+		lineageTag: 92c05b0c-cdfa-53e7-9acd-4f77ce777a06
+		summarizeBy: none
+		sourceColumn: households
+
+		annotation SummarizationSetBy = Automatic
+
+	column household_growth_pct
+		dataType: double
+		lineageTag: 04c877bc-a054-58ac-93d4-60c9a7021287
+		summarizeBy: none
+		sourceColumn: household_growth_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column growth_basis
+		dataType: string
+		lineageTag: b731ff60-259b-5724-b37b-20818f0f3123
+		summarizeBy: none
+		sourceColumn: growth_basis
+
+		annotation SummarizationSetBy = Automatic
+
+	column median_hh_income
+		dataType: double
+		lineageTag: 0c0d1672-a711-508f-851d-59a3b977b43a
+		summarizeBy: none
+		sourceColumn: median_hh_income
+
+		annotation SummarizationSetBy = Automatic
+
+	column median_family_income
+		dataType: double
+		lineageTag: 420d0b03-9702-5945-a549-fbaf7157e837
+		summarizeBy: none
+		sourceColumn: median_family_income
+
+		annotation SummarizationSetBy = Automatic
+
+	column median_home_value
+		dataType: double
+		lineageTag: e239b73e-c7d0-574c-9a29-83b182ef0304
+		summarizeBy: none
+		sourceColumn: median_home_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column tract_to_area_income_pct
+		dataType: double
+		lineageTag: 477a5ec2-c5c0-559c-9ae7-614ed0dc7fe5
+		summarizeBy: none
+		sourceColumn: tract_to_area_income_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_flag
+		dataType: boolean
+		lineageTag: 503abed5-4409-5241-baad-3c8b6e58867d
+		summarizeBy: none
+		sourceColumn: lmi_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_basis
+		dataType: string
+		lineageTag: 8c0ee4f5-c428-538e-b385-e32bf6df0225
+		summarizeBy: none
+		sourceColumn: lmi_basis
+
+		annotation SummarizationSetBy = Automatic
+
+	column tract_status
+		dataType: string
+		lineageTag: 35ca3a5d-4474-51cd-bee8-28cb12a4defa
+		summarizeBy: none
+		sourceColumn: tract_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column centroid_lat
+		dataType: double
+		lineageTag: e8953dd1-a928-5c5a-a7b3-ce3d0e08490a
+		summarizeBy: none
+		sourceColumn: centroid_lat
+
+		annotation SummarizationSetBy = Automatic
+
+	column centroid_lon
+		dataType: double
+		lineageTag: 0264607f-7678-5820-a10c-752a91ee0d0e
+		summarizeBy: none
+		sourceColumn: centroid_lon
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'LMI Share of Selection %' =
+			VAR Determined = CALCULATE ( COUNTROWS ( dim_tract ), NOT ISBLANK ( dim_tract[lmi_flag] ) )
+			VAR IsLMI = CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[lmi_flag] = TRUE )
+			RETURN DIVIDE ( IsLMI, Determined ) * 100
+		lineageTag: d374476b-7646-5578-b167-13357868fbf4
+		formatString: #,0.0
+	measure 'Cluster-Measured Growth %' =
+			DIVIDE (
+			    CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[growth_basis] <> "direct" ),
+			    CALCULATE ( COUNTROWS ( dim_tract ), NOT ISBLANK ( dim_tract[household_growth_pct] ) )
+			) * 100
+		lineageTag: 73e120c8-4ba4-5b96-be5f-26a7c91ac404
+		formatString: #,0.0
+	measure 'Shortlist Caveat' =
+			"LMI " & FORMAT ( [LMI Share of Selection %], "0.0" ) & "% vs 29.5% footprint  |  growth estimated for "
+			    & FORMAT ( [Cluster-Measured Growth %], "0.0" ) & "% of these tracts"
+		lineageTag: e478c3cf-bc5c-5550-b37f-9cc88d144f94
+
+	partition dim_tract = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\dim_tract.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"county_fips", type text}, {"county_name", type text}, {"cbsa", type text}, {"cbsa_title", type text}, {"tier", type text}, {"population", Int64.Type}, {"households", Int64.Type}, {"household_growth_pct", type number}, {"growth_basis", type text}, {"median_hh_income", type number}, {"median_family_income", type number}, {"median_home_value", type number}, {"tract_to_area_income_pct", type number}, {"lmi_flag", type logical}, {"lmi_basis", type text}, {"tract_status", type text}, {"centroid_lat", type number}, {"centroid_lon", type number}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

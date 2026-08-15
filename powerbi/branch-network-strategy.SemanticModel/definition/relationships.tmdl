@@ -1,0 +1,47 @@
+relationship bf142aa2-effd-54c5-915b-574831bd7999
+	fromColumn: fact_branch_deposits.uninumbr
+	toColumn: dim_branch.uninumbr
+
+relationship ad3967a2-6bdc-5894-a2cd-edc520c39099
+	fromColumn: fact_branch_deposits.cert
+	toColumn: dim_institution.cert
+
+relationship da093e7f-4e9d-518c-a70c-2dceb7263df3
+	fromColumn: fact_branch_deposits.year
+	toColumn: dim_year.year
+
+relationship 1572a8e7-b1f8-5d64-b3a7-f742c2a468b2
+	fromColumn: bridge_branch_catchment.uninumbr
+	toColumn: dim_branch.uninumbr
+
+relationship 2b932138-edb3-5cf7-87de-96ba81f9d181
+	fromColumn: bridge_branch_catchment.tract_geoid
+	toColumn: dim_tract.tract_geoid
+
+relationship d0bcf7dd-1981-5485-a87c-282561d17215
+	fromColumn: branch_performance.uninumbr
+	toColumn: dim_branch.uninumbr
+
+relationship 0d511404-9c21-5394-bf5c-8b02ae76d2b3
+	fromColumn: fact_tract_competition.tract_geoid
+	toColumn: dim_tract.tract_geoid
+
+relationship 2e0f1faf-4038-5e02-bcac-ff8e96ae50c2
+	fromColumn: tract_capture_rate.tract_geoid
+	toColumn: dim_tract.tract_geoid
+
+relationship 1ccdde45-4cbc-5249-97ea-a86e09e012c4
+	fromColumn: unmet_demand.tract_geoid
+	toColumn: dim_tract.tract_geoid
+
+relationship ab25a3ab-018f-56cd-ae8c-f75dbf7b052b
+	fromColumn: opportunity_index.tract_geoid
+	toColumn: dim_tract.tract_geoid
+
+relationship e2ee5f0b-b38c-5049-958e-4f235af4b3b5
+	fromColumn: fact_index_components.tract_geoid
+	toColumn: dim_tract.tract_geoid
+
+relationship a6dd5bbe-3062-5afa-a136-f3c9b45b9bed
+	fromColumn: recommended_coverage.tract_geoid
+	toColumn: dim_tract.tract_geoid

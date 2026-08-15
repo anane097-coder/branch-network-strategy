@@ -1,0 +1,54 @@
+table ref_index_weights
+	lineageTag: 2fc6ff5a-dc83-5d92-9248-b8aabbf3c870
+
+	column scenario
+		dataType: string
+		lineageTag: 06a034bc-8127-502a-a55e-93bc5880e084
+		summarizeBy: none
+		sourceColumn: scenario
+
+		annotation SummarizationSetBy = Automatic
+
+	column component
+		dataType: string
+		lineageTag: da4270cb-3f56-5708-b5a8-de2fbf7fdd22
+		summarizeBy: none
+		sourceColumn: component
+
+		annotation SummarizationSetBy = Automatic
+
+	column weight
+		dataType: double
+		lineageTag: 8fd04d3d-d764-5b15-82d2-5054b017e2db
+		summarizeBy: none
+		sourceColumn: weight
+
+		annotation SummarizationSetBy = Automatic
+
+	column inverted
+		dataType: boolean
+		lineageTag: b8d47eca-c9c4-5e58-b7f3-09ddb1af9b03
+		summarizeBy: none
+		sourceColumn: inverted
+
+		annotation SummarizationSetBy = Automatic
+
+	column normalization
+		dataType: string
+		lineageTag: ab0f31ad-c550-561d-a7b9-28754488538f
+		summarizeBy: none
+		sourceColumn: normalization
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ref_index_weights = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\ref_index_weights.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"scenario", type text}, {"component", type text}, {"weight", type number}, {"inverted", type logical}, {"normalization", type text}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

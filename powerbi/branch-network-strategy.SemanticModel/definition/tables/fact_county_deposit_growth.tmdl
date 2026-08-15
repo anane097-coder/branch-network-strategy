@@ -1,0 +1,70 @@
+table fact_county_deposit_growth
+	lineageTag: 92af350a-7638-559b-9248-5c4a0619c532
+
+	column county_fips
+		dataType: string
+		lineageTag: 765111eb-3a35-5aff-a837-0ff0a3cf437b
+		summarizeBy: none
+		sourceColumn: county_fips
+
+		annotation SummarizationSetBy = Automatic
+
+	column cagr_pct_total
+		dataType: double
+		lineageTag: 2e38bfe7-f3fa-559b-af94-b2638737956e
+		summarizeBy: none
+		sourceColumn: cagr_pct_total
+
+		annotation SummarizationSetBy = Automatic
+
+	column cagr_pct_retail
+		dataType: double
+		lineageTag: f2bc061f-b5b0-5b83-ac0f-6cde80d71f5e
+		summarizeBy: none
+		sourceColumn: cagr_pct_retail
+
+		annotation SummarizationSetBy = Automatic
+
+	column cagr_shift_pp
+		dataType: double
+		lineageTag: dfafd85f-ab77-53a8-bd57-fb15e1913442
+		summarizeBy: none
+		sourceColumn: cagr_shift_pp
+
+		annotation SummarizationSetBy = Automatic
+
+	column excluded_branches
+		dataType: double
+		lineageTag: cdcc11af-42a6-5261-a71d-d33c26d27c24
+		summarizeBy: none
+		sourceColumn: excluded_branches
+
+		annotation SummarizationSetBy = Automatic
+
+	column excluded_deposit_share
+		dataType: double
+		lineageTag: eb31080b-98a4-59bc-9ea6-1c0481a68757
+		summarizeBy: none
+		sourceColumn: excluded_deposit_share
+
+		annotation SummarizationSetBy = Automatic
+
+	column retail_basis_status
+		dataType: string
+		lineageTag: 6248ac3f-f960-5b4b-8512-a1dfceef40d6
+		summarizeBy: none
+		sourceColumn: retail_basis_status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_county_deposit_growth = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\fact_county_deposit_growth.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"county_fips", type text}, {"cagr_pct_total", type number}, {"cagr_pct_retail", type number}, {"cagr_shift_pp", type number}, {"excluded_branches", type number}, {"excluded_deposit_share", type number}, {"retail_basis_status", type text}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

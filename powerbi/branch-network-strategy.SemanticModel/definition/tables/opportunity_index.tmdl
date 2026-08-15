@@ -1,0 +1,203 @@
+table opportunity_index
+	lineageTag: 6b85478b-dc62-57e4-9742-ef4ff5aa47f9
+
+	column tract_geoid
+		dataType: string
+		lineageTag: b7152066-a2d7-5b6e-ac0c-c89d0acf9078
+		summarizeBy: none
+		sourceColumn: tract_geoid
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_name
+		dataType: string
+		lineageTag: 50df3bf2-7c32-5e7c-9dd5-2ebfaaed9bee
+		summarizeBy: none
+		sourceColumn: county_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column cbsa_title
+		dataType: string
+		lineageTag: 2ad14bf5-d7b1-52b0-bcc8-b1f6915a8054
+		summarizeBy: none
+		sourceColumn: cbsa_title
+
+		annotation SummarizationSetBy = Automatic
+
+	column tier
+		dataType: string
+		lineageTag: 4059e120-d88c-583b-8bd2-15388ce4cc47
+		summarizeBy: none
+		sourceColumn: tier
+
+		annotation SummarizationSetBy = Automatic
+
+	column households
+		dataType: int64
+		lineageTag: a17b3e51-45c7-5aa9-9fc7-c06ef3ad340f
+		summarizeBy: none
+		sourceColumn: households
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_flag
+		dataType: boolean
+		lineageTag: a32e04df-d231-503d-8836-e3a7e5c573f6
+		summarizeBy: none
+		sourceColumn: lmi_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column household_growth
+		dataType: double
+		lineageTag: fc5c701a-e9b9-5ac5-b9b0-7ece0645c18c
+		summarizeBy: none
+		sourceColumn: household_growth
+
+		annotation SummarizationSetBy = Automatic
+
+	column median_income
+		dataType: double
+		lineageTag: 199cebd7-a017-53d1-b798-efd7fb16e674
+		summarizeBy: none
+		sourceColumn: median_income
+
+		annotation SummarizationSetBy = Automatic
+
+	column deposit_market_growth
+		dataType: double
+		lineageTag: 2b05506c-63d8-562f-81a3-0d1b04f1046e
+		summarizeBy: none
+		sourceColumn: deposit_market_growth
+
+		annotation SummarizationSetBy = Automatic
+
+	column competitor_saturation
+		dataType: double
+		lineageTag: b6b340cb-958e-5ee0-b67a-314eb3bf7f76
+		summarizeBy: none
+		sourceColumn: competitor_saturation
+
+		annotation SummarizationSetBy = Automatic
+
+	column unmet_mortgage_demand
+		dataType: double
+		lineageTag: c1d9bb16-9c8b-56f8-9f8f-39008412230b
+		summarizeBy: none
+		sourceColumn: unmet_mortgage_demand
+
+		annotation SummarizationSetBy = Automatic
+
+	column contrib_household_growth
+		dataType: double
+		lineageTag: d5b02ebd-e8fb-546e-8af4-605d47ae6f90
+		summarizeBy: none
+		sourceColumn: contrib_household_growth
+
+		annotation SummarizationSetBy = Automatic
+
+	column contrib_median_income
+		dataType: double
+		lineageTag: 981443bb-3112-568e-953c-dc7edd7f8cc2
+		summarizeBy: none
+		sourceColumn: contrib_median_income
+
+		annotation SummarizationSetBy = Automatic
+
+	column contrib_deposit_market_growth
+		dataType: double
+		lineageTag: cb786128-6124-500d-b195-3cf4244f9f7f
+		summarizeBy: none
+		sourceColumn: contrib_deposit_market_growth
+
+		annotation SummarizationSetBy = Automatic
+
+	column contrib_competitor_saturation
+		dataType: double
+		lineageTag: eb46aca5-2e3c-5f64-b059-c528cf060a4d
+		summarizeBy: none
+		sourceColumn: contrib_competitor_saturation
+
+		annotation SummarizationSetBy = Automatic
+
+	column contrib_unmet_mortgage_demand
+		dataType: double
+		lineageTag: 6f8518e9-8fe1-5243-b723-b0d30786e29c
+		summarizeBy: none
+		sourceColumn: contrib_unmet_mortgage_demand
+
+		annotation SummarizationSetBy = Automatic
+
+	column components_present
+		dataType: int64
+		lineageTag: 7f4b1ac0-0cc5-5dcd-b73a-4b200724ef23
+		summarizeBy: none
+		sourceColumn: components_present
+
+		annotation SummarizationSetBy = Automatic
+
+	column opportunity_score
+		dataType: double
+		lineageTag: 11f1bed6-b169-5271-bdbd-3856084cbc8d
+		summarizeBy: none
+		sourceColumn: opportunity_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column growth_is_estimated
+		dataType: boolean
+		lineageTag: 71289abb-ceb7-5cb1-9a1c-0cfc58db431e
+		summarizeBy: none
+		sourceColumn: growth_is_estimated
+
+		annotation SummarizationSetBy = Automatic
+
+	column tract_partly_unmeasured
+		dataType: boolean
+		lineageTag: 1caec17e-6b74-5c46-866f-b66275f604ba
+		summarizeBy: none
+		sourceColumn: tract_partly_unmeasured
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_undetermined
+		dataType: boolean
+		lineageTag: c41f4ea6-2832-5fea-98ce-e771cea31a21
+		summarizeBy: none
+		sourceColumn: lmi_undetermined
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_growth_heavily_adjusted
+		dataType: boolean
+		lineageTag: 757949a7-6ec7-59dd-96f3-5c0c4bdae4d4
+		summarizeBy: none
+		sourceColumn: county_growth_heavily_adjusted
+
+		annotation SummarizationSetBy = Automatic
+
+	column retail_basis_status
+		dataType: string
+		lineageTag: b5b24cf3-7b51-5a98-b7a4-6138b73ef875
+		summarizeBy: none
+		sourceColumn: retail_basis_status
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Published Opportunity Score' =
+			AVERAGE ( opportunity_index[opportunity_score] )
+		lineageTag: d990776f-5c82-507b-905d-7ea0f1b41317
+		formatString: #,0.000
+
+	partition opportunity_index = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\opportunity_index.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"county_name", type text}, {"cbsa_title", type text}, {"tier", type text}, {"households", Int64.Type}, {"lmi_flag", type logical}, {"household_growth", type number}, {"median_income", type number}, {"deposit_market_growth", type number}, {"competitor_saturation", type number}, {"unmet_mortgage_demand", type number}, {"contrib_household_growth", type number}, {"contrib_median_income", type number}, {"contrib_deposit_market_growth", type number}, {"contrib_competitor_saturation", type number}, {"contrib_unmet_mortgage_demand", type number}, {"components_present", Int64.Type}, {"opportunity_score", type number}, {"growth_is_estimated", type logical}, {"tract_partly_unmeasured", type logical}, {"lmi_undetermined", type logical}, {"county_growth_heavily_adjusted", type logical}, {"retail_basis_status", type text}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

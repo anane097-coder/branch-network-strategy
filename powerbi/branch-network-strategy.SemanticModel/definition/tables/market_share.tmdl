@@ -1,0 +1,110 @@
+table market_share
+	lineageTag: bc31cecb-3d79-559a-93c1-37d78e684d6a
+
+	column state
+		dataType: string
+		lineageTag: 0287aa73-9eb1-53ed-ac4f-4fa0aca3a1a2
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_fips
+		dataType: string
+		lineageTag: 2d4afde2-2d90-5d0b-9399-8afcfddf66e8
+		summarizeBy: none
+		sourceColumn: county_fips
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		lineageTag: fa2a2afe-3cd1-509a-a4b0-7b0fd1e71479
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column institutions
+		dataType: int64
+		lineageTag: 6c46d5b7-963c-5492-92e0-a73938934d65
+		summarizeBy: none
+		sourceColumn: institutions
+
+		annotation SummarizationSetBy = Automatic
+
+	column market_branches
+		dataType: int64
+		lineageTag: 4d24e3e6-6886-5cf8-9005-3c8b1b3b70b6
+		summarizeBy: none
+		sourceColumn: market_branches
+
+		annotation SummarizationSetBy = Automatic
+
+	column subject_branches
+		dataType: int64
+		lineageTag: 280ec932-35e5-5da3-b6a7-effab40f3fff
+		summarizeBy: none
+		sourceColumn: subject_branches
+
+		annotation SummarizationSetBy = Automatic
+
+	column hq_branches
+		dataType: int64
+		lineageTag: 1c89235e-b618-5586-b088-98d926ee67bb
+		summarizeBy: none
+		sourceColumn: hq_branches
+
+		annotation SummarizationSetBy = Automatic
+
+	column market_deposits
+		dataType: double
+		lineageTag: d83f4864-5d6d-5841-82b6-8fa094287e47
+		summarizeBy: none
+		sourceColumn: market_deposits
+
+		annotation SummarizationSetBy = Automatic
+
+	column subject_deposits
+		dataType: double
+		lineageTag: eeb7381d-86ba-53c5-8004-5671d92180fd
+		summarizeBy: none
+		sourceColumn: subject_deposits
+
+		annotation SummarizationSetBy = Automatic
+
+	column deposit_share_pct
+		dataType: double
+		lineageTag: 1a329673-46f8-5aa7-93a0-7c2b336b870e
+		summarizeBy: none
+		sourceColumn: deposit_share_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column branch_share_pct
+		dataType: double
+		lineageTag: 7c4112b0-034d-5a1b-baf8-f8dcee883cbd
+		summarizeBy: none
+		sourceColumn: branch_share_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column share_gap_pp
+		dataType: double
+		lineageTag: d843c824-4c8f-56a7-a35d-2515ebc69624
+		summarizeBy: none
+		sourceColumn: share_gap_pp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition market_share = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\market_share.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"state", type text}, {"county_fips", type text}, {"year", Int64.Type}, {"institutions", Int64.Type}, {"market_branches", Int64.Type}, {"subject_branches", Int64.Type}, {"hq_branches", Int64.Type}, {"market_deposits", type number}, {"subject_deposits", type number}, {"deposit_share_pct", type number}, {"branch_share_pct", type number}, {"share_gap_pp", type number}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

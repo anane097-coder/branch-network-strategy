@@ -1,0 +1,138 @@
+table lmi_coverage
+	lineageTag: 24b576a1-6d1f-507c-8d8a-a81db2eeb3d8
+
+	column rule
+		dataType: string
+		lineageTag: af143303-810d-5e03-8ec9-32a3a1a6218b
+		summarizeBy: none
+		sourceColumn: rule
+
+		annotation SummarizationSetBy = Automatic
+
+	column tracts_covered
+		dataType: int64
+		lineageTag: 63cbe6dc-c4ca-592b-b0e0-d1f1495cd8b8
+		summarizeBy: none
+		sourceColumn: tracts_covered
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_coverage_pct
+		dataType: double
+		lineageTag: eb14ed6e-c64d-50c0-b042-79ec4481c34b
+		summarizeBy: none
+		sourceColumn: lmi_coverage_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column non_lmi_coverage_pct
+		dataType: double
+		lineageTag: 62f1d719-f8ba-595e-8564-270f8eed3b89
+		summarizeBy: none
+		sourceColumn: non_lmi_coverage_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column coverage_gap_pp
+		dataType: double
+		lineageTag: 127d99c5-b778-5e23-bc69-8c116d2fca1d
+		summarizeBy: none
+		sourceColumn: coverage_gap_pp
+
+		annotation SummarizationSetBy = Automatic
+
+	column ac06_as_written
+		dataType: string
+		lineageTag: d78285e7-5506-5881-a907-c40b4f75c735
+		summarizeBy: none
+		sourceColumn: ac06_as_written
+
+		annotation SummarizationSetBy = Automatic
+
+	column delta_lmi_pp
+		dataType: double
+		lineageTag: 77e24d38-88cc-5425-9dc0-2315e75e8443
+		summarizeBy: none
+		sourceColumn: delta_lmi_pp
+
+		annotation SummarizationSetBy = Automatic
+
+	column delta_non_lmi_pp
+		dataType: double
+		lineageTag: 0df14404-d52c-51e4-bd38-152439a939fe
+		summarizeBy: none
+		sourceColumn: delta_non_lmi_pp
+
+		annotation SummarizationSetBy = Automatic
+
+	column binding_test
+		dataType: string
+		lineageTag: 718086dc-7e20-5773-aed8-3dd1008fb1c1
+		summarizeBy: none
+		sourceColumn: binding_test
+
+		annotation SummarizationSetBy = Automatic
+
+	column non_lmi_growth_multiple
+		dataType: double
+		lineageTag: 10943cef-898f-5e69-b267-ec7489338983
+		summarizeBy: none
+		sourceColumn: non_lmi_growth_multiple
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'LMI Coverage %' =
+			CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
+		lineageTag: 2ca795a0-f4f2-54f1-b3a6-5abe98247440
+		formatString: #,0.00
+	measure 'LMI Coverage % (recommended)' =
+			CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "B_constrained" )
+		lineageTag: 3a7ff24b-c7ad-5586-916d-a141a9ed99e5
+		formatString: #,0.00
+	measure 'Coverage Delta Gap (pp)' =
+			VAR Rule = SELECTEDVALUE ( lmi_coverage[rule], "B_constrained" )
+			VAR CurLMI = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
+			VAR CurNon = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
+			VAR NewLMI = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
+			VAR NewNon = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
+			RETURN ( NewLMI - CurLMI ) - ( NewNon - CurNon )
+		lineageTag: d167026e-9251-5d6d-a34a-4cc78f408354
+		formatString: #,0.000
+	measure 'Binding Test Result' =
+			IF (
+			    ISBLANK ( [Coverage Delta Gap (pp)] ),
+			    "NOT MEASURED",
+			    IF ( [Coverage Delta Gap (pp)] >= 0, "PASS - expansion is proportional", "FAIL - non-LMI coverage grows faster" )
+			)
+		lineageTag: 5ab1a429-fc51-5fb0-8b2e-55d0ee3284a7
+	measure 'Constraint Cost (index points)' =
+			VAR A = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
+			VAR B = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "B_constrained" )
+			RETURN A - B
+		lineageTag: b748a211-cda5-5113-a961-15e3df9e4486
+		formatString: #,0.000
+	measure 'Constraint Cost %' =
+			VAR A = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
+			RETURN DIVIDE ( [Constraint Cost (index points)], A ) * 100
+		lineageTag: 21a0218b-c951-5ab6-a604-b1c363b8391a
+		formatString: #,0.0
+	measure 'LMI Sites in Shortlist' =
+			CALCULATE (
+			    COUNTROWS ( recommended_sites ),
+			    recommended_sites[lmi_flag] = TRUE,
+			    recommended_sites[rule] = "B_constrained"
+			) + 0
+		lineageTag: 1ed85422-a814-5b25-bcb1-3725b024d33b
+		formatString: #,0
+
+	partition lmi_coverage = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\lmi_coverage.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"rule", type text}, {"tracts_covered", Int64.Type}, {"lmi_coverage_pct", type number}, {"non_lmi_coverage_pct", type number}, {"coverage_gap_pp", type number}, {"ac06_as_written", type text}, {"delta_lmi_pp", type number}, {"delta_non_lmi_pp", type number}, {"binding_test", type text}, {"non_lmi_growth_multiple", type number}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

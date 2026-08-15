@@ -1,0 +1,190 @@
+table unmet_demand
+	lineageTag: 5858f235-ff4d-5016-a2e5-6d769c38ab25
+
+	column tract_geoid
+		dataType: string
+		lineageTag: 9794dc09-0834-55e7-975a-d9cc5f1c3103
+		summarizeBy: none
+		sourceColumn: tract_geoid
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_name
+		dataType: string
+		lineageTag: babb928d-aa4a-5cd8-a914-ef2c3dd48934
+		summarizeBy: none
+		sourceColumn: county_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: 1b0a6a4a-1502-5a81-860f-76dd972444ec
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column tier
+		dataType: string
+		lineageTag: 53b8206f-f251-517e-aa5b-89bcfd1eba31
+		summarizeBy: none
+		sourceColumn: tier
+
+		annotation SummarizationSetBy = Automatic
+
+	column households
+		dataType: int64
+		lineageTag: 124b06f0-2227-56ba-8bdf-40e7b9e2b785
+		summarizeBy: none
+		sourceColumn: households
+
+		annotation SummarizationSetBy = Automatic
+
+	column median_family_income
+		dataType: double
+		lineageTag: 1b574330-b620-522d-b658-60eea981e158
+		summarizeBy: none
+		sourceColumn: median_family_income
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_flag
+		dataType: boolean
+		lineageTag: 46f28848-3e3c-50fa-841d-b295d72284d2
+		summarizeBy: none
+		sourceColumn: lmi_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_basis
+		dataType: string
+		lineageTag: 57c0780f-dc13-54ba-916e-79e9ba032cd1
+		summarizeBy: none
+		sourceColumn: lmi_basis
+
+		annotation SummarizationSetBy = Automatic
+
+	column all_applications
+		dataType: double
+		lineageTag: babe58ef-8a91-59b2-b0d5-fd5e9a7bbae8
+		summarizeBy: none
+		sourceColumn: all_applications
+
+		annotation SummarizationSetBy = Automatic
+
+	column all_originations
+		dataType: double
+		lineageTag: d7f998be-50e1-540c-9acf-704fa990bbc3
+		summarizeBy: none
+		sourceColumn: all_originations
+
+		annotation SummarizationSetBy = Automatic
+
+	column subject_originations
+		dataType: double
+		lineageTag: 4aa8b1be-c0cd-5a0b-bfd1-6bca6cba7816
+		summarizeBy: none
+		sourceColumn: subject_originations
+
+		annotation SummarizationSetBy = Automatic
+
+	column unmet_originations
+		dataType: double
+		lineageTag: 85775843-fa41-5da7-83e5-fc0e9e49751c
+		summarizeBy: none
+		sourceColumn: unmet_originations
+
+		annotation SummarizationSetBy = Automatic
+
+	column all_origination_amt
+		dataType: double
+		lineageTag: 6f7b9667-154d-50e5-af72-ca40341f7808
+		summarizeBy: none
+		sourceColumn: all_origination_amt
+
+		annotation SummarizationSetBy = Automatic
+
+	column capture_rate_pct
+		dataType: double
+		lineageTag: 6bcd4f14-97cc-5ecc-b98b-a7883143685d
+		summarizeBy: none
+		sourceColumn: capture_rate_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column outside_footprint
+		dataType: boolean
+		lineageTag: 65829d8e-aa51-520c-bec5-88723fb87d39
+		summarizeBy: none
+		sourceColumn: outside_footprint
+
+		annotation SummarizationSetBy = Automatic
+
+	column basis_absolute
+		dataType: double
+		lineageTag: 841da664-eded-59ca-bde6-815678ca7e0c
+		summarizeBy: none
+		sourceColumn: basis_absolute
+
+		annotation SummarizationSetBy = Automatic
+
+	column basis_per_household
+		dataType: double
+		lineageTag: 61f64577-52dc-5d64-96fb-062fa3ef2dc1
+		summarizeBy: none
+		sourceColumn: basis_per_household
+
+		annotation SummarizationSetBy = Automatic
+
+	column basis_per_application
+		dataType: double
+		lineageTag: 8270a55d-7092-5d57-948c-31559b667a9f
+		summarizeBy: none
+		sourceColumn: basis_per_application
+
+		annotation SummarizationSetBy = Automatic
+
+	column basis_uncaptured_apps
+		dataType: double
+		lineageTag: 3181ceb6-37c6-5a12-b5f8-efc2caf9976f
+		summarizeBy: none
+		sourceColumn: basis_uncaptured_apps
+
+		annotation SummarizationSetBy = Automatic
+
+	column opportunity_type
+		dataType: string
+		lineageTag: 0e5c49a3-2731-5ef3-bb96-ded5f94ebd58
+		summarizeBy: none
+		sourceColumn: opportunity_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_undetermined
+		dataType: boolean
+		lineageTag: 90180e99-73b8-59df-b73f-88cb805712e2
+		summarizeBy: none
+		sourceColumn: lmi_undetermined
+
+		annotation SummarizationSetBy = Automatic
+
+	column tract_partly_unmeasured
+		dataType: boolean
+		lineageTag: 38c10904-e97c-5559-8361-4fc489743ca2
+		summarizeBy: none
+		sourceColumn: tract_partly_unmeasured
+
+		annotation SummarizationSetBy = Automatic
+
+	partition unmet_demand = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\unmet_demand.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"county_name", type text}, {"state", type text}, {"tier", type text}, {"households", Int64.Type}, {"median_family_income", type number}, {"lmi_flag", type logical}, {"lmi_basis", type text}, {"all_applications", type number}, {"all_originations", type number}, {"subject_originations", type number}, {"unmet_originations", type number}, {"all_origination_amt", type number}, {"capture_rate_pct", type number}, {"outside_footprint", type logical}, {"basis_absolute", type number}, {"basis_per_household", type number}, {"basis_per_application", type number}, {"basis_uncaptured_apps", type number}, {"opportunity_type", type text}, {"lmi_undetermined", type logical}, {"tract_partly_unmeasured", type logical}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

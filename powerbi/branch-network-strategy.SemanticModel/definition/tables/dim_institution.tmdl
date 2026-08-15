@@ -1,0 +1,54 @@
+table dim_institution
+	lineageTag: ff7305e6-f227-53ed-b4d7-bb7f70eea984
+
+	column cert
+		dataType: string
+		lineageTag: 018ee2ec-2137-5fb4-851f-cadd155dda7a
+		summarizeBy: none
+		sourceColumn: cert
+
+		annotation SummarizationSetBy = Automatic
+
+	column institution_name
+		dataType: string
+		lineageTag: 039ee02d-29ff-595b-91fb-a3702abccb84
+		summarizeBy: none
+		sourceColumn: institution_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column lei
+		dataType: string
+		lineageTag: 244af9f7-a47a-5c47-9b5c-5c623c426d7c
+		summarizeBy: none
+		sourceColumn: lei
+
+		annotation SummarizationSetBy = Automatic
+
+	column match_quality
+		dataType: string
+		lineageTag: d3ba3c0a-6c3b-5b9b-9bfa-033ce6dc6447
+		summarizeBy: none
+		sourceColumn: match_quality
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_subject_bank
+		dataType: boolean
+		lineageTag: 55f8678e-be68-556c-80b9-3180f54b9646
+		summarizeBy: none
+		sourceColumn: is_subject_bank
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_institution = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\dim_institution.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"cert", type text}, {"institution_name", type text}, {"lei", type text}, {"match_quality", type text}, {"is_subject_bank", type logical}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table
