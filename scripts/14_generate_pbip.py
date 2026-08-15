@@ -20,6 +20,7 @@ silently fails every join. That failure mode is why the type list is explicit
 rather than left to Power Query's inference.
 """
 import json
+import re
 import shutil
 import uuid
 from pathlib import Path
@@ -181,7 +182,36 @@ def table_tmdl(table: str, df: pd.DataFrame, measures: str = "") -> str:
     return "\n".join(lines)
 
 
+# DAX reserves more identifiers than the documented function list, and a
+# collision fails at parse time in Desktop rather than here - which is the
+# worst place to find it, because the model half-loads and the error names the
+# measure rather than the word. `Weight` was the one that bit; the rest are
+# words plausible enough to reach for. NOT EXHAUSTIVE, which is why VAR names
+# in this file are all prefixed rather than merely checked.
+DAX_RESERVED = {
+    "weight", "measure", "column", "table", "var", "return", "define",
+    "evaluate", "order", "by", "asc", "desc", "start", "at", "in", "not",
+    "and", "or", "true", "false", "blank", "value", "values", "all", "filter",
+    "row", "rank", "level", "scale", "format", "path", "union", "distinct",
+    "sample", "generate", "summarize", "calculate", "calendar", "currency",
+    "date", "time", "year", "month", "day", "hour", "minute", "second",
+    "now", "today", "min", "max", "sum", "count", "average", "divide",
+    "if", "switch", "rate", "type", "name", "index", "sort", "group",
+}
+
+
+def check_var_names(name: str, expr: str):
+    """Reject a measure whose VAR names could collide before it is written."""
+    bad = [v for v in re.findall(r"\bVAR\s+([A-Za-z_][A-Za-z0-9_]*)", expr)
+           if v.lower() in DAX_RESERVED]
+    if bad:
+        raise SystemExit(
+            f"Measure {name!r} uses reserved VAR name(s) {bad}. "
+            "DAX will refuse to parse it in Power BI Desktop.")
+
+
 def measure(name: str, expr: str, table: str, fmt: str | None = None) -> str:
+    check_var_names(name, expr)
     body = "\n".join(f"\t\t\t{l}" if l.strip() else "" for l in expr.strip().split("\n"))
     out = [f"\tmeasure '{name}' =", body, f"\t\tlineageTag: {tag('m', table, name)}"]
     if fmt:
@@ -204,15 +234,17 @@ DEPOSIT_MEASURES = [
      "CALCULATE ( [Total Deposits], REMOVEFILTERS ( dim_institution ) )", "#,0"),
     ("Market Share %",
      "DIVIDE ( [Subject Deposits], [Market Deposits] ) * 100", "#,0.00"),
-    ("Deposit CAGR %", """VAR FirstYear = MIN ( dim_year[year] )
-VAR LastYear = MAX ( dim_year[year] )
-VAR Span = LastYear - FirstYear
-VAR StartDep = CALCULATE ( [Total Deposits], dim_year[year] = FirstYear )
-VAR EndDep = CALCULATE ( [Total Deposits], dim_year[year] = LastYear )
+    ("Deposit CAGR %", """VAR CagrFirstYear = MIN ( dim_year[year] )
+VAR CagrLastYear = MAX ( dim_year[year] )
+VAR CagrYearSpan = CagrLastYear - CagrFirstYear
+VAR CagrStartDeposits = CALCULATE ( [Total Deposits], dim_year[year] = CagrFirstYear )
+VAR CagrEndDeposits = CALCULATE ( [Total Deposits], dim_year[year] = CagrLastYear )
 RETURN
     IF (
-        Span > 0 && NOT ISBLANK ( StartDep ) && StartDep > 0 && NOT ISBLANK ( EndDep ),
-        ( ( EndDep / StartDep ) ^ ( 1 / Span ) - 1 ) * 100
+        CagrYearSpan > 0
+            && NOT ISBLANK ( CagrStartDeposits ) && CagrStartDeposits > 0
+            && NOT ISBLANK ( CagrEndDeposits ),
+        ( ( CagrEndDeposits / CagrStartDeposits ) ^ ( 1 / CagrYearSpan ) - 1 ) * 100
     )""", "#,0.00"),
 ]
 
@@ -232,22 +264,24 @@ COVERAGE_MEASURES = [
     ("LMI Coverage % (recommended)",
      'CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "B_constrained" )',
      "#,0.00"),
-    ("Coverage Delta Gap (pp)", """VAR Rule = SELECTEDVALUE ( lmi_coverage[rule], "B_constrained" )
-VAR CurLMI = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
-VAR CurNon = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
-VAR NewLMI = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
-VAR NewNon = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
-RETURN ( NewLMI - CurLMI ) - ( NewNon - CurNon )""", "#,0.000"),
+    ("Coverage Delta Gap (pp)", """VAR SelectedRule = SELECTEDVALUE ( lmi_coverage[rule], "B_constrained" )
+VAR CurrentLmiCoverage = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
+VAR CurrentNonLmiCoverage = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
+VAR RecommendedLmiCoverage = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = SelectedRule )
+VAR RecommendedNonLmiCoverage = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = SelectedRule )
+RETURN
+    ( RecommendedLmiCoverage - CurrentLmiCoverage )
+        - ( RecommendedNonLmiCoverage - CurrentNonLmiCoverage )""", "#,0.000"),
     ("Binding Test Result", """IF (
     ISBLANK ( [Coverage Delta Gap (pp)] ),
     "NOT MEASURED",
     IF ( [Coverage Delta Gap (pp)] >= 0, "PASS - expansion is proportional", "FAIL - non-LMI coverage grows faster" )
 )""", None),
-    ("Constraint Cost (index points)", """VAR A = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
-VAR B = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "B_constrained" )
-RETURN A - B""", "#,0.000"),
-    ("Constraint Cost %", """VAR A = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
-RETURN DIVIDE ( [Constraint Cost (index points)], A ) * 100""", "#,0.0"),
+    ("Constraint Cost (index points)", """VAR CommercialScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
+VAR ConstrainedScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "B_constrained" )
+RETURN CommercialScore - ConstrainedScore""", "#,0.000"),
+    ("Constraint Cost %", """VAR CommercialScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
+RETURN DIVIDE ( [Constraint Cost (index points)], CommercialScore ) * 100""", "#,0.0"),
     ("LMI Sites in Shortlist", """CALCULATE (
     COUNTROWS ( recommended_sites ),
     recommended_sites[lmi_flag] = TRUE,
@@ -256,9 +290,9 @@ RETURN DIVIDE ( [Constraint Cost (index points)], A ) * 100""", "#,0.0"),
 ]
 
 TRACT_MEASURES = [
-    ("LMI Share of Selection %", """VAR Determined = CALCULATE ( COUNTROWS ( dim_tract ), NOT ISBLANK ( dim_tract[lmi_flag] ) )
-VAR IsLMI = CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[lmi_flag] = TRUE )
-RETURN DIVIDE ( IsLMI, Determined ) * 100""", "#,0.0"),
+    ("LMI Share of Selection %", """VAR TractsDetermined = CALCULATE ( COUNTROWS ( dim_tract ), NOT ISBLANK ( dim_tract[lmi_flag] ) )
+VAR TractsLmi = CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[lmi_flag] = TRUE )
+RETURN DIVIDE ( TractsLmi, TractsDetermined ) * 100""", "#,0.0"),
     ("Cluster-Measured Growth %", """DIVIDE (
     CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[growth_basis] <> "direct" ),
     CALCULATE ( COUNTROWS ( dim_tract ), NOT ISBLANK ( dim_tract[household_growth_pct] ) )
@@ -282,23 +316,26 @@ INDEX_MEASURES = [
 WHATIF_MEASURES = [
     ("Weight Total",
      " + ".join(f"[{n} Value]" for n, _ in WHATIF), "#,0.00"),
-    ("Selected Opportunity Score", """VAR W = [Weight Total]
-VAR Contribution =
+    # VAR names are deliberately long. `Weight` is reserved in DAX and fails to
+    # parse; so are enough other short, obvious words that guessing is not
+    # worth it. Every VAR here is prefixed so none can collide.
+    ("Selected Opportunity Score", """VAR WeightSum = [Weight Total]
+VAR TotalContribution =
     SUMX (
         VALUES ( fact_index_components[component] ),
-        VAR C = fact_index_components[component]
-        VAR Z = CALCULATE ( AVERAGE ( fact_index_components[z_score] ) )
-        VAR Weight =
+        VAR ComponentName = fact_index_components[component]
+        VAR ComponentZ = CALCULATE ( AVERAGE ( fact_index_components[z_score] ) )
+        VAR ComponentWeight =
             SWITCH (
-                C,
+                ComponentName,
 """ + ",\n".join(
         f'                "{COMPONENT_OF[n]}", [{n} Value]' for n, _ in WHATIF
     ) + """,
                 0
             )
-        RETURN Z * Weight
+        RETURN ComponentZ * ComponentWeight
     )
-RETURN DIVIDE ( Contribution, W )""", "#,0.000"),
+RETURN DIVIDE ( TotalContribution, WeightSum )""", "#,0.000"),
 ]
 
 
@@ -768,6 +805,34 @@ def validate(tables, pages):
     alone: the damage shows up as a plausible absence, not as a crash.
     """
     problems = []
+    known_measures = set(MEASURE_HOME)
+
+    # Every table[column] reference in every generated measure, and in the
+    # hand-written measures.dax reference file. A DAX measure naming a column
+    # that is not there fails at load and names the MEASURE, not the column -
+    # so it is cheaper to catch here. measures.dax is checked too because it
+    # is a second copy of the same logic and second copies drift: it carried
+    # branch_performance[index_vs_market] and [service_type], neither of which
+    # exists on that table.
+    dax_sources = {"generated": "\n".join(
+        e for _tbl, ms in (("", DEPOSIT_MEASURES), ("", PERF_MEASURES),
+                           ("", COVERAGE_MEASURES), ("", TRACT_MEASURES),
+                           ("", CAPTURE_MEASURES), ("", INDEX_MEASURES),
+                           ("", WHATIF_MEASURES))
+        for _n, e, *_ in ms)}
+    ref = BASE / "measures.dax"
+    if ref.exists():
+        dax_sources["measures.dax"] = re.sub(
+            r"//[^\n]*", "", ref.read_text(encoding="utf-8"))
+
+    for label, body in dax_sources.items():
+        for tbl, col in re.findall(r"\b([A-Za-z_][A-Za-z0-9_]*)\[([^\]]+)\]", body):
+            if tbl in tables:
+                if col not in tables[tbl].columns and col not in known_measures:
+                    problems.append(f"[{label}] {tbl} has no column {col!r}")
+            elif tbl not in {p for p, _ in WHATIF}:
+                problems.append(f"[{label}] unknown table {tbl!r}")
+
     for ft, fc, tt, tc in RELATIONSHIPS:
         for t in (ft, tt):
             if t in DISCONNECTED:

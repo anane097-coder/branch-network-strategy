@@ -58,15 +58,17 @@ table fact_branch_deposits
 		lineageTag: 3d2aaf0e-5c28-5028-9a41-d16474941419
 		formatString: #,0.00
 	measure 'Deposit CAGR %' =
-			VAR FirstYear = MIN ( dim_year[year] )
-			VAR LastYear = MAX ( dim_year[year] )
-			VAR Span = LastYear - FirstYear
-			VAR StartDep = CALCULATE ( [Total Deposits], dim_year[year] = FirstYear )
-			VAR EndDep = CALCULATE ( [Total Deposits], dim_year[year] = LastYear )
+			VAR CagrFirstYear = MIN ( dim_year[year] )
+			VAR CagrLastYear = MAX ( dim_year[year] )
+			VAR CagrYearSpan = CagrLastYear - CagrFirstYear
+			VAR CagrStartDeposits = CALCULATE ( [Total Deposits], dim_year[year] = CagrFirstYear )
+			VAR CagrEndDeposits = CALCULATE ( [Total Deposits], dim_year[year] = CagrLastYear )
 			RETURN
 			    IF (
-			        Span > 0 && NOT ISBLANK ( StartDep ) && StartDep > 0 && NOT ISBLANK ( EndDep ),
-			        ( ( EndDep / StartDep ) ^ ( 1 / Span ) - 1 ) * 100
+			        CagrYearSpan > 0
+			            && NOT ISBLANK ( CagrStartDeposits ) && CagrStartDeposits > 0
+			            && NOT ISBLANK ( CagrEndDeposits ),
+			        ( ( CagrEndDeposits / CagrStartDeposits ) ^ ( 1 / CagrYearSpan ) - 1 ) * 100
 			    )
 		lineageTag: db59584f-8396-5c11-ae1f-51ebdf2f07d9
 		formatString: #,0.00

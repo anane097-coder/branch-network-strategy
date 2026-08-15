@@ -38,15 +38,15 @@ table fact_index_components
 		lineageTag: f0e087f5-86d8-5b39-b0f6-c32bc856daf3
 		formatString: #,0.00
 	measure 'Selected Opportunity Score' =
-			VAR W = [Weight Total]
-			VAR Contribution =
+			VAR WeightSum = [Weight Total]
+			VAR TotalContribution =
 			    SUMX (
 			        VALUES ( fact_index_components[component] ),
-			        VAR C = fact_index_components[component]
-			        VAR Z = CALCULATE ( AVERAGE ( fact_index_components[z_score] ) )
-			        VAR Weight =
+			        VAR ComponentName = fact_index_components[component]
+			        VAR ComponentZ = CALCULATE ( AVERAGE ( fact_index_components[z_score] ) )
+			        VAR ComponentWeight =
 			            SWITCH (
-			                C,
+			                ComponentName,
 			                "household_growth", [w Household Growth Value],
 			                "median_income", [w Median Income Value],
 			                "deposit_market_growth", [w Deposit Growth Value],
@@ -54,9 +54,9 @@ table fact_index_components
 			                "unmet_mortgage_demand", [w Unmet Demand Value],
 			                0
 			            )
-			        RETURN Z * Weight
+			        RETURN ComponentZ * ComponentWeight
 			    )
-			RETURN DIVIDE ( Contribution, W )
+			RETURN DIVIDE ( TotalContribution, WeightSum )
 		lineageTag: 463b28df-e4c3-50a5-b758-67ba2e346858
 		formatString: #,0.000
 

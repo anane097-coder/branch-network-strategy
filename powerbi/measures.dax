@@ -32,18 +32,19 @@ DIVIDE ( [Total Deposits], 1000000000 )
 // against a fixed endpoint under a filtered context is a common and silent
 // error, because it keeps returning a plausible number.
 Deposit CAGR % =
-VAR FirstYear = MIN ( dim_year[year] )
-VAR LastYear  = MAX ( dim_year[year] )
-VAR Span      = LastYear - FirstYear
-VAR StartDep  =
-    CALCULATE ( [Total Deposits], dim_year[year] = FirstYear )
-VAR EndDep    =
-    CALCULATE ( [Total Deposits], dim_year[year] = LastYear )
+VAR CagrFirstYear = MIN ( dim_year[year] )
+VAR CagrLastYear  = MAX ( dim_year[year] )
+VAR CagrYearSpan  = CagrLastYear - CagrFirstYear
+VAR CagrStartDeposits =
+    CALCULATE ( [Total Deposits], dim_year[year] = CagrFirstYear )
+VAR CagrEndDeposits =
+    CALCULATE ( [Total Deposits], dim_year[year] = CagrLastYear )
 RETURN
     IF (
-        Span > 0 && NOT ISBLANK ( StartDep ) && StartDep > 0
-            && NOT ISBLANK ( EndDep ),
-        ( ( EndDep / StartDep ) ^ ( 1 / Span ) - 1 ) * 100
+        CagrYearSpan > 0
+            && NOT ISBLANK ( CagrStartDeposits ) && CagrStartDeposits > 0
+            && NOT ISBLANK ( CagrEndDeposits ),
+        ( ( CagrEndDeposits / CagrStartDeposits ) ^ ( 1 / CagrYearSpan ) - 1 ) * 100
     )
     // No ELSE. A period with no starting deposits has NO growth rate, and
     // returning 0 would put it in the middle of every ranking as though it
@@ -84,16 +85,17 @@ Performance Index =
 AVERAGE ( branch_performance[index_size_adjusted] )
 
 Performance Index (raw, do not rank) =
-AVERAGE ( branch_performance[index_vs_market] )
+AVERAGE ( branch_performance[performance_index] )
 
+// No service-type filter is needed here: SQL-08 already restricts to service
+// types 11 and 12 before the index is computed. Limited-service facilities
+// structurally book no deposits, so a zero reading is a fact about the
+// facility type rather than a measurement of it - left in, they score 0.0000
+// and sort to the top of any review list.
 Underperforming Branches =
 CALCULATE (
     COUNTROWS ( branch_performance ),
-    branch_performance[index_size_adjusted] < 1,
-    // Limited-service facilities structurally book no deposits, so a zero
-    // reading is a fact about the facility type and not a measurement of it.
-    // Left in, they score 0.0000 and sort to the top of any review list.
-    branch_performance[service_type] IN { "11", "12" }
+    branch_performance[index_size_adjusted] < 1
 )
 
 
@@ -119,21 +121,22 @@ CALCULATE (
 // their signs. AC-06 as written ("both values present") cannot fail; this can,
 // and did, for the unconstrained commercial set.
 Coverage Delta Gap (pp) =
-VAR Rule = SELECTEDVALUE ( lmi_coverage[rule], "B_constrained" )
-VAR CurLMI =
+VAR SelectedRule = SELECTEDVALUE ( lmi_coverage[rule], "B_constrained" )
+VAR CurrentLmiCoverage =
     CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ),
                 ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
-VAR CurNon =
+VAR CurrentNonLmiCoverage =
     CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ),
                 ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
-VAR NewLMI =
+VAR RecommendedLmiCoverage =
     CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ),
-                ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
-VAR NewNon =
+                ALL ( lmi_coverage ), lmi_coverage[rule] = SelectedRule )
+VAR RecommendedNonLmiCoverage =
     CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ),
-                ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
+                ALL ( lmi_coverage ), lmi_coverage[rule] = SelectedRule )
 RETURN
-    ( NewLMI - CurLMI ) - ( NewNon - CurNon )
+    ( RecommendedLmiCoverage - CurrentLmiCoverage )
+        - ( RecommendedNonLmiCoverage - CurrentNonLmiCoverage )
 
 Binding Test Result =
 IF (
@@ -149,13 +152,13 @@ IF (
 // visual against the 29.5% footprint baseline, at the point the shortlist is
 // read rather than in a limitations panel.
 LMI Share of Selection % =
-VAR Determined =
+VAR TractsDetermined =
     CALCULATE ( COUNTROWS ( dim_tract ),
                 NOT ISBLANK ( dim_tract[lmi_flag] ) )
-VAR IsLMI =
+VAR TractsLmi =
     CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[lmi_flag] = TRUE )
 RETURN
-    DIVIDE ( IsLMI, Determined ) * 100
+    DIVIDE ( TractsLmi, TractsDetermined ) * 100
     // Tracts with no LMI determination leave BOTH numerator and denominator.
     // Counting them as non-LMI would inflate the denominator and quietly
     // improve every equity figure on the page.
@@ -204,17 +207,22 @@ Weight Total =
 // Weights are RENORMALISED to sum to 1 so the score stays comparable as
 // sliders move. Without this, dragging every slider up would raise every
 // score and look like improvement.
+// VAR names here are long on purpose. `Weight` is RESERVED in DAX and this
+// measure would not parse with it; so are `Rule`, `Value`, `Index`, `Rate`,
+// `Level` and a good many other words worth reaching for. The generator
+// checks VAR names against a reserved list before writing, because the error
+// surfaces in Desktop at load time and names the measure, not the word.
 Selected Opportunity Score =
-VAR W = [Weight Total]
-VAR Contribution =
+VAR WeightSum = [Weight Total]
+VAR TotalContribution =
     SUMX (
         VALUES ( fact_index_components[component] ),
-        VAR C = fact_index_components[component]
-        VAR Z =
+        VAR ComponentName = fact_index_components[component]
+        VAR ComponentZ =
             CALCULATE ( AVERAGE ( fact_index_components[z_score] ) )
-        VAR Weight =
+        VAR ComponentWeight =
             SWITCH (
-                C,
+                ComponentName,
                 "household_growth",      [w Household Growth Value],
                 "median_income",         [w Median Income Value],
                 "deposit_market_growth", [w Deposit Growth Value],
@@ -222,10 +230,10 @@ VAR Contribution =
                 "unmet_mortgage_demand", [w Unmet Demand Value],
                 0
             )
-        RETURN Z * Weight
+        RETURN ComponentZ * ComponentWeight
     )
 RETURN
-    DIVIDE ( Contribution, W )
+    DIVIDE ( TotalContribution, WeightSum )
     // DIVIDE, not "/". All five sliders at zero is a state a user can reach in
     // one drag, and it must return blank rather than an error on the visual.
 
@@ -236,15 +244,15 @@ RETURN
 // growth-led weighting, 39.7% of tracts move 500+ places and only 31 of the
 // top 50 survive.
 Rank Shift vs Published =
-VAR PublishedRank =
+VAR PublishedRankValue =
     RANKX ( ALLSELECTED ( opportunity_index ),
             CALCULATE ( AVERAGE ( opportunity_index[opportunity_score] ) ),
             , DESC, DENSE )
-VAR LiveRank =
+VAR LiveRankValue =
     RANKX ( ALLSELECTED ( fact_index_components[tract_geoid] ),
             [Selected Opportunity Score], , DESC, DENSE )
 RETURN
-    LiveRank - PublishedRank
+    LiveRankValue - PublishedRankValue
 
 
 // ---------------------------------------------------------------------------

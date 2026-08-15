@@ -90,12 +90,14 @@ table lmi_coverage
 		lineageTag: 3a7ff24b-c7ad-5586-916d-a141a9ed99e5
 		formatString: #,0.00
 	measure 'Coverage Delta Gap (pp)' =
-			VAR Rule = SELECTEDVALUE ( lmi_coverage[rule], "B_constrained" )
-			VAR CurLMI = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
-			VAR CurNon = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
-			VAR NewLMI = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
-			VAR NewNon = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = Rule )
-			RETURN ( NewLMI - CurLMI ) - ( NewNon - CurNon )
+			VAR SelectedRule = SELECTEDVALUE ( lmi_coverage[rule], "B_constrained" )
+			VAR CurrentLmiCoverage = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
+			VAR CurrentNonLmiCoverage = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = "current" )
+			VAR RecommendedLmiCoverage = CALCULATE ( MAX ( lmi_coverage[lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = SelectedRule )
+			VAR RecommendedNonLmiCoverage = CALCULATE ( MAX ( lmi_coverage[non_lmi_coverage_pct] ), ALL ( lmi_coverage ), lmi_coverage[rule] = SelectedRule )
+			RETURN
+			    ( RecommendedLmiCoverage - CurrentLmiCoverage )
+			        - ( RecommendedNonLmiCoverage - CurrentNonLmiCoverage )
 		lineageTag: d167026e-9251-5d6d-a34a-4cc78f408354
 		formatString: #,0.000
 	measure 'Binding Test Result' =
@@ -106,14 +108,14 @@ table lmi_coverage
 			)
 		lineageTag: 5ab1a429-fc51-5fb0-8b2e-55d0ee3284a7
 	measure 'Constraint Cost (index points)' =
-			VAR A = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
-			VAR B = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "B_constrained" )
-			RETURN A - B
+			VAR CommercialScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
+			VAR ConstrainedScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "B_constrained" )
+			RETURN CommercialScore - ConstrainedScore
 		lineageTag: b748a211-cda5-5113-a961-15e3df9e4486
 		formatString: #,0.000
 	measure 'Constraint Cost %' =
-			VAR A = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
-			RETURN DIVIDE ( [Constraint Cost (index points)], A ) * 100
+			VAR CommercialScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
+			RETURN DIVIDE ( [Constraint Cost (index points)], CommercialScore ) * 100
 		lineageTag: 21a0218b-c951-5ab6-a604-b1c363b8391a
 		formatString: #,0.0
 	measure 'LMI Sites in Shortlist' =

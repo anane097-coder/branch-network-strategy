@@ -154,9 +154,9 @@ table dim_tract
 		annotation SummarizationSetBy = Automatic
 
 	measure 'LMI Share of Selection %' =
-			VAR Determined = CALCULATE ( COUNTROWS ( dim_tract ), NOT ISBLANK ( dim_tract[lmi_flag] ) )
-			VAR IsLMI = CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[lmi_flag] = TRUE )
-			RETURN DIVIDE ( IsLMI, Determined ) * 100
+			VAR TractsDetermined = CALCULATE ( COUNTROWS ( dim_tract ), NOT ISBLANK ( dim_tract[lmi_flag] ) )
+			VAR TractsLmi = CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[lmi_flag] = TRUE )
+			RETURN DIVIDE ( TractsLmi, TractsDetermined ) * 100
 		lineageTag: d374476b-7646-5578-b167-13357868fbf4
 		formatString: #,0.0
 	measure 'Cluster-Measured Growth %' =
