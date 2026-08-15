@@ -121,6 +121,22 @@ table dim_branch
 
 		annotation SummarizationSetBy = Automatic
 
+	column position_drift_miles
+		dataType: double
+		lineageTag: 6062a26e-7f28-52e3-a51d-402262f2ddc2
+		summarizeBy: none
+		sourceColumn: position_drift_miles
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_agrees
+		dataType: boolean
+		lineageTag: e2461fec-6dd3-54ff-98b1-9079d9270fe2
+		summarizeBy: none
+		sourceColumn: county_agrees
+
+		annotation SummarizationSetBy = Automatic
+
 	column validity
 		dataType: string
 		lineageTag: 0c89b412-7404-52ea-b400-b79734a787c2
@@ -137,13 +153,106 @@ table dim_branch
 
 		annotation SummarizationSetBy = Automatic
 
+	column index_size_adjusted
+		dataType: double
+		lineageTag: fb8baa63-2661-5404-8038-8e7181b6d550
+		summarizeBy: none
+		sourceColumn: index_size_adjusted
+
+		annotation SummarizationSetBy = Automatic
+
+	column index_raw
+		dataType: double
+		lineageTag: 4114b025-ebd9-5cc7-bef7-c8284974c46f
+		summarizeBy: none
+		sourceColumn: index_raw
+
+		annotation SummarizationSetBy = Automatic
+
+	column diagnosis
+		dataType: string
+		lineageTag: 05b64a96-d014-5b32-9cb8-a24126644d51
+		summarizeBy: none
+		sourceColumn: diagnosis
+
+		annotation SummarizationSetBy = Automatic
+
+	column market
+		dataType: string
+		lineageTag: 00ea8b05-f2bd-5fad-95ff-fafa640c6857
+		summarizeBy: none
+		sourceColumn: market
+
+		annotation SummarizationSetBy = Automatic
+
+	column cagr_3y_pct
+		dataType: double
+		lineageTag: cb8d8340-3499-5fd3-bf20-6ccb8e64130f
+		summarizeBy: none
+		sourceColumn: cagr_3y_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column actual_deposits
+		dataType: double
+		lineageTag: 25374152-ad44-51da-a5bd-83bebf64e65f
+		summarizeBy: none
+		sourceColumn: actual_deposits
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted_deposits
+		dataType: double
+		lineageTag: 0e0d3466-0992-5163-a1b5-dfe8acbdf50a
+		summarizeBy: none
+		sourceColumn: predicted_deposits
+
+		annotation SummarizationSetBy = Automatic
+
+	column catchment_households
+		dataType: double
+		lineageTag: f06e3f39-4220-523b-9ad2-da4fd76d42fd
+		summarizeBy: none
+		sourceColumn: catchment_households
+
+		annotation SummarizationSetBy = Automatic
+
+	column booking_concentration
+		dataType: boolean
+		lineageTag: 22877c41-2d4d-562c-b6a0-9b49ace617af
+		summarizeBy: none
+		sourceColumn: booking_concentration
+
+		annotation SummarizationSetBy = Automatic
+
+	column catchment_partly_unmeasured
+		dataType: boolean
+		lineageTag: 4368b34f-d1f0-5409-89ea-ffba753e32f4
+		summarizeBy: none
+		sourceColumn: catchment_partly_unmeasured
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Index (size-adjusted)' =
+			AVERAGE ( dim_branch[index_size_adjusted] )
+		lineageTag: 76e48862-e16a-52ac-954c-4a6b31bf4db8
+		formatString: #,0.000
+	measure 'Index (raw)' =
+			AVERAGE ( dim_branch[index_raw] )
+		lineageTag: b5e41b4c-e4c0-5747-8bce-33b27b7cec95
+		formatString: #,0.000
+	measure 'Underperforming Branches' =
+			CALCULATE ( COUNTROWS ( dim_branch ), dim_branch[index_size_adjusted] < 1 )
+		lineageTag: 76638b75-a96e-592e-8b2e-957708d164ce
+		formatString: #,0
+
 	partition dim_branch = m
 		mode: import
 		source =
 			let
 			    Source = Csv.Document(File.Contents(DataFolder & "\dim_branch.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
 			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-			    Typed = Table.TransformColumnTypes(Promoted, {{"uninumbr", type text}, {"cert", type text}, {"institution_name", type text}, {"address", type text}, {"city", type text}, {"state", type text}, {"county_fips", type text}, {"latitude", type number}, {"longitude", type number}, {"tract_geoid", type text}, {"service_type", type text}, {"is_main_office", type text}, {"first_year", Int64.Type}, {"last_year", Int64.Type}, {"drift_kind", type text}, {"validity", type text}, {"is_subject_bank", type logical}})
+			    Typed = Table.TransformColumnTypes(Promoted, {{"uninumbr", type text}, {"cert", type text}, {"institution_name", type text}, {"address", type text}, {"city", type text}, {"state", type text}, {"county_fips", type text}, {"latitude", type number}, {"longitude", type number}, {"tract_geoid", type text}, {"service_type", type text}, {"is_main_office", type text}, {"first_year", Int64.Type}, {"last_year", Int64.Type}, {"drift_kind", type text}, {"position_drift_miles", type number}, {"county_agrees", type logical}, {"validity", type text}, {"is_subject_bank", type logical}, {"index_size_adjusted", type number}, {"index_raw", type number}, {"diagnosis", type text}, {"market", type text}, {"cagr_3y_pct", type number}, {"actual_deposits", type number}, {"predicted_deposits", type number}, {"catchment_households", type number}, {"booking_concentration", type logical}, {"catchment_partly_unmeasured", type logical}})
 			in
 			    Typed
 

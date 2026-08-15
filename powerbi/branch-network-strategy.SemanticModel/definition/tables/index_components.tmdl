@@ -1,0 +1,142 @@
+table index_components
+	lineageTag: fd020c71-9e52-5870-9336-9926c8044959
+
+	column tract_geoid
+		dataType: string
+		lineageTag: bb42b9ae-f512-5287-82a5-de46891d2b86
+		summarizeBy: none
+		sourceColumn: tract_geoid
+
+		annotation SummarizationSetBy = Automatic
+
+	column household_growth_z
+		dataType: double
+		lineageTag: 50c5fa7c-8c1b-5055-966b-b46d02d99b38
+		summarizeBy: none
+		sourceColumn: household_growth_z
+
+		annotation SummarizationSetBy = Automatic
+
+	column median_income_z
+		dataType: double
+		lineageTag: b9bc7577-36a7-5fa5-afa5-c57fd5725fde
+		summarizeBy: none
+		sourceColumn: median_income_z
+
+		annotation SummarizationSetBy = Automatic
+
+	column deposit_growth_z
+		dataType: double
+		lineageTag: fb9750e3-956f-5846-b3d6-1dce5c6043a7
+		summarizeBy: none
+		sourceColumn: deposit_growth_z
+
+		annotation SummarizationSetBy = Automatic
+
+	column competitor_saturation_z
+		dataType: double
+		lineageTag: 253e831c-a56b-54bc-bbd2-2c44c4db7361
+		summarizeBy: none
+		sourceColumn: competitor_saturation_z
+
+		annotation SummarizationSetBy = Automatic
+
+	column unmet_demand_z
+		dataType: double
+		lineageTag: 505aac6d-5da1-52e4-b4d7-43f7c7bc5b6c
+		summarizeBy: none
+		sourceColumn: unmet_demand_z
+
+		annotation SummarizationSetBy = Automatic
+
+	column opportunity_score
+		dataType: double
+		lineageTag: 409c8959-3825-5d85-9a95-9347e96e7666
+		summarizeBy: none
+		sourceColumn: opportunity_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_name
+		dataType: string
+		lineageTag: a350b578-c878-5119-a696-167f7aca7d5f
+		summarizeBy: none
+		sourceColumn: county_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column lmi_flag
+		dataType: boolean
+		lineageTag: 35768960-f0f8-5012-ae86-28e7e29c3a75
+		summarizeBy: none
+		sourceColumn: lmi_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column growth_is_estimated
+		dataType: boolean
+		lineageTag: 32044baa-1f05-5bdd-8153-8b97ce77ef92
+		summarizeBy: none
+		sourceColumn: growth_is_estimated
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Weight Total' =
+			[w Household Growth Value] + [w Median Income Value] + [w Deposit Growth Value] + [w Competitor Saturation Value] + [w Unmet Demand Value]
+		lineageTag: 4b81520a-756a-504e-b81e-6cc0a876caf1
+		formatString: #,0.00
+	measure 'Weighted Score' =
+			VAR wHG = [w Household Growth Value]
+			VAR wMI = [w Median Income Value]
+			VAR wDG = [w Deposit Growth Value]
+			VAR wCS = [w Competitor Saturation Value]
+			VAR wUD = [w Unmet Demand Value]
+			VAR wTotal = wHG + wMI + wDG + wCS + wUD
+			RETURN
+			    IF (
+			        wTotal = 0,
+			        BLANK (),
+			        DIVIDE (
+			            SUMX (
+			                index_components,
+			                index_components[household_growth_z] * wHG
+			                    + index_components[median_income_z] * wMI
+			                    + index_components[deposit_growth_z] * wDG
+			                    + index_components[competitor_saturation_z] * wCS
+			                    + index_components[unmet_demand_z] * wUD
+			            ),
+			            wTotal
+			        )
+			    )
+		lineageTag: 34ed1eeb-608a-5e5d-b1c1-9efe28191316
+		formatString: #,0.000
+	measure 'Top 50 LMI Share %' =
+			VAR Top50 =
+			    TOPN ( 50, ALL ( index_components ), [Weighted Score], DESC )
+			VAR Determined = COUNTROWS ( FILTER ( Top50, NOT ISBLANK ( index_components[lmi_flag] ) ) )
+			VAR IsLmi = COUNTROWS ( FILTER ( Top50, index_components[lmi_flag] = TRUE ) )
+			RETURN DIVIDE ( IsLmi, Determined ) * 100
+		lineageTag: 3e849fd9-aab6-50c2-a3bf-252136a32480
+		formatString: #,0.0
+	measure 'Top 50 Cluster-Measured Growth %' =
+			VAR Top50 =
+			    TOPN ( 50, ALL ( index_components ), [Weighted Score], DESC )
+			RETURN
+			    DIVIDE (
+			        COUNTROWS ( FILTER ( Top50, index_components[growth_is_estimated] = TRUE ) ),
+			        COUNTROWS ( Top50 )
+			    ) * 100
+		lineageTag: 66cdad05-b663-55ff-82ff-2a00cdf68e70
+		formatString: #,0.0
+
+	partition index_components = m
+		mode: import
+		source =
+			let
+			    Source = Csv.Document(File.Contents(DataFolder & "\index_components.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"household_growth_z", type number}, {"median_income_z", type number}, {"deposit_growth_z", type number}, {"competitor_saturation_z", type number}, {"unmet_demand_z", type number}, {"opportunity_score", type number}, {"county_name", type text}, {"lmi_flag", type logical}, {"growth_is_estimated", type logical}})
+			in
+			    Typed
+
+	annotation PBI_ResultType = Table

@@ -108,21 +108,21 @@ table lmi_coverage
 			)
 		lineageTag: 5ab1a429-fc51-5fb0-8b2e-55d0ee3284a7
 	measure 'Constraint Cost (index points)' =
-			VAR CommercialScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
-			VAR ConstrainedScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "B_constrained" )
+			VAR CommercialScore = CALCULATE ( SUM ( recommendation_sets[opportunity_score] ), ALL ( recommendation_sets ), recommendation_sets[rule] = "A_commercial" )
+			VAR ConstrainedScore = CALCULATE ( SUM ( recommendation_sets[opportunity_score] ), ALL ( recommendation_sets ), recommendation_sets[rule] = "B_constrained" )
 			RETURN CommercialScore - ConstrainedScore
 		lineageTag: b748a211-cda5-5113-a961-15e3df9e4486
 		formatString: #,0.000
 	measure 'Constraint Cost %' =
-			VAR CommercialScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
+			VAR CommercialScore = CALCULATE ( SUM ( recommendation_sets[opportunity_score] ), ALL ( recommendation_sets ), recommendation_sets[rule] = "A_commercial" )
 			RETURN DIVIDE ( [Constraint Cost (index points)], CommercialScore ) * 100
 		lineageTag: 21a0218b-c951-5ab6-a604-b1c363b8391a
 		formatString: #,0.0
 	measure 'LMI Sites in Shortlist' =
 			CALCULATE (
-			    COUNTROWS ( recommended_sites ),
-			    recommended_sites[lmi_flag] = TRUE,
-			    recommended_sites[rule] = "B_constrained"
+			    COUNTROWS ( recommendation_sets ),
+			    recommendation_sets[lmi_flag] = TRUE,
+			    recommendation_sets[rule] = "B_constrained"
 			) + 0
 		lineageTag: 1ed85422-a814-5b25-bcb1-3725b024d33b
 		formatString: #,0

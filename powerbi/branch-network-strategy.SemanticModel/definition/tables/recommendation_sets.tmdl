@@ -1,9 +1,9 @@
-table recommended_sites
-	lineageTag: 95289587-2869-5aeb-90bb-12795f07bac3
+table recommendation_sets
+	lineageTag: c02edbeb-1ece-5d92-a326-3cd28a25af75
 
 	column rule
 		dataType: string
-		lineageTag: bc3a573a-4740-5b2d-a445-4168738dfd65
+		lineageTag: 14c0a53c-e0a4-511e-b2fb-1d75bd710971
 		summarizeBy: none
 		sourceColumn: rule
 
@@ -11,7 +11,7 @@ table recommended_sites
 
 	column tract_geoid
 		dataType: string
-		lineageTag: db1aba07-b081-53a3-a26b-0c21f90e5204
+		lineageTag: 386858b3-c681-5129-90e6-de97069b1ea7
 		summarizeBy: none
 		sourceColumn: tract_geoid
 
@@ -19,7 +19,7 @@ table recommended_sites
 
 	column county_name
 		dataType: string
-		lineageTag: 3efb62a6-131f-59ef-8783-6f7ca2b19aad
+		lineageTag: dc0c1e97-4a0c-543f-94a9-9d05f5be1104
 		summarizeBy: none
 		sourceColumn: county_name
 
@@ -27,7 +27,7 @@ table recommended_sites
 
 	column cbsa_title
 		dataType: string
-		lineageTag: 73b6b407-7fe8-5b14-9967-85c5351b379f
+		lineageTag: 5b1ecc54-90de-5e77-af6f-ef569098e2b4
 		summarizeBy: none
 		sourceColumn: cbsa_title
 
@@ -35,7 +35,7 @@ table recommended_sites
 
 	column tier
 		dataType: string
-		lineageTag: c711500b-fd90-5ed6-8bfe-094a5d9ed3fa
+		lineageTag: 32bea4df-1c92-5b6f-af0d-41db864b897a
 		summarizeBy: none
 		sourceColumn: tier
 
@@ -43,7 +43,7 @@ table recommended_sites
 
 	column households
 		dataType: int64
-		lineageTag: 459a61f1-1912-5630-8eef-c18b14fa87be
+		lineageTag: dfd7ca62-099f-539d-9052-42c8dde106be
 		summarizeBy: none
 		sourceColumn: households
 
@@ -51,7 +51,7 @@ table recommended_sites
 
 	column lmi_flag
 		dataType: boolean
-		lineageTag: 08c596ef-10ce-5645-a306-d11c2ae0af21
+		lineageTag: a05a7605-e161-523a-af3b-ef77f10c2da3
 		summarizeBy: none
 		sourceColumn: lmi_flag
 
@@ -59,7 +59,7 @@ table recommended_sites
 
 	column opportunity_score
 		dataType: double
-		lineageTag: dee07e61-463a-5fd3-830c-e9ac7d25c6c6
+		lineageTag: 70d083fb-5fe5-5b1a-8ee0-90c984f971a3
 		summarizeBy: none
 		sourceColumn: opportunity_score
 
@@ -67,7 +67,7 @@ table recommended_sites
 
 	column unmet_mortgage_demand
 		dataType: double
-		lineageTag: 82aedb58-3a8c-5fda-8b58-cdbaeace9dfd
+		lineageTag: df3d237b-8c81-5265-be7c-94355a07390b
 		summarizeBy: none
 		sourceColumn: unmet_mortgage_demand
 
@@ -75,17 +75,17 @@ table recommended_sites
 
 	column growth_is_estimated
 		dataType: boolean
-		lineageTag: ca492942-fe71-5526-8f4f-84fbccb69ae3
+		lineageTag: 4a80da5b-45c8-5aee-9985-24be08cbf48b
 		summarizeBy: none
 		sourceColumn: growth_is_estimated
 
 		annotation SummarizationSetBy = Automatic
 
-	partition recommended_sites = m
+	partition recommendation_sets = m
 		mode: import
 		source =
 			let
-			    Source = Csv.Document(File.Contents(DataFolder & "\recommended_sites.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+			    Source = Csv.Document(File.Contents(DataFolder & "\recommendation_sets.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
 			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 			    Typed = Table.TransformColumnTypes(Promoted, {{"rule", type text}, {"tract_geoid", type text}, {"county_name", type text}, {"cbsa_title", type text}, {"tier", type text}, {"households", Int64.Type}, {"lmi_flag", type logical}, {"opportunity_score", type number}, {"unmet_mortgage_demand", type number}, {"growth_is_estimated", type logical}})
 			in

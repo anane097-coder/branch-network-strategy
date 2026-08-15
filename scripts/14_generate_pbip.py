@@ -43,7 +43,7 @@ TEXT_COLUMNS = {
 # Tables that must NOT participate in relationships. Each is a footprint-level
 # constant or a parameter set; connecting them would let a page filter change
 # a number that is not supposed to vary by page filter.
-DISCONNECTED = {"lmi_coverage", "recommended_sites", "ref_index_weights",
+DISCONNECTED = {"lmi_coverage", "recommendation_sets", "ref_index_weights",
                 "fact_county_deposit_growth", "market_share"}
 
 RELATIONSHIPS = [
@@ -53,12 +53,11 @@ RELATIONSHIPS = [
     ("fact_branch_deposits", "year", "dim_year", "year"),
     ("bridge_branch_catchment", "uninumbr", "dim_branch", "uninumbr"),
     ("bridge_branch_catchment", "tract_geoid", "dim_tract", "tract_geoid"),
-    ("branch_performance", "uninumbr", "dim_branch", "uninumbr"),
     ("fact_tract_competition", "tract_geoid", "dim_tract", "tract_geoid"),
     ("tract_capture_rate", "tract_geoid", "dim_tract", "tract_geoid"),
     ("unmet_demand", "tract_geoid", "dim_tract", "tract_geoid"),
     ("opportunity_index", "tract_geoid", "dim_tract", "tract_geoid"),
-    ("fact_index_components", "tract_geoid", "dim_tract", "tract_geoid"),
+    ("index_components", "tract_geoid", "dim_tract", "tract_geoid"),
     ("recommended_coverage", "tract_geoid", "dim_tract", "tract_geoid"),
 ]
 # NOTE: dim_branch[tract_geoid] -> dim_tract is deliberately ABSENT. With the
@@ -100,8 +99,11 @@ MUST_BE_BOOLEAN = {
     ("dim_tract", "lmi_flag"),
     ("opportunity_index", "lmi_flag"),
     ("opportunity_index", "growth_is_estimated"),
-    ("recommended_sites", "lmi_flag"),
-    ("recommended_sites", "growth_is_estimated"),
+    ("index_components", "lmi_flag"),
+    ("index_components", "growth_is_estimated"),
+    ("dim_tract", "in_catchment"),
+    ("recommendation_sets", "lmi_flag"),
+    ("recommendation_sets", "growth_is_estimated"),
     ("dim_branch", "is_subject_bank"),
     ("dim_institution", "is_subject_bank"),
     ("unmet_demand", "lmi_flag"),
@@ -109,11 +111,24 @@ MUST_BE_BOOLEAN = {
 }
 BOOL_LITERALS = {True, False, "True", "False", "true", "false"}
 
+# THE DATE TABLE. DATEADD, and every other time-intelligence function, needs a
+# real date column on a table MARKED as a date table. Against anything else it
+# does not error - it returns blank, and a year-over-year measure then reads as
+# "no change", which is the most convincing wrong answer available.
+#
+# Marking it takes two things and both are required: dataCategory Time on the
+# table, and isKey on the date column. One without the other silently does
+# nothing.
+DATE_TABLE, DATE_COLUMN = "dim_year", "date"
+
 
 def pbi_types(df: pd.DataFrame, table: str):
     """(tmdl dataType, M type) per column, identifiers forced to text."""
     out = {}
     for col in df.columns:
+        if table == DATE_TABLE and col == DATE_COLUMN:
+            out[col] = ("dateTime", "type date")
+            continue
         if col in TEXT_COLUMNS:
             out[col] = ("string", "type text")
             continue
@@ -156,11 +171,16 @@ def m_partition(table: str, types: dict) -> str:
 
 def table_tmdl(table: str, df: pd.DataFrame, measures: str = "") -> str:
     types = pbi_types(df, table)
-    lines = [f"table {table}", f"\tlineageTag: {tag('table', table)}", ""]
+    lines = [f"table {table}", f"\tlineageTag: {tag('table', table)}"]
+    if table == DATE_TABLE:
+        lines.append("\tdataCategory: Time")
+    lines.append("")
     for col, (dt, _) in types.items():
+        is_date_key = table == DATE_TABLE and col == DATE_COLUMN
+        lines += [f"\tcolumn {col}", f"\t\tdataType: {dt}"]
+        if is_date_key:
+            lines += ["\t\tisKey", "\t\tformatString: General Date"]
         lines += [
-            f"\tcolumn {col}",
-            f"\t\tdataType: {dt}",
             f"\t\tlineageTag: {tag('col', table, col)}",
             "\t\tsummarizeBy: none",
             f"\t\tsourceColumn: {col}",
@@ -234,6 +254,17 @@ DEPOSIT_MEASURES = [
      "CALCULATE ( [Total Deposits], REMOVEFILTERS ( dim_institution ) )", "#,0"),
     ("Market Share %",
      "DIVIDE ( [Subject Deposits], [Market Deposits] ) * 100", "#,0.00"),
+    # Spec 11. DATEADD requires a REAL date column on a table marked as a
+    # date table - against an integer year it does not error, it returns
+    # blank, and a year-over-year measure then reads as "no change".
+    ("Deposits PY",
+     "CALCULATE ( [Total Deposits], DATEADD ( dim_year[date], -1, YEAR ) )",
+     "#,0"),
+    ("Deposit CAGR 3yr", """VAR CurrentDeposits = [Total Deposits]
+VAR BaseDeposits = CALCULATE ( [Total Deposits], DATEADD ( dim_year[date], -3, YEAR ) )
+RETURN
+    IF ( BaseDeposits > 0, ( CurrentDeposits / BaseDeposits ) ^ ( 1 / 3 ) - 1 )""",
+     "0.0%"),
     ("Deposit CAGR %", """VAR CagrFirstYear = MIN ( dim_year[year] )
 VAR CagrLastYear = MAX ( dim_year[year] )
 VAR CagrYearSpan = CagrLastYear - CagrFirstYear
@@ -249,11 +280,19 @@ RETURN
 ]
 
 PERF_MEASURES = [
-    ("Performance Index", "AVERAGE ( branch_performance[index_size_adjusted] )", "#,0.000"),
-    ("Performance Index (raw, do not rank)",
-     "AVERAGE ( branch_performance[performance_index] )", "#,0.000"),
+    # Spec 11 names. Both ship; size-adjusted is the default on every visual
+    # and raw is reachable through the page-2 field parameter, so the
+    # market-position effect stays visible rather than normalised out of sight.
+    ("Index (size-adjusted)",
+     "AVERAGE ( dim_branch[index_size_adjusted] )", "#,0.000"),
+    ("Index (raw)", "AVERAGE ( dim_branch[index_raw] )", "#,0.000"),
+    # No service-type filter: SQL-08 already restricts to types 11 and 12
+    # before the index exists. Limited-service facilities structurally book no
+    # deposits, so a zero is a fact about the facility type rather than a
+    # measurement of it - left in, they score 0.0000 and sort to the top of
+    # any review list.
     ("Underperforming Branches",
-     "CALCULATE ( COUNTROWS ( branch_performance ), branch_performance[index_size_adjusted] < 1 )",
+     "CALCULATE ( COUNTROWS ( dim_branch ), dim_branch[index_size_adjusted] < 1 )",
      "#,0"),
 ]
 
@@ -277,19 +316,41 @@ RETURN
     "NOT MEASURED",
     IF ( [Coverage Delta Gap (pp)] >= 0, "PASS - expansion is proportional", "FAIL - non-LMI coverage grows faster" )
 )""", None),
-    ("Constraint Cost (index points)", """VAR CommercialScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
-VAR ConstrainedScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "B_constrained" )
+    ("Constraint Cost (index points)", """VAR CommercialScore = CALCULATE ( SUM ( recommendation_sets[opportunity_score] ), ALL ( recommendation_sets ), recommendation_sets[rule] = "A_commercial" )
+VAR ConstrainedScore = CALCULATE ( SUM ( recommendation_sets[opportunity_score] ), ALL ( recommendation_sets ), recommendation_sets[rule] = "B_constrained" )
 RETURN CommercialScore - ConstrainedScore""", "#,0.000"),
-    ("Constraint Cost %", """VAR CommercialScore = CALCULATE ( SUM ( recommended_sites[opportunity_score] ), ALL ( recommended_sites ), recommended_sites[rule] = "A_commercial" )
+    ("Constraint Cost %", """VAR CommercialScore = CALCULATE ( SUM ( recommendation_sets[opportunity_score] ), ALL ( recommendation_sets ), recommendation_sets[rule] = "A_commercial" )
 RETURN DIVIDE ( [Constraint Cost (index points)], CommercialScore ) * 100""", "#,0.0"),
     ("LMI Sites in Shortlist", """CALCULATE (
-    COUNTROWS ( recommended_sites ),
-    recommended_sites[lmi_flag] = TRUE,
-    recommended_sites[rule] = "B_constrained"
+    COUNTROWS ( recommendation_sets ),
+    recommendation_sets[lmi_flag] = TRUE,
+    recommendation_sets[rule] = "B_constrained"
 ) + 0""", "#,0"),
 ]
 
 TRACT_MEASURES = [
+    # SUBJECT-PREFIXED, per spec 11's own naming rule: in_catchment derives
+    # from bridge_branch_catchment, which covers the subject only, so every
+    # measure reading it inherits that scope. The spec names this measure
+    # "LMI Coverage"; the prefix is applied because the rule it states two
+    # paragraphs earlier is the more important of the two.
+    ("Subject LMI Coverage", """DIVIDE (
+    CALCULATE ( SUM ( dim_tract[households] ),
+                dim_tract[lmi_flag] = TRUE, dim_tract[in_catchment] = TRUE ),
+    CALCULATE ( SUM ( dim_tract[households] ), dim_tract[lmi_flag] = TRUE )
+)""", "0.0%"),
+    # Households, never tracts - the tract basis inflated the over-index from
+    # +1.9pp to +3.3pp. The 31 no-basis tracts leave BOTH sides via the
+    # lmi_flag NULL, which is why neither filter above coalesces it to FALSE.
+    ("Subject Non-LMI Coverage", """DIVIDE (
+    CALCULATE ( SUM ( dim_tract[households] ),
+                dim_tract[lmi_flag] = FALSE, dim_tract[in_catchment] = TRUE ),
+    CALCULATE ( SUM ( dim_tract[households] ), dim_tract[lmi_flag] = FALSE )
+)""", "0.0%"),
+    ("Subject Tract Coverage %", """DIVIDE (
+    CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[in_catchment] = TRUE ),
+    COUNTROWS ( ALL ( dim_tract ) )
+) * 100""", "#,0.0"),
     ("LMI Share of Selection %", """VAR TractsDetermined = CALCULATE ( COUNTROWS ( dim_tract ), NOT ISBLANK ( dim_tract[lmi_flag] ) )
 VAR TractsLmi = CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[lmi_flag] = TRUE )
 RETURN DIVIDE ( TractsLmi, TractsDetermined ) * 100""", "#,0.0"),
@@ -316,26 +377,51 @@ INDEX_MEASURES = [
 WHATIF_MEASURES = [
     ("Weight Total",
      " + ".join(f"[{n} Value]" for n, _ in WHATIF), "#,0.00"),
-    # VAR names are deliberately long. `Weight` is reserved in DAX and fails to
-    # parse; so are enough other short, obvious words that guessing is not
-    # worth it. Every VAR here is prefixed so none can collide.
-    ("Selected Opportunity Score", """VAR WeightSum = [Weight Total]
-VAR TotalContribution =
-    SUMX (
-        VALUES ( fact_index_components[component] ),
-        VAR ComponentName = fact_index_components[component]
-        VAR ComponentZ = CALCULATE ( AVERAGE ( fact_index_components[z_score] ) )
-        VAR ComponentWeight =
-            SWITCH (
-                ComponentName,
-""" + ",\n".join(
-        f'                "{COMPONENT_OF[n]}", [{n} Value]' for n, _ in WHATIF
-    ) + """,
-                0
-            )
-        RETURN ComponentZ * ComponentWeight
-    )
-RETURN DIVIDE ( TotalContribution, WeightSum )""", "#,0.000"),
+    # Spec 11's Weighted Score: a plain SUMX over five named columns, which
+    # is why index_components ships wide. The long form needed a SUMX over
+    # VALUES() with a SWITCH inside - correct, but harder to read, and this is
+    # the measure a reviewer is most likely to actually read.
+    #
+    # VAR names are long on purpose: `Weight` is RESERVED in DAX and will not
+    # parse, and so are enough other obvious words that guessing is not worth
+    # it. check_var_names() rejects a collision before anything is written.
+    ("Weighted Score", """VAR wHG = [w Household Growth Value]
+VAR wMI = [w Median Income Value]
+VAR wDG = [w Deposit Growth Value]
+VAR wCS = [w Competitor Saturation Value]
+VAR wUD = [w Unmet Demand Value]
+VAR wTotal = wHG + wMI + wDG + wCS + wUD
+RETURN
+    IF (
+        wTotal = 0,
+        BLANK (),
+        DIVIDE (
+            SUMX (
+                index_components,
+                index_components[household_growth_z] * wHG
+                    + index_components[median_income_z] * wMI
+                    + index_components[deposit_growth_z] * wDG
+                    + index_components[competitor_saturation_z] * wCS
+                    + index_components[unmet_demand_z] * wUD
+            ),
+            wTotal
+        )
+    )""", "#,0.000"),
+    # The card that sits beside the sliders. Moving unmet demand down visibly
+    # raises it - the sensitivity finding made interactive, and the single
+    # most useful thing on the page.
+    ("Top 50 LMI Share %", """VAR Top50 =
+    TOPN ( 50, ALL ( index_components ), [Weighted Score], DESC )
+VAR Determined = COUNTROWS ( FILTER ( Top50, NOT ISBLANK ( index_components[lmi_flag] ) ) )
+VAR IsLmi = COUNTROWS ( FILTER ( Top50, index_components[lmi_flag] = TRUE ) )
+RETURN DIVIDE ( IsLmi, Determined ) * 100""", "#,0.0"),
+    ("Top 50 Cluster-Measured Growth %", """VAR Top50 =
+    TOPN ( 50, ALL ( index_components ), [Weighted Score], DESC )
+RETURN
+    DIVIDE (
+        COUNTROWS ( FILTER ( Top50, index_components[growth_is_estimated] = TRUE ) ),
+        COUNTROWS ( Top50 )
+    ) * 100""", "#,0.0"),
 ]
 
 
@@ -349,12 +435,12 @@ def build_model():
 
     home = {
         "fact_branch_deposits": DEPOSIT_MEASURES,
-        "branch_performance": PERF_MEASURES,
+        "dim_branch": PERF_MEASURES,
         "lmi_coverage": COVERAGE_MEASURES,
         "dim_tract": TRACT_MEASURES,
         "tract_capture_rate": CAPTURE_MEASURES,
         "opportunity_index": INDEX_MEASURES,
-        "fact_index_components": WHATIF_MEASURES,
+        "index_components": WHATIF_MEASURES,
     }
 
     sm = BASE / f"{PROJECT}.SemanticModel"
@@ -475,12 +561,12 @@ def build_model():
 # Where a measure lives, so a visual's query names the right entity.
 MEASURE_HOME = {}
 for _tbl, _ms in (("fact_branch_deposits", DEPOSIT_MEASURES),
-                  ("branch_performance", PERF_MEASURES),
+                  ("dim_branch", PERF_MEASURES),
                   ("lmi_coverage", COVERAGE_MEASURES),
                   ("dim_tract", TRACT_MEASURES),
                   ("tract_capture_rate", CAPTURE_MEASURES),
                   ("opportunity_index", INDEX_MEASURES),
-                  ("fact_index_components", WHATIF_MEASURES)):
+                  ("index_components", WHATIF_MEASURES)):
     for _n, *_ in _ms:
         MEASURE_HOME[_n] = _tbl
 for _p, _ in WHATIF:
@@ -583,167 +669,355 @@ def run(text, size="12pt", bold=False, colour=None):
 INK, WARN, GOOD = "#1F2933", "#B23A22", "#1B6B4A"
 
 
+# Rationale carried into the emitted measures.dax. Kept here rather than in
+# that file because a second hand-maintained copy has now drifted twice - it
+# referenced branch_performance[index_vs_market] and [service_type], neither
+# of which existed, and then survived a table rename it knew nothing about.
+# One source, generated.
+MEASURE_NOTES = {
+    "Total Deposits ($bn)":
+        "Deposits are stored in WHOLE DOLLARS. SOD publishes thousands and the\n"
+        "conversion happens once, in script 10. A second conversion here would\n"
+        "be invisible and would surface as a 1000x error only where somebody\n"
+        "compared two visuals.",
+    "Market Deposits":
+        "REMOVEFILTERS on the institution ONLY, leaving geography and time\n"
+        "intact. ALL() over the model would compare a county's subject deposits\n"
+        "against the whole footprint; no removal at all returns 100%. Both look\n"
+        "entirely plausible on a card, which is what makes this the classic\n"
+        "filter-context error.",
+    "Deposits PY":
+        "DATEADD needs a REAL date column on a table marked as a date table.\n"
+        "Against an integer year it does not error - it returns blank, and the\n"
+        "measure reads as no change.",
+    "Deposit CAGR 3yr":
+        "BLANK, never zero, when the base is missing. Zero would place an\n"
+        "unmeasured branch in the middle of every ranking as though it had been\n"
+        "measured. Refuse before computing.",
+    "Deposit CAGR %":
+        "Endpoints come from the SELECTION, not hardcoded to 2019 and 2025, so\n"
+        "the measure stays correct when a slicer narrows the range. A CAGR\n"
+        "against a fixed endpoint under a filtered context keeps returning a\n"
+        "plausible number, which is why it survives review.",
+    "Index (size-adjusted)":
+        "THE DEFAULT ON EVERY VISUAL. The raw index fell mechanically as\n"
+        "catchment size rose - median 1.518 in the smallest catchment quartile\n"
+        "against 0.416 in the largest - and inverted the ranking of every\n"
+        "market. Chicago read weakest at 0.564 and is strongest at 1.357 once\n"
+        "adjusted.",
+    "Index (raw)":
+        "Audit only, reachable through the page-2 field parameter so the\n"
+        "market-position effect stays visible rather than normalised out of\n"
+        "sight. Never rank on it.",
+    "Subject LMI Coverage":
+        "SUBJECT-PREFIXED because in_catchment derives from\n"
+        "bridge_branch_catchment, which covers the subject only - every measure\n"
+        "reading it inherits that scope, and the field list should say so.\n"
+        "Households, never tracts: the tract basis inflated the over-index from\n"
+        "+1.9pp to +3.3pp. The 31 no-basis tracts leave BOTH numerator and\n"
+        "denominator through the lmi_flag NULL, which is why neither filter\n"
+        "coalesces it to FALSE.",
+    "Coverage Delta Gap (pp)":
+        "THE BINDING TEST. Both deltas are non-negative by construction - a\n"
+        "branch adds catchment area and removes none - so this compares their\n"
+        "SIZES, not their signs. AC-06 as written (both values present) cannot\n"
+        "fail; this can, and did, for the unconstrained commercial set, where\n"
+        "non-LMI coverage grew 8.4x faster than LMI.",
+    "Capture Rate %":
+        "Originations only, on BOTH sides of the ratio. Purchased loans\n"
+        "(action_taken 6) were bought on the secondary market and say nothing\n"
+        "about serving a tract; several lenders here exceed 88% purchased\n"
+        "against the subject's 0.8%, so including them would inflate\n"
+        "competitors far more than the subject.",
+    "Weighted Score":
+        "FR-03 demonstrated rather than claimed. Sliders cannot be constrained\n"
+        "to sum to 1, so the measure normalises across whatever they do sum to\n"
+        "rather than asking the user to do arithmetic. index_components ships\n"
+        "wide precisely so this is a plain SUMX over five named columns.\n"
+        "VAR names are long because `Weight` is RESERVED in DAX and will not\n"
+        "parse - check_var_names() rejects a collision before writing.",
+    "Top 50 LMI Share %":
+        "The card beside the sliders. Moving unmet demand down visibly raises\n"
+        "it, which is the sensitivity finding made interactive and the single\n"
+        "most useful thing on the page.",
+    "LMI Share of Selection %":
+        "Tracts with no LMI determination leave BOTH numerator and denominator.\n"
+        "Counting them as non-LMI would inflate the denominator and quietly\n"
+        "improve every equity figure on the page.",
+    "Underperforming Branches":
+        "No service-type filter is needed: SQL-08 already restricts to types 11\n"
+        "and 12. Limited-service facilities structurally book no deposits, so a\n"
+        "zero is a fact about the facility type rather than a measurement of\n"
+        "it - left in, they score 0.0000 and sort to the top of any review list.",
+}
+
+MEASURE_SECTIONS = [
+    ("Deposits, share and trend", "fact_branch_deposits", "DEPOSIT_MEASURES"),
+    ("Branch performance", "dim_branch", "PERF_MEASURES"),
+    ("Equity and the binding test", "lmi_coverage", "COVERAGE_MEASURES"),
+    ("Tract composition", "dim_tract", "TRACT_MEASURES"),
+    ("Capture rate", "tract_capture_rate", "CAPTURE_MEASURES"),
+    ("Opportunity index", "opportunity_index", "INDEX_MEASURES"),
+    ("What-if weighting", "index_components", "WHATIF_MEASURES"),
+]
+
+
+def write_measures_dax():
+    """Emit powerbi/measures.dax from the same lists the model is built from.
+
+    Not a second copy - a rendering. The previous hand-maintained file drifted
+    twice, and both drifts were only caught because the validator reads it.
+    """
+    lists = {"DEPOSIT_MEASURES": DEPOSIT_MEASURES, "PERF_MEASURES": PERF_MEASURES,
+             "COVERAGE_MEASURES": COVERAGE_MEASURES, "TRACT_MEASURES": TRACT_MEASURES,
+             "CAPTURE_MEASURES": CAPTURE_MEASURES, "INDEX_MEASURES": INDEX_MEASURES,
+             "WHATIF_MEASURES": WHATIF_MEASURES}
+    out = [
+        "// " + "=" * 73,
+        "// Measures - branch-network-strategy",
+        "// " + "=" * 73,
+        "// GENERATED by scripts/14_generate_pbip.py. Do not edit: the model and",
+        "// this file are rendered from one list, so they cannot disagree.",
+        "//",
+        "// Written to be read. Every measure that could be computed more than one",
+        "// way says which way it computes and why, because the definitional",
+        "// choices in this project are the analysis, not an implementation detail.",
+        "// " + "=" * 73,
+        "",
+    ]
+    for title, home, key in MEASURE_SECTIONS:
+        out += ["", "// " + "-" * 73,
+                f"// {title}   [table: {home}]",
+                "// " + "-" * 73, ""]
+        for name, expr, *rest in lists[key]:
+            note = MEASURE_NOTES.get(name)
+            if note:
+                out += ["// " + line for line in note.split("\n")]
+            out.append(f"{name} =")
+            out.append(expr.strip())
+            out.append("")
+    for pname, default in WHATIF:
+        out += [f"// What-if parameter: {pname}, 0 to 0.50 step 0.05,"
+                f" default {default}",
+                f"{pname} = GENERATESERIES ( 0, 0.5, 0.05 )",
+                f"{pname} Value = SELECTEDVALUE ( '{pname}'[{pname}], {default} )",
+                ""]
+    (BASE / "measures.dax").write_text("\n".join(out), encoding="utf-8")
+
+
 def build_report():
-    pages = []
+    """Pages per spec 11, built in the spec build order - page 4 first,
+    because it carries the finding and must not be the unfinished one.
+    File order is 1,2,3,4 with page 3 hidden from the navigator."""
 
-    # ---- Page 1: Market opportunity -------------------------------------
-    p1 = [
-        textbox(16, 12, 900, 44, [run("Market opportunity", "20pt", True, INK)]),
-        visual("card", 16, 68, 240, 110, {"Values": ["measure:Total Deposits ($bn)"]},
-               "Footprint deposits ($bn)"),
-        visual("card", 268, 68, 240, 110, {"Values": ["measure:Deposit CAGR %"]},
-               "Deposit CAGR % (selected years)"),
-        visual("card", 520, 68, 240, 110, {"Values": ["measure:Market Share %"]},
-               "Subject market share %"),
-        visual("card", 772, 68, 240, 110, {"Values": ["measure:Branch Count"]},
-               "Branches in view"),
-        visual("slicer", 1024, 68, 240, 110, {"Values": ["dim_tract:tier"]}, "Tier"),
-        visual("tableEx", 16, 192, 620, 300, {"Values": [
-            "dim_tract:county_name", "measure:Published Opportunity Score",
-            "measure:LMI Share of Selection %",
-            "measure:Cluster-Measured Growth %"]},
-            "Markets by opportunity score",
-            sort=("measure:Published Opportunity Score", "desc")),
-        visual("columnChart", 648, 192, 616, 300,
-               {"Category": ["dim_tract:cbsa_title"],
-                "Y": ["measure:Published Opportunity Score"]},
-               "Opportunity by CBSA",
-               sort=("measure:Published Opportunity Score", "desc")),
-        textbox(16, 504, 1248, 60, [
-            run("The index is z-score normalised. min-max was abandoned because "
-                "17 tracts report the ACS top-code of $250,001 — a censored "
-                "bound, not a measurement — and min-max anchors the whole scale "
-                "on it.", "10pt", False, INK)]),
-        visual("slicer", 16, 576, 240, 120, {"Values": ["dim_branch:state"]},
-               "State"),
-        visual("tableEx", 268, 576, 996, 120, {"Values": [
-            "fact_county_deposit_growth:county_fips",
-            "fact_county_deposit_growth:cagr_pct_total",
-            "fact_county_deposit_growth:cagr_pct_retail",
-            "fact_county_deposit_growth:excluded_deposit_share"]},
-            "County deposit growth — total vs retail basis (booking centres removed)"),
-    ]
-    pages.append(("Market opportunity", p1))
-
-    # ---- Page 2: Branch performance -------------------------------------
-    p2 = [
-        textbox(16, 12, 900, 44, [run("Branch performance", "20pt", True, INK)]),
-        visual("scatterChart", 16, 68, 760, 420,
-               {"Category": ["branch_performance:uninumbr"],
-                "X": ["branch_performance:households"],
-                "Y": ["branch_performance:actual_deposits"]},
-               "Catchment households against actual deposits"),
-        visual("card", 792, 68, 236, 110,
-               {"Values": ["measure:Performance Index"]},
-               "Performance index (size-adjusted)"),
-        visual("card", 1036, 68, 228, 110,
-               {"Values": ["measure:Underperforming Branches"]},
-               "Branches below 1.0"),
-        visual("tableEx", 792, 192, 472, 296, {"Values": [
-            "branch_performance:city", "branch_performance:index_size_adjusted",
-            "branch_performance:diagnosis"]},
-            "Ranked by size-adjusted index",
-            sort=("branch_performance:index_size_adjusted", "asc")),
-        textbox(16, 500, 1248, 76, [
-            run("Rank on index_size_adjusted, never on the raw index. ", "10pt", True, WARN),
-            run("The raw index fell mechanically as catchment size rose — median "
-                "1.518 in the smallest catchment quartile against 0.416 in the "
-                "largest — which inverted the ranking of every market. Chicago "
-                "read as weakest at 0.564 and is strongest at 1.357 once adjusted.",
-                "10pt", False, INK)]),
-    ]
-    pages.append(("Branch performance", p2))
-
-    # ---- Page 3: Branch detail ------------------------------------------
-    p3 = [
-        textbox(16, 12, 900, 44, [run("Branch detail", "20pt", True, INK)]),
-        visual("slicer", 16, 68, 260, 420, {"Values": ["dim_branch:city"]}, "Branch city"),
-        visual("columnChart", 288, 68, 500, 220,
-               {"Category": ["dim_year:year"], "Y": ["measure:Total Deposits"]},
-               "Deposits by year"),
-        visual("card", 800, 68, 224, 110, {"Values": ["measure:Capture Rate %"]},
-               "Mortgage capture rate %"),
-        visual("card", 1040, 68, 224, 110, {"Values": ["measure:Unmet Originations"]},
-               "Unmet originations"),
-        visual("tableEx", 800, 192, 464, 296, {"Values": [
-            "fact_tract_competition:tract_geoid",
-            "fact_tract_competition:competitor_branches",
-            "fact_tract_competition:competitor_per_10k_catchment_hh"]},
-            "Competitor branches near these tracts"),
-        visual("tableEx", 288, 300, 500, 188, {"Values": [
-            "dim_tract:tract_geoid", "dim_tract:households",
-            "dim_tract:lmi_flag"]}, "Catchment tracts"),
-        textbox(16, 500, 1248, 76, [
-            run("fact_tract_competition is not a catchment bridge. ", "10pt", True, WARN),
-            run("It counts competitor branches near a tract and carries no branch "
-                "identifier, because competitor branches have no catchments here — "
-                "their tract assignments were never computed and their coordinates "
-                "never validated. Do not relate it to dim_branch.", "10pt", False, INK)]),
-    ]
-    pages.append(("Branch detail", p3))
-
-    # ---- Page 4: Recommendation and equity ------------------------------
+    # ---- Page 4: recommendation and equity, three bands ------------------
     p4 = [
-        textbox(16, 12, 1248, 52, [
+        textbox(16, 10, 1248, 40, [
             run("Recommendation and equity check", "20pt", True, INK)]),
-        textbox(16, 64, 1248, 52, [
-            run("Rule B ships. ", "12pt", True, INK),
-            run("The commercial set fails the binding test: non-LMI coverage "
-                "grows 8.4× faster than LMI. AC-06 as written would have passed "
-                "it, because AC-06 tests that two numbers exist.", "12pt", False, INK)]),
-        visual("tableEx", 16, 124, 760, 240, {"Values": [
-            "recommended_sites:rule", "recommended_sites:tract_geoid",
-            "recommended_sites:county_name", "recommended_sites:opportunity_score",
-            "recommended_sites:lmi_flag", "recommended_sites:growth_is_estimated"]},
-            "The three sites — constrained (B) and commercial (A)"),
-        visual("card", 792, 124, 232, 106, {"Values": ["measure:LMI Coverage %"]},
-               "LMI coverage now %"),
-        visual("card", 1032, 124, 232, 106,
-               {"Values": ["measure:LMI Coverage % (recommended)"]},
-               "LMI coverage recommended %"),
-        visual("card", 792, 238, 232, 126,
-               {"Values": ["measure:Binding Test Result"]}, "Binding test"),
-        visual("card", 1032, 238, 232, 126,
-               {"Values": ["measure:Constraint Cost %"]},
-               "Cost of the constraint %"),
-        visual("tableEx", 16, 376, 760, 150, {"Values": [
+        # BAND 1 - both site sets, over the existing footprint.
+        visual("map", 16, 54, 620, 250,
+               {"Category": ["recommendation_sets:tract_geoid"],
+                "Series": ["recommendation_sets:rule"],
+                "Size": ["recommendation_sets:opportunity_score"]},
+               "Rule A (commercial) and Rule B (constrained), both shown"),
+        visual("tableEx", 648, 54, 616, 250, {"Values": [
+            "recommendation_sets:rule", "recommendation_sets:county_name",
+            "recommendation_sets:tract_geoid", "recommendation_sets:tier",
+            "recommendation_sets:opportunity_score",
+            "recommendation_sets:lmi_flag",
+            "recommendation_sets:growth_is_estimated"]},
+            "The three sites, both rules"),
+        # BAND 2 - the comparison table. The centrepiece of the page.
+        visual("tableEx", 16, 314, 900, 178, {"Values": [
             "lmi_coverage:rule", "lmi_coverage:lmi_coverage_pct",
             "lmi_coverage:non_lmi_coverage_pct", "lmi_coverage:delta_lmi_pp",
-            "lmi_coverage:delta_non_lmi_pp", "lmi_coverage:binding_test"]},
-            "AC-06 and the test that can fail"),
-        visual("card", 792, 376, 232, 150,
-               {"Values": ["measure:LMI Sites in Shortlist"]},
-               "LMI tracts among the 3 sites"),
-        textbox(1032, 376, 232, 150, [
-            run("0 of 3.", "14pt", True, WARN),
-            run(" The constraint improves catchment composition; it does not "
-                "site among LMI communities. It selects from a shortlist that "
-                "is 4.0% LMI, so the ceiling is upstream in the opportunity "
-                "model, not in the constraint.", "9pt", False, INK)]),
-        textbox(16, 538, 1248, 74, [
-            run("One named risk, not three caveats. ", "10pt", True, WARN),
-            run("29 of the top 50 sit in one Chicago-area growth corridor, and "
-                "growth there is disproportionately cluster-estimated rather "
-                "than observed (22 of 29 against 9 of 21 elsewhere, phi +0.336). "
-                "One growth assumption, mostly estimated, in one corridor.",
-                "10pt", False, INK)],),
-        textbox(16, 620, 620, 84, [
+            "lmi_coverage:delta_non_lmi_pp",
+            "lmi_coverage:non_lmi_growth_multiple",
+            "lmi_coverage:binding_test"]},
+            "Current, Rule A, Rule B - the test that can fail"),
+        visual("card", 928, 314, 168, 88,
+               {"Values": ["measure:Subject LMI Coverage"]}, "LMI coverage now"),
+        visual("card", 1104, 314, 160, 88,
+               {"Values": ["measure:Subject Non-LMI Coverage"]}, "non-LMI now"),
+        visual("card", 928, 410, 168, 82,
+               {"Values": ["measure:Constraint Cost %"]}, "Constraint cost %"),
+        visual("card", 1104, 410, 160, 82,
+               {"Values": ["measure:LMI Sites in Shortlist"]}, "LMI sites of 3"),
+        # BAND 3 - three text blocks, on canvas, not in tooltips.
+        textbox(16, 500, 410, 104, [
+            run("Cost of the constraint. ", "10pt", True, INK),
+            run("0.6712 index points, 9.4% of the unconstrained score. "
+                "26,617 new catchment households against 37,413.",
+                "10pt", False, INK)]),
+        textbox(436, 500, 410, 104, [
+            run("0 of 3. ", "11pt", True, WARN),
+            run("Neither set places a branch in an LMI tract. Rule B improves "
+                "catchment composition; it does not site among LMI "
+                "households. Anyone reading this as a CRA response needs that "
+                "distinction - the ceiling is upstream, in a shortlist that "
+                "is 4.0% LMI.", "10pt", False, INK)]),
+        textbox(856, 500, 408, 104, [
+            run("Correlated exposure. ", "10pt", True, WARN),
+            run("Both sets concentrate in the Chicago-Naperville-Elgin "
+                "corridor, where 22 of 29 top-50 tracts carry cluster-"
+                "estimated growth. One regional growth assumption, mostly "
+                "estimated.", "10pt", False, INK)]),
+        # What-if weighting. FR-03 demonstrated rather than claimed.
+        textbox(16, 612, 300, 92, [
             run("Weights are a judgement, not a fact.", "10pt", True, INK),
-            run(" Drag to re-weight. Under a growth-led weighting 39.7% of "
-                "tracts move 500+ places and only 31 of the top 50 survive.",
+            run(" Under a growth-led weighting 39.7% of tracts move 500+ "
+                "places and only 31 of the top 50 survive.", "9pt", False, INK)]),
+        visual("card", 1004, 612, 128, 92,
+               {"Values": ["measure:Top 50 LMI Share %"]}, "Top-50 LMI %"),
+        visual("card", 1140, 612, 124, 92,
+               {"Values": ["measure:Top 50 Cluster-Measured Growth %"]},
+               "Top-50 est. growth %"),
+    ]
+    x = 324
+    for pname, _ in WHATIF:
+        p4.append(visual("slicer", x, 612, 132, 92,
+                         {"Values": [f"{pname}:{pname}"]},
+                         pname.replace("w ", "")))
+        x += 136
+
+    # ---- Page 1: market opportunity --------------------------------------
+    p1 = [
+        textbox(16, 10, 900, 40, [run("Market opportunity", "20pt", True, INK)]),
+        # Five cards. Five is the ceiling the spec sets, not a target.
+        visual("card", 16, 52, 240, 92,
+               {"Values": ["measure:Total Deposits ($bn)"]},
+               "Footprint deposits ($bn)"),
+        visual("card", 264, 52, 200, 92, {"Values": ["measure:Branch Count"]},
+               "Branches"),
+        visual("card", 472, 52, 200, 92,
+               {"Values": ["measure:Deposit CAGR 3yr"]}, "3yr deposit CAGR"),
+        visual("card", 680, 52, 200, 92, {"Values": ["measure:Market Share %"]},
+               "Market share %"),
+        visual("card", 888, 52, 208, 92,
+               {"Values": ["measure:Subject Tract Coverage %"]},
+               "Tract coverage %"),
+        # County choropleth rather than 4,807 tract polygons: 174 counties
+        # render fast and read clearly, which is the entire reason for it.
+        visual("filledMap", 16, 152, 600, 320,
+               {"Category": ["dim_tract:county_name"],
+                "Y": ["measure:Published Opportunity Score"]},
+               "Counties by mean opportunity score"),
+        visual("map", 16, 152, 600, 320,
+               {"Category": ["index_components:tract_geoid"],
+                "Size": ["measure:Weighted Score"]},
+               "Top-50 tracts", z=1),
+        # The composition flags ARE the point of this table: a reader should
+        # see 4.0% LMI and 62% estimated growth without being told.
+        visual("tableEx", 628, 152, 636, 320, {"Values": [
+            "index_components:tract_geoid", "index_components:county_name",
+            "index_components:opportunity_score", "index_components:lmi_flag",
+            "index_components:growth_is_estimated"]},
+            "Top 50 tracts - LMI and growth-basis flags",
+            sort=("index_components:opportunity_score", "desc")),
+        visual("columnChart", 16, 482, 600, 150,
+               {"Category": ["ref_index_weights:component"],
+                "Y": ["ref_index_weights:weight"]},
+               "Component weights - unmet demand carries 39.0% of top-50 contribution"),
+        visual("slicer", 628, 482, 200, 150, {"Values": ["dim_branch:state"]},
+               "State"),
+        visual("slicer", 840, 482, 200, 150, {"Values": ["dim_tract:tier"]},
+               "Tier"),
+        visual("slicer", 1052, 482, 212, 150,
+               {"Values": ["dim_tract:cbsa_title"]}, "CBSA"),
+        textbox(16, 640, 1248, 64, [
+            run("Shortlist is 4.0% LMI against a 29.5% baseline; 62% of "
+                "top-50 tracts carry estimated rather than observed growth.",
+                "11pt", True, WARN)]),
+    ]
+
+    # ---- Page 2: branch performance --------------------------------------
+    p2 = [
+        textbox(16, 10, 900, 40, [run("Branch performance", "20pt", True, INK)]),
+        visual("scatterChart", 16, 52, 740, 420,
+               {"Category": ["dim_branch:uninumbr"],
+                "X": ["dim_branch:catchment_households"],
+                "Y": ["dim_branch:actual_deposits"],
+                "Size": ["dim_branch:catchment_households"],
+                "Series": ["dim_branch:diagnosis"]},
+               "Catchment potential against actual deposits"),
+        visual("card", 768, 52, 240, 92,
+               {"Values": ["measure:Index (size-adjusted)"]},
+               "Index (size-adjusted)"),
+        visual("card", 1016, 52, 248, 92, {"Values": ["measure:Index (raw)"]},
+               "Index (raw) - audit only"),
+        # Five diagnosis categories, cross-filtering the scatter. Level and
+        # trajectory stay apart here: no composite rank.
+        visual("barChart", 768, 152, 496, 150,
+               {"Category": ["dim_branch:diagnosis"],
+                "Y": ["measure:Underperforming Branches"]}, "Diagnosis"),
+        # The flags carry the formatting, not the index - they are what a
+        # reader needs to spot.
+        visual("tableEx", 768, 310, 496, 162, {"Values": [
+            "dim_branch:city", "dim_branch:index_size_adjusted",
+            "dim_branch:cagr_3y_pct", "dim_branch:booking_concentration",
+            "dim_branch:catchment_partly_unmeasured",
+            "dim_branch:position_drift_miles", "dim_branch:county_agrees"]},
+            "Ranked, with the four flags",
+            sort=("dim_branch:index_size_adjusted", "asc")),
+        textbox(16, 482, 1248, 76, [
+            run("Brown County holds 18.6% of branches and 51.7% of deposits. ",
+                "10pt", True, WARN),
+            run("Booking-concentration branches are flagged and excluded from "
+                "the index. Rank on the size-adjusted index, never the raw "
+                "one: raw fell mechanically as catchment size rose - median "
+                "1.518 in the smallest quartile against 0.416 in the largest "
+                "- and inverted the ranking of every market.",
                 "10pt", False, INK)]),
     ]
-    x = 648
-    for pname, _ in WHATIF:
-        p4.append(visual("slicer", x, 620, 122, 84, {"Values": [f"{pname}:{pname}"]},
-                         pname.replace("w ", "")))
-        x += 124
-    pages.append(("Recommendation and equity", p4))
+
+    # ---- Page 3: branch detail, drillthrough only ------------------------
+    p3 = [
+        textbox(16, 10, 900, 40, [run("Branch detail", "20pt", True, INK)]),
+        visual("slicer", 16, 52, 260, 200, {"Values": ["dim_branch:city"]},
+               "Branch"),
+        visual("tableEx", 16, 260, 260, 212, {"Values": [
+            "dim_branch:institution_name", "dim_branch:address",
+            "dim_branch:market", "dim_branch:first_year",
+            "dim_branch:last_year"]}, "Header"),
+        visual("lineChart", 288, 52, 480, 220,
+               {"Category": ["dim_year:year"], "Y": ["measure:Total Deposits"]},
+               "Deposits 2019-2025"),
+        visual("tableEx", 288, 280, 480, 192, {"Values": [
+            "dim_branch:catchment_households", "dim_branch:predicted_deposits",
+            "dim_branch:actual_deposits", "dim_branch:index_size_adjusted"]},
+            "Index breakdown - potential, predicted, actual"),
+        visual("tableEx", 780, 52, 484, 220, {"Values": [
+            "dim_tract:tract_geoid", "dim_tract:households",
+            "dim_tract:median_hh_income", "dim_tract:lmi_flag",
+            "bridge_branch_catchment:distance_miles",
+            "bridge_branch_catchment:is_primary"]},
+            "Catchment tracts - distance and whether contested"),
+        visual("tableEx", 780, 280, 484, 192, {"Values": [
+            "fact_tract_competition:competitor_branches",
+            "fact_tract_competition:radius_miles",
+            "fact_tract_competition:competitor_per_10k_catchment_hh"]},
+            "Competitors within tier radius"),
+        textbox(16, 482, 1248, 76, [
+            run("Flags. ", "10pt", True, WARN),
+            run("position_drift_miles above threshold means the branch moved "
+                "and its catchment was recomputed; catchment_partly_unmeasured "
+                "means one or more tracts had suppressed ACS values. Either "
+                "explains why an index reads as it does. fact_tract_competition "
+                "is not a catchment bridge - it carries no branch identifier, "
+                "because competitor branches have no catchments here.",
+                "10pt", False, INK)]),
+    ]
+
+    pages = [("Market opportunity", p1), ("Branch performance", p2),
+             ("Branch detail", p3), ("Recommendation and equity", p4)]
 
     sections = []
     for i, (name, visuals) in enumerate(pages):
+        # Page 3 is a drillthrough target and must not appear in the page
+        # navigator. visibility 1 = HiddenInViewMode.
+        hidden = name == "Branch detail"
         sections.append({
-            "config": "{}",
+            "config": json.dumps({"visibility": 1}) if hidden else "{}",
             "displayName": name,
             "displayOption": 1,
             "filters": "[]",
@@ -867,6 +1141,7 @@ if __name__ == "__main__":
                                   CAPTURE_MEASURES, INDEX_MEASURES,
                                   WHATIF_MEASURES))
     print(f"  measures: {n_meas} + {len(WHATIF)} parameter values")
+    write_measures_dax()
     pages = build_report()
     for name, vis in pages:
         print(f"  page: {name:32s} {len(vis)} visuals")

@@ -18,10 +18,6 @@ relationship 2b932138-edb3-5cf7-87de-96ba81f9d181
 	fromColumn: bridge_branch_catchment.tract_geoid
 	toColumn: dim_tract.tract_geoid
 
-relationship d0bcf7dd-1981-5485-a87c-282561d17215
-	fromColumn: branch_performance.uninumbr
-	toColumn: dim_branch.uninumbr
-
 relationship 0d511404-9c21-5394-bf5c-8b02ae76d2b3
 	fromColumn: fact_tract_competition.tract_geoid
 	toColumn: dim_tract.tract_geoid
@@ -38,8 +34,8 @@ relationship ab25a3ab-018f-56cd-ae8c-f75dbf7b052b
 	fromColumn: opportunity_index.tract_geoid
 	toColumn: dim_tract.tract_geoid
 
-relationship e2ee5f0b-b38c-5049-958e-4f235af4b3b5
-	fromColumn: fact_index_components.tract_geoid
+relationship 8539f58c-2864-5449-a33f-f4f98cb0c7e2
+	fromColumn: index_components.tract_geoid
 	toColumn: dim_tract.tract_geoid
 
 relationship a6dd5bbe-3062-5afa-a136-f3c9b45b9bed

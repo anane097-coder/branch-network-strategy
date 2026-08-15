@@ -153,6 +153,37 @@ table dim_tract
 
 		annotation SummarizationSetBy = Automatic
 
+	column in_catchment
+		dataType: boolean
+		lineageTag: eda43e16-e2fb-5adf-a2bb-04ea8930280e
+		summarizeBy: none
+		sourceColumn: in_catchment
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Subject LMI Coverage' =
+			DIVIDE (
+			    CALCULATE ( SUM ( dim_tract[households] ),
+			                dim_tract[lmi_flag] = TRUE, dim_tract[in_catchment] = TRUE ),
+			    CALCULATE ( SUM ( dim_tract[households] ), dim_tract[lmi_flag] = TRUE )
+			)
+		lineageTag: 4ff10fe5-61f8-5e49-a096-81734bf4ebd5
+		formatString: 0.0%
+	measure 'Subject Non-LMI Coverage' =
+			DIVIDE (
+			    CALCULATE ( SUM ( dim_tract[households] ),
+			                dim_tract[lmi_flag] = FALSE, dim_tract[in_catchment] = TRUE ),
+			    CALCULATE ( SUM ( dim_tract[households] ), dim_tract[lmi_flag] = FALSE )
+			)
+		lineageTag: d40c9d00-34ad-50c3-97ab-a93a0e050b09
+		formatString: 0.0%
+	measure 'Subject Tract Coverage %' =
+			DIVIDE (
+			    CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[in_catchment] = TRUE ),
+			    COUNTROWS ( ALL ( dim_tract ) )
+			) * 100
+		lineageTag: a12474ab-80f3-5b65-9b25-f7b745585fbb
+		formatString: #,0.0
 	measure 'LMI Share of Selection %' =
 			VAR TractsDetermined = CALCULATE ( COUNTROWS ( dim_tract ), NOT ISBLANK ( dim_tract[lmi_flag] ) )
 			VAR TractsLmi = CALCULATE ( COUNTROWS ( dim_tract ), dim_tract[lmi_flag] = TRUE )
@@ -177,7 +208,7 @@ table dim_tract
 			let
 			    Source = Csv.Document(File.Contents(DataFolder & "\dim_tract.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
 			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"county_fips", type text}, {"county_name", type text}, {"cbsa", type text}, {"cbsa_title", type text}, {"tier", type text}, {"population", Int64.Type}, {"households", Int64.Type}, {"household_growth_pct", type number}, {"growth_basis", type text}, {"median_hh_income", type number}, {"median_family_income", type number}, {"median_home_value", type number}, {"tract_to_area_income_pct", type number}, {"lmi_flag", type logical}, {"lmi_basis", type text}, {"tract_status", type text}, {"centroid_lat", type number}, {"centroid_lon", type number}})
+			    Typed = Table.TransformColumnTypes(Promoted, {{"tract_geoid", type text}, {"county_fips", type text}, {"county_name", type text}, {"cbsa", type text}, {"cbsa_title", type text}, {"tier", type text}, {"population", Int64.Type}, {"households", Int64.Type}, {"household_growth_pct", type number}, {"growth_basis", type text}, {"median_hh_income", type number}, {"median_family_income", type number}, {"median_home_value", type number}, {"tract_to_area_income_pct", type number}, {"lmi_flag", type logical}, {"lmi_basis", type text}, {"tract_status", type text}, {"centroid_lat", type number}, {"centroid_lon", type number}, {"in_catchment", type logical}})
 			in
 			    Typed
 

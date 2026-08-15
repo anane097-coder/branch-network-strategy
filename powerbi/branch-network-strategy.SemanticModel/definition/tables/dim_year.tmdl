@@ -1,5 +1,6 @@
 table dim_year
 	lineageTag: 3b6f8b97-5e8a-547a-8c2c-0662c0a24a56
+	dataCategory: Time
 
 	column year
 		dataType: int64
@@ -17,13 +18,23 @@ table dim_year
 
 		annotation SummarizationSetBy = Automatic
 
+	column date
+		dataType: dateTime
+		isKey
+		formatString: General Date
+		lineageTag: 08807c9c-7bf7-529d-82b9-c73b6ddc6fa0
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
 	partition dim_year = m
 		mode: import
 		source =
 			let
 			    Source = Csv.Document(File.Contents(DataFolder & "\dim_year.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
 			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-			    Typed = Table.TransformColumnTypes(Promoted, {{"year", Int64.Type}, {"sod_as_of_date", type text}})
+			    Typed = Table.TransformColumnTypes(Promoted, {{"year", Int64.Type}, {"sod_as_of_date", type text}, {"date", type date}})
 			in
 			    Typed
 

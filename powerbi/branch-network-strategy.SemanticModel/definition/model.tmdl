@@ -7,11 +7,10 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
-	annotation PBI_QueryOrder = ["branch_performance", "bridge_branch_catchment", "dim_branch", "dim_institution", "dim_tract", "dim_year", "fact_branch_deposits", "fact_county_deposit_growth", "fact_index_components", "fact_tract_competition", "lmi_coverage", "market_share", "opportunity_index", "recommended_coverage", "recommended_sites", "ref_index_weights", "tract_capture_rate", "unmet_demand", "w Household Growth", "w Median Income", "w Deposit Growth", "w Competitor Saturation", "w Unmet Demand"]
+	annotation PBI_QueryOrder = ["bridge_branch_catchment", "dim_branch", "dim_institution", "dim_tract", "dim_year", "fact_branch_deposits", "fact_county_deposit_growth", "fact_tract_competition", "index_components", "lmi_coverage", "market_share", "opportunity_index", "recommendation_sets", "recommended_coverage", "ref_index_weights", "tract_capture_rate", "unmet_demand", "w Household Growth", "w Median Income", "w Deposit Growth", "w Competitor Saturation", "w Unmet Demand"]
 
 	annotation __PBI_TimeIntelligenceEnabled = 0
 
-ref table branch_performance
 ref table bridge_branch_catchment
 ref table dim_branch
 ref table dim_institution
@@ -19,13 +18,13 @@ ref table dim_tract
 ref table dim_year
 ref table fact_branch_deposits
 ref table fact_county_deposit_growth
-ref table fact_index_components
 ref table fact_tract_competition
+ref table index_components
 ref table lmi_coverage
 ref table market_share
 ref table opportunity_index
+ref table recommendation_sets
 ref table recommended_coverage
-ref table recommended_sites
 ref table ref_index_weights
 ref table tract_capture_rate
 ref table unmet_demand

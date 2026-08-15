@@ -57,6 +57,17 @@ table fact_branch_deposits
 			DIVIDE ( [Subject Deposits], [Market Deposits] ) * 100
 		lineageTag: 3d2aaf0e-5c28-5028-9a41-d16474941419
 		formatString: #,0.00
+	measure 'Deposits PY' =
+			CALCULATE ( [Total Deposits], DATEADD ( dim_year[date], -1, YEAR ) )
+		lineageTag: 49aa5d9c-6555-5504-bc5a-18561807c579
+		formatString: #,0
+	measure 'Deposit CAGR 3yr' =
+			VAR CurrentDeposits = [Total Deposits]
+			VAR BaseDeposits = CALCULATE ( [Total Deposits], DATEADD ( dim_year[date], -3, YEAR ) )
+			RETURN
+			    IF ( BaseDeposits > 0, ( CurrentDeposits / BaseDeposits ) ^ ( 1 / 3 ) - 1 )
+		lineageTag: 6deb57c1-b909-559a-8ffc-8150964adc4e
+		formatString: 0.0%
 	measure 'Deposit CAGR %' =
 			VAR CagrFirstYear = MIN ( dim_year[year] )
 			VAR CagrLastYear = MAX ( dim_year[year] )

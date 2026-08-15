@@ -28,102 +28,129 @@
       "ordinal": 0,
       "visualContainers": [
         {
-          "config": "{\"name\": \"1ae58e03-3b7d-5c56-af3f-20aa7d676db4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 12, \"z\": 0, \"width\": 900, \"height\": 44}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Market opportunity\", \"textStyle\": {\"fontSize\": \"20pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "config": "{\"name\": \"642f30d4-0f26-5e9c-85b1-67c1a7a5c6a5\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 10, \"z\": 0, \"width\": 900, \"height\": 40}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Market opportunity\", \"textStyle\": {\"fontSize\": \"20pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}]}]}}]}}}",
           "filters": "[]",
-          "height": 44,
+          "height": 40,
           "width": 900,
           "x": 16,
-          "y": 12,
+          "y": 10,
           "z": 0
         },
         {
-          "config": "{\"name\": \"a95007e2-7630-561e-9d86-32136d5e34d1\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 68, \"z\": 0, \"width\": 240, \"height\": 110}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_branch_deposits.Total Deposits ($bn)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Total Deposits ($bn)\"}, \"Name\": \"fact_branch_deposits.Total Deposits ($bn)\", \"NativeReferenceName\": \"Total Deposits ($bn)\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Footprint deposits ($bn)'\"}}}}}]}}}",
+          "config": "{\"name\": \"df77bcea-85d7-55e1-b7df-765de5c59ced\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 52, \"z\": 0, \"width\": 240, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_branch_deposits.Total Deposits ($bn)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Total Deposits ($bn)\"}, \"Name\": \"fact_branch_deposits.Total Deposits ($bn)\", \"NativeReferenceName\": \"Total Deposits ($bn)\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Footprint deposits ($bn)'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 110,
+          "height": 92,
           "width": 240,
           "x": 16,
-          "y": 68,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"8a0c1941-50b6-547b-b274-5c2497474b0c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 268, \"y\": 68, \"z\": 0, \"width\": 240, \"height\": 110}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_branch_deposits.Deposit CAGR %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Deposit CAGR %\"}, \"Name\": \"fact_branch_deposits.Deposit CAGR %\", \"NativeReferenceName\": \"Deposit CAGR %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Deposit CAGR % (selected years)'\"}}}}}]}}}",
+          "config": "{\"name\": \"8b8ff31d-68f1-54f8-9fe3-62d98c51440d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 264, \"y\": 52, \"z\": 0, \"width\": 200, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_branch_deposits.Branch Count\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Branch Count\"}, \"Name\": \"fact_branch_deposits.Branch Count\", \"NativeReferenceName\": \"Branch Count\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Branches'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 110,
-          "width": 240,
-          "x": 268,
-          "y": 68,
+          "height": 92,
+          "width": 200,
+          "x": 264,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"df0578cd-b9ce-5f64-bee6-76c1c4a66b34\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 520, \"y\": 68, \"z\": 0, \"width\": 240, \"height\": 110}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_branch_deposits.Market Share %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Market Share %\"}, \"Name\": \"fact_branch_deposits.Market Share %\", \"NativeReferenceName\": \"Market Share %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Subject market share %'\"}}}}}]}}}",
+          "config": "{\"name\": \"fccbd396-179b-544a-910c-f4c7d4b66ab6\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 472, \"y\": 52, \"z\": 0, \"width\": 200, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_branch_deposits.Deposit CAGR 3yr\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Deposit CAGR 3yr\"}, \"Name\": \"fact_branch_deposits.Deposit CAGR 3yr\", \"NativeReferenceName\": \"Deposit CAGR 3yr\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'3yr deposit CAGR'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 110,
-          "width": 240,
-          "x": 520,
-          "y": 68,
+          "height": 92,
+          "width": 200,
+          "x": 472,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"489e5f9d-4b17-5f0f-aff3-3cbc7685b3f9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 772, \"y\": 68, \"z\": 0, \"width\": 240, \"height\": 110}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_branch_deposits.Branch Count\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Branch Count\"}, \"Name\": \"fact_branch_deposits.Branch Count\", \"NativeReferenceName\": \"Branch Count\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Branches in view'\"}}}}}]}}}",
+          "config": "{\"name\": \"9dbbd375-fdd4-5d6b-93bb-7c981519eebb\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 680, \"y\": 52, \"z\": 0, \"width\": 200, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_branch_deposits.Market Share %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Market Share %\"}, \"Name\": \"fact_branch_deposits.Market Share %\", \"NativeReferenceName\": \"Market Share %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Market share %'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 110,
-          "width": 240,
-          "x": 772,
-          "y": 68,
+          "height": 92,
+          "width": 200,
+          "x": 680,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"db5b4b84-805b-5a14-96c7-9368a9eee7d4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1024, \"y\": 68, \"z\": 0, \"width\": 240, \"height\": 110}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_tract.tier\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"tier\"}, \"Name\": \"dim_tract.tier\", \"NativeReferenceName\": \"tier\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Tier'\"}}}}}]}}}",
+          "config": "{\"name\": \"65174dcc-e0d9-54be-84bd-4197b449d0fd\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 888, \"y\": 52, \"z\": 0, \"width\": 208, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_tract.Subject Tract Coverage %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"Subject Tract Coverage %\"}, \"Name\": \"dim_tract.Subject Tract Coverage %\", \"NativeReferenceName\": \"Subject Tract Coverage %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Tract coverage %'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 110,
-          "width": 240,
-          "x": 1024,
-          "y": 68,
+          "height": 92,
+          "width": 208,
+          "x": 888,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"536f779b-99dd-5101-b12a-7e2f76bfd403\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 192, \"z\": 0, \"width\": 620, \"height\": 300}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_tract.county_name\"}, {\"queryRef\": \"opportunity_index.Published Opportunity Score\"}, {\"queryRef\": \"dim_tract.LMI Share of Selection %\"}, {\"queryRef\": \"dim_tract.Cluster-Measured Growth %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}, {\"Name\": \"o\", \"Entity\": \"opportunity_index\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"county_name\"}, \"Name\": \"dim_tract.county_name\", \"NativeReferenceName\": \"county_name\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"o\"}}, \"Property\": \"Published Opportunity Score\"}, \"Name\": \"opportunity_index.Published Opportunity Score\", \"NativeReferenceName\": \"Published Opportunity Score\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"LMI Share of Selection %\"}, \"Name\": \"dim_tract.LMI Share of Selection %\", \"NativeReferenceName\": \"LMI Share of Selection %\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"Cluster-Measured Growth %\"}, \"Name\": \"dim_tract.Cluster-Measured Growth %\", \"NativeReferenceName\": \"Cluster-Measured Growth %\"}], \"OrderBy\": [{\"Direction\": 2, \"Expression\": {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"o\"}}, \"Property\": \"Published Opportunity Score\"}}}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Markets by opportunity score'\"}}}}}]}}}",
+          "config": "{\"name\": \"14fd5b0e-6fbf-58a8-b332-23a36ea6dadb\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 152, \"z\": 0, \"width\": 600, \"height\": 320}}], \"singleVisual\": {\"visualType\": \"filledMap\", \"projections\": {\"Category\": [{\"queryRef\": \"dim_tract.county_name\"}], \"Y\": [{\"queryRef\": \"opportunity_index.Published Opportunity Score\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}, {\"Name\": \"o\", \"Entity\": \"opportunity_index\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"county_name\"}, \"Name\": \"dim_tract.county_name\", \"NativeReferenceName\": \"county_name\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"o\"}}, \"Property\": \"Published Opportunity Score\"}, \"Name\": \"opportunity_index.Published Opportunity Score\", \"NativeReferenceName\": \"Published Opportunity Score\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Counties by mean opportunity score'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 300,
-          "width": 620,
+          "height": 320,
+          "width": 600,
           "x": 16,
-          "y": 192,
+          "y": 152,
           "z": 0
         },
         {
-          "config": "{\"name\": \"6bf5ca86-57d2-5349-828b-ad8c861276a7\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 648, \"y\": 192, \"z\": 0, \"width\": 616, \"height\": 300}}], \"singleVisual\": {\"visualType\": \"columnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"dim_tract.cbsa_title\"}], \"Y\": [{\"queryRef\": \"opportunity_index.Published Opportunity Score\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}, {\"Name\": \"o\", \"Entity\": \"opportunity_index\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"cbsa_title\"}, \"Name\": \"dim_tract.cbsa_title\", \"NativeReferenceName\": \"cbsa_title\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"o\"}}, \"Property\": \"Published Opportunity Score\"}, \"Name\": \"opportunity_index.Published Opportunity Score\", \"NativeReferenceName\": \"Published Opportunity Score\"}], \"OrderBy\": [{\"Direction\": 2, \"Expression\": {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"o\"}}, \"Property\": \"Published Opportunity Score\"}}}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Opportunity by CBSA'\"}}}}}]}}}",
+          "config": "{\"name\": \"12953885-6bdb-5bb6-bcb3-c56ab119939f\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 152, \"z\": 1, \"width\": 600, \"height\": 320}}], \"singleVisual\": {\"visualType\": \"map\", \"projections\": {\"Category\": [{\"queryRef\": \"index_components.tract_geoid\"}], \"Size\": [{\"queryRef\": \"index_components.Weighted Score\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"i\", \"Entity\": \"index_components\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"tract_geoid\"}, \"Name\": \"index_components.tract_geoid\", \"NativeReferenceName\": \"tract_geoid\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"Weighted Score\"}, \"Name\": \"index_components.Weighted Score\", \"NativeReferenceName\": \"Weighted Score\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Top-50 tracts'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 300,
-          "width": 616,
-          "x": 648,
-          "y": 192,
+          "height": 320,
+          "width": 600,
+          "x": 16,
+          "y": 152,
+          "z": 1
+        },
+        {
+          "config": "{\"name\": \"aae0bc05-bdf3-5424-b142-861f4a2c6899\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 628, \"y\": 152, \"z\": 0, \"width\": 636, \"height\": 320}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"index_components.tract_geoid\"}, {\"queryRef\": \"index_components.county_name\"}, {\"queryRef\": \"index_components.opportunity_score\"}, {\"queryRef\": \"index_components.lmi_flag\"}, {\"queryRef\": \"index_components.growth_is_estimated\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"i\", \"Entity\": \"index_components\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"tract_geoid\"}, \"Name\": \"index_components.tract_geoid\", \"NativeReferenceName\": \"tract_geoid\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"county_name\"}, \"Name\": \"index_components.county_name\", \"NativeReferenceName\": \"county_name\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"opportunity_score\"}, \"Name\": \"index_components.opportunity_score\", \"NativeReferenceName\": \"opportunity_score\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"lmi_flag\"}, \"Name\": \"index_components.lmi_flag\", \"NativeReferenceName\": \"lmi_flag\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"growth_is_estimated\"}, \"Name\": \"index_components.growth_is_estimated\", \"NativeReferenceName\": \"growth_is_estimated\"}], \"OrderBy\": [{\"Direction\": 2, \"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"opportunity_score\"}}}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Top 50 tracts - LMI and growth-basis flags'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 320,
+          "width": 636,
+          "x": 628,
+          "y": 152,
           "z": 0
         },
         {
-          "config": "{\"name\": \"c791b5b3-408b-5082-a57c-fb24fd14e39c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 504, \"z\": 0, \"width\": 1248, \"height\": 60}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"The index is z-score normalised. min-max was abandoned because 17 tracts report the ACS top-code of $250,001 \\u2014 a censored bound, not a measurement \\u2014 and min-max anchors the whole scale on it.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "config": "{\"name\": \"70b551df-8c50-5435-9951-68f45e826b1a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 482, \"z\": 0, \"width\": 600, \"height\": 150}}], \"singleVisual\": {\"visualType\": \"columnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"ref_index_weights.component\"}], \"Y\": [{\"queryRef\": \"ref_index_weights.weight\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"r\", \"Entity\": \"ref_index_weights\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"component\"}, \"Name\": \"ref_index_weights.component\", \"NativeReferenceName\": \"component\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"weight\"}, \"Name\": \"ref_index_weights.weight\", \"NativeReferenceName\": \"weight\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Component weights - unmet demand carries 39.0% of top-50 contribution'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 60,
+          "height": 150,
+          "width": 600,
+          "x": 16,
+          "y": 482,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"7422ee54-166b-5df1-a38d-2b9abd756acc\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 628, \"y\": 482, \"z\": 0, \"width\": 200, \"height\": 150}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_branch.state\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"state\"}, \"Name\": \"dim_branch.state\", \"NativeReferenceName\": \"state\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'State'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 150,
+          "width": 200,
+          "x": 628,
+          "y": 482,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"1b35e3f3-5a7e-5f64-847c-3e5a9a818527\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 840, \"y\": 482, \"z\": 0, \"width\": 200, \"height\": 150}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_tract.tier\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"tier\"}, \"Name\": \"dim_tract.tier\", \"NativeReferenceName\": \"tier\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Tier'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 150,
+          "width": 200,
+          "x": 840,
+          "y": 482,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"b2b9c597-3d6d-5f4d-8af6-4bba89ac6dda\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1052, \"y\": 482, \"z\": 0, \"width\": 212, \"height\": 150}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_tract.cbsa_title\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"cbsa_title\"}, \"Name\": \"dim_tract.cbsa_title\", \"NativeReferenceName\": \"cbsa_title\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'CBSA'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 150,
+          "width": 212,
+          "x": 1052,
+          "y": 482,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"806fe6f8-c744-510a-b06a-b6cc2db643c1\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 640, \"z\": 0, \"width\": 1248, \"height\": 64}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Shortlist is 4.0% LMI against a 29.5% baseline; 62% of top-50 tracts carry estimated rather than observed growth.\", \"textStyle\": {\"fontSize\": \"11pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#B23A22\"}}]}]}}]}}}",
+          "filters": "[]",
+          "height": 64,
           "width": 1248,
           "x": 16,
-          "y": 504,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"d8d36adf-602b-5340-9f2b-93b0631015ad\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 576, \"z\": 0, \"width\": 240, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_branch.state\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"state\"}, \"Name\": \"dim_branch.state\", \"NativeReferenceName\": \"state\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'State'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 120,
-          "width": 240,
-          "x": 16,
-          "y": 576,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"8a973503-d39b-5d2a-b83c-7db42e0a83b1\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 268, \"y\": 576, \"z\": 0, \"width\": 996, \"height\": 120}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_county_deposit_growth.county_fips\"}, {\"queryRef\": \"fact_county_deposit_growth.cagr_pct_total\"}, {\"queryRef\": \"fact_county_deposit_growth.cagr_pct_retail\"}, {\"queryRef\": \"fact_county_deposit_growth.excluded_deposit_share\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_county_deposit_growth\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"county_fips\"}, \"Name\": \"fact_county_deposit_growth.county_fips\", \"NativeReferenceName\": \"county_fips\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"cagr_pct_total\"}, \"Name\": \"fact_county_deposit_growth.cagr_pct_total\", \"NativeReferenceName\": \"cagr_pct_total\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"cagr_pct_retail\"}, \"Name\": \"fact_county_deposit_growth.cagr_pct_retail\", \"NativeReferenceName\": \"cagr_pct_retail\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"excluded_deposit_share\"}, \"Name\": \"fact_county_deposit_growth.excluded_deposit_share\", \"NativeReferenceName\": \"excluded_deposit_share\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'County deposit growth \\u2014 total vs retail basis (booking centres removed)'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 120,
-          "width": 996,
-          "x": 268,
-          "y": 576,
+          "y": 640,
           "z": 0
         }
       ],
@@ -139,64 +166,73 @@
       "ordinal": 1,
       "visualContainers": [
         {
-          "config": "{\"name\": \"2d444079-30a5-5c0f-932f-b84602074c3a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 12, \"z\": 0, \"width\": 900, \"height\": 44}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Branch performance\", \"textStyle\": {\"fontSize\": \"20pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "config": "{\"name\": \"046ef384-8222-55fc-b4c4-ede886c2a06d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 10, \"z\": 0, \"width\": 900, \"height\": 40}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Branch performance\", \"textStyle\": {\"fontSize\": \"20pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}]}]}}]}}}",
           "filters": "[]",
-          "height": 44,
+          "height": 40,
           "width": 900,
           "x": 16,
-          "y": 12,
+          "y": 10,
           "z": 0
         },
         {
-          "config": "{\"name\": \"39fdb436-1de8-5352-b705-208b32cf922c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 68, \"z\": 0, \"width\": 760, \"height\": 420}}], \"singleVisual\": {\"visualType\": \"scatterChart\", \"projections\": {\"Category\": [{\"queryRef\": \"branch_performance.uninumbr\"}], \"X\": [{\"queryRef\": \"branch_performance.households\"}], \"Y\": [{\"queryRef\": \"branch_performance.actual_deposits\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"b\", \"Entity\": \"branch_performance\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"uninumbr\"}, \"Name\": \"branch_performance.uninumbr\", \"NativeReferenceName\": \"uninumbr\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"households\"}, \"Name\": \"branch_performance.households\", \"NativeReferenceName\": \"households\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"actual_deposits\"}, \"Name\": \"branch_performance.actual_deposits\", \"NativeReferenceName\": \"actual_deposits\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Catchment households against actual deposits'\"}}}}}]}}}",
+          "config": "{\"name\": \"71b65078-a574-57c1-85a0-5dc7345acd45\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 52, \"z\": 0, \"width\": 740, \"height\": 420}}], \"singleVisual\": {\"visualType\": \"scatterChart\", \"projections\": {\"Category\": [{\"queryRef\": \"dim_branch.uninumbr\"}], \"X\": [{\"queryRef\": \"dim_branch.catchment_households\"}], \"Y\": [{\"queryRef\": \"dim_branch.actual_deposits\"}], \"Size\": [{\"queryRef\": \"dim_branch.catchment_households\"}], \"Series\": [{\"queryRef\": \"dim_branch.diagnosis\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"uninumbr\"}, \"Name\": \"dim_branch.uninumbr\", \"NativeReferenceName\": \"uninumbr\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"catchment_households\"}, \"Name\": \"dim_branch.catchment_households\", \"NativeReferenceName\": \"catchment_households\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"actual_deposits\"}, \"Name\": \"dim_branch.actual_deposits\", \"NativeReferenceName\": \"actual_deposits\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"diagnosis\"}, \"Name\": \"dim_branch.diagnosis\", \"NativeReferenceName\": \"diagnosis\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Catchment potential against actual deposits'\"}}}}}]}}}",
           "filters": "[]",
           "height": 420,
-          "width": 760,
+          "width": 740,
           "x": 16,
-          "y": 68,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"43949737-cf8c-53da-8260-7a29665e66eb\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 792, \"y\": 68, \"z\": 0, \"width\": 236, \"height\": 110}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"branch_performance.Performance Index\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"b\", \"Entity\": \"branch_performance\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"Performance Index\"}, \"Name\": \"branch_performance.Performance Index\", \"NativeReferenceName\": \"Performance Index\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Performance index (size-adjusted)'\"}}}}}]}}}",
+          "config": "{\"name\": \"b5db1d99-330e-584e-978f-bd97d85c7cb1\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 768, \"y\": 52, \"z\": 0, \"width\": 240, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_branch.Index (size-adjusted)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"Index (size-adjusted)\"}, \"Name\": \"dim_branch.Index (size-adjusted)\", \"NativeReferenceName\": \"Index (size-adjusted)\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Index (size-adjusted)'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 110,
-          "width": 236,
-          "x": 792,
-          "y": 68,
+          "height": 92,
+          "width": 240,
+          "x": 768,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"8cf4bbeb-dabd-5529-a7d8-ed4927afc544\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1036, \"y\": 68, \"z\": 0, \"width\": 228, \"height\": 110}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"branch_performance.Underperforming Branches\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"b\", \"Entity\": \"branch_performance\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"Underperforming Branches\"}, \"Name\": \"branch_performance.Underperforming Branches\", \"NativeReferenceName\": \"Underperforming Branches\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Branches below 1.0'\"}}}}}]}}}",
+          "config": "{\"name\": \"094d111d-16ec-55ef-9d03-0f659466f69d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1016, \"y\": 52, \"z\": 0, \"width\": 248, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_branch.Index (raw)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"Index (raw)\"}, \"Name\": \"dim_branch.Index (raw)\", \"NativeReferenceName\": \"Index (raw)\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Index (raw) - audit only'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 110,
-          "width": 228,
-          "x": 1036,
-          "y": 68,
+          "height": 92,
+          "width": 248,
+          "x": 1016,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"61527773-e49c-5705-8ef4-b4cf6c0e94cf\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 792, \"y\": 192, \"z\": 0, \"width\": 472, \"height\": 296}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"branch_performance.city\"}, {\"queryRef\": \"branch_performance.index_size_adjusted\"}, {\"queryRef\": \"branch_performance.diagnosis\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"b\", \"Entity\": \"branch_performance\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"city\"}, \"Name\": \"branch_performance.city\", \"NativeReferenceName\": \"city\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"index_size_adjusted\"}, \"Name\": \"branch_performance.index_size_adjusted\", \"NativeReferenceName\": \"index_size_adjusted\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"diagnosis\"}, \"Name\": \"branch_performance.diagnosis\", \"NativeReferenceName\": \"diagnosis\"}], \"OrderBy\": [{\"Direction\": 1, \"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"index_size_adjusted\"}}}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Ranked by size-adjusted index'\"}}}}}]}}}",
+          "config": "{\"name\": \"36684f54-791d-5d42-8d55-82df74ab864c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 768, \"y\": 152, \"z\": 0, \"width\": 496, \"height\": 150}}], \"singleVisual\": {\"visualType\": \"barChart\", \"projections\": {\"Category\": [{\"queryRef\": \"dim_branch.diagnosis\"}], \"Y\": [{\"queryRef\": \"dim_branch.Underperforming Branches\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"diagnosis\"}, \"Name\": \"dim_branch.diagnosis\", \"NativeReferenceName\": \"diagnosis\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"Underperforming Branches\"}, \"Name\": \"dim_branch.Underperforming Branches\", \"NativeReferenceName\": \"Underperforming Branches\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Diagnosis'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 296,
-          "width": 472,
-          "x": 792,
-          "y": 192,
+          "height": 150,
+          "width": 496,
+          "x": 768,
+          "y": 152,
           "z": 0
         },
         {
-          "config": "{\"name\": \"dcbd181f-84be-5fc4-92ce-3872e7d84139\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 500, \"z\": 0, \"width\": 1248, \"height\": 76}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Rank on index_size_adjusted, never on the raw index. \", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#B23A22\"}}, {\"value\": \"The raw index fell mechanically as catchment size rose \\u2014 median 1.518 in the smallest catchment quartile against 0.416 in the largest \\u2014 which inverted the ranking of every market. Chicago read as weakest at 0.564 and is strongest at 1.357 once adjusted.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "config": "{\"name\": \"6d172dfa-b10c-530c-9fcd-7fca47a68144\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 768, \"y\": 310, \"z\": 0, \"width\": 496, \"height\": 162}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_branch.city\"}, {\"queryRef\": \"dim_branch.index_size_adjusted\"}, {\"queryRef\": \"dim_branch.cagr_3y_pct\"}, {\"queryRef\": \"dim_branch.booking_concentration\"}, {\"queryRef\": \"dim_branch.catchment_partly_unmeasured\"}, {\"queryRef\": \"dim_branch.position_drift_miles\"}, {\"queryRef\": \"dim_branch.county_agrees\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"city\"}, \"Name\": \"dim_branch.city\", \"NativeReferenceName\": \"city\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"index_size_adjusted\"}, \"Name\": \"dim_branch.index_size_adjusted\", \"NativeReferenceName\": \"index_size_adjusted\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"cagr_3y_pct\"}, \"Name\": \"dim_branch.cagr_3y_pct\", \"NativeReferenceName\": \"cagr_3y_pct\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"booking_concentration\"}, \"Name\": \"dim_branch.booking_concentration\", \"NativeReferenceName\": \"booking_concentration\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"catchment_partly_unmeasured\"}, \"Name\": \"dim_branch.catchment_partly_unmeasured\", \"NativeReferenceName\": \"catchment_partly_unmeasured\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"position_drift_miles\"}, \"Name\": \"dim_branch.position_drift_miles\", \"NativeReferenceName\": \"position_drift_miles\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"county_agrees\"}, \"Name\": \"dim_branch.county_agrees\", \"NativeReferenceName\": \"county_agrees\"}], \"OrderBy\": [{\"Direction\": 1, \"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"index_size_adjusted\"}}}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Ranked, with the four flags'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 162,
+          "width": 496,
+          "x": 768,
+          "y": 310,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"b69057da-148e-50a7-8846-f99b6d335f64\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 482, \"z\": 0, \"width\": 1248, \"height\": 76}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Brown County holds 18.6% of branches and 51.7% of deposits. \", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#B23A22\"}}, {\"value\": \"Booking-concentration branches are flagged and excluded from the index. Rank on the size-adjusted index, never the raw one: raw fell mechanically as catchment size rose - median 1.518 in the smallest quartile against 0.416 in the largest - and inverted the ranking of every market.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
           "filters": "[]",
           "height": 76,
           "width": 1248,
           "x": 16,
-          "y": 500,
+          "y": 482,
           "z": 0
         }
       ],
       "width": 1280.0
     },
     {
-      "config": "{}",
+      "config": "{\"visibility\": 1}",
       "displayName": "Branch detail",
       "displayOption": 1,
       "filters": "[]",
@@ -205,75 +241,75 @@
       "ordinal": 2,
       "visualContainers": [
         {
-          "config": "{\"name\": \"12cc2474-b5c5-533a-9e5a-fe8a5d1c33b2\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 12, \"z\": 0, \"width\": 900, \"height\": 44}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Branch detail\", \"textStyle\": {\"fontSize\": \"20pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "config": "{\"name\": \"f148c96e-0414-59b0-ac00-3f42e79efea1\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 10, \"z\": 0, \"width\": 900, \"height\": 40}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Branch detail\", \"textStyle\": {\"fontSize\": \"20pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}]}]}}]}}}",
           "filters": "[]",
-          "height": 44,
+          "height": 40,
           "width": 900,
           "x": 16,
-          "y": 12,
+          "y": 10,
           "z": 0
         },
         {
-          "config": "{\"name\": \"4fe2ecd0-727b-588e-b91f-2b3b9af61398\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 68, \"z\": 0, \"width\": 260, \"height\": 420}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_branch.city\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"city\"}, \"Name\": \"dim_branch.city\", \"NativeReferenceName\": \"city\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Branch city'\"}}}}}]}}}",
+          "config": "{\"name\": \"65c31661-cd6b-5bb7-911b-67f67232812f\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 52, \"z\": 0, \"width\": 260, \"height\": 200}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_branch.city\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"city\"}, \"Name\": \"dim_branch.city\", \"NativeReferenceName\": \"city\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Branch'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 420,
+          "height": 200,
           "width": 260,
           "x": 16,
-          "y": 68,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"667e5f32-6b32-5c7c-ba6d-09b19a3a093e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 288, \"y\": 68, \"z\": 0, \"width\": 500, \"height\": 220}}], \"singleVisual\": {\"visualType\": \"columnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"dim_year.year\"}], \"Y\": [{\"queryRef\": \"fact_branch_deposits.Total Deposits\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_year\", \"Type\": 0}, {\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"year\"}, \"Name\": \"dim_year.year\", \"NativeReferenceName\": \"year\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Total Deposits\"}, \"Name\": \"fact_branch_deposits.Total Deposits\", \"NativeReferenceName\": \"Total Deposits\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Deposits by year'\"}}}}}]}}}",
+          "config": "{\"name\": \"4891f05d-2e42-5762-a117-2cf8cc7ff83e\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 260, \"z\": 0, \"width\": 260, \"height\": 212}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_branch.institution_name\"}, {\"queryRef\": \"dim_branch.address\"}, {\"queryRef\": \"dim_branch.market\"}, {\"queryRef\": \"dim_branch.first_year\"}, {\"queryRef\": \"dim_branch.last_year\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"institution_name\"}, \"Name\": \"dim_branch.institution_name\", \"NativeReferenceName\": \"institution_name\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"address\"}, \"Name\": \"dim_branch.address\", \"NativeReferenceName\": \"address\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"market\"}, \"Name\": \"dim_branch.market\", \"NativeReferenceName\": \"market\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"first_year\"}, \"Name\": \"dim_branch.first_year\", \"NativeReferenceName\": \"first_year\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"last_year\"}, \"Name\": \"dim_branch.last_year\", \"NativeReferenceName\": \"last_year\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Header'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 212,
+          "width": 260,
+          "x": 16,
+          "y": 260,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"a225e107-f32f-5786-b30c-aaa9611ce01d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 288, \"y\": 52, \"z\": 0, \"width\": 480, \"height\": 220}}], \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"dim_year.year\"}], \"Y\": [{\"queryRef\": \"fact_branch_deposits.Total Deposits\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_year\", \"Type\": 0}, {\"Name\": \"f\", \"Entity\": \"fact_branch_deposits\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"year\"}, \"Name\": \"dim_year.year\", \"NativeReferenceName\": \"year\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Total Deposits\"}, \"Name\": \"fact_branch_deposits.Total Deposits\", \"NativeReferenceName\": \"Total Deposits\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Deposits 2019-2025'\"}}}}}]}}}",
           "filters": "[]",
           "height": 220,
-          "width": 500,
+          "width": 480,
           "x": 288,
-          "y": 68,
+          "y": 52,
           "z": 0
         },
         {
-          "config": "{\"name\": \"12a108dc-1c26-580c-ba9e-ad3b93c99465\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 800, \"y\": 68, \"z\": 0, \"width\": 224, \"height\": 110}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"tract_capture_rate.Capture Rate %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"tract_capture_rate\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Capture Rate %\"}, \"Name\": \"tract_capture_rate.Capture Rate %\", \"NativeReferenceName\": \"Capture Rate %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Mortgage capture rate %'\"}}}}}]}}}",
+          "config": "{\"name\": \"c1625c07-3a8d-55af-a953-724bb9e1fa2d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 288, \"y\": 280, \"z\": 0, \"width\": 480, \"height\": 192}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_branch.catchment_households\"}, {\"queryRef\": \"dim_branch.predicted_deposits\"}, {\"queryRef\": \"dim_branch.actual_deposits\"}, {\"queryRef\": \"dim_branch.index_size_adjusted\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_branch\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"catchment_households\"}, \"Name\": \"dim_branch.catchment_households\", \"NativeReferenceName\": \"catchment_households\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"predicted_deposits\"}, \"Name\": \"dim_branch.predicted_deposits\", \"NativeReferenceName\": \"predicted_deposits\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"actual_deposits\"}, \"Name\": \"dim_branch.actual_deposits\", \"NativeReferenceName\": \"actual_deposits\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"index_size_adjusted\"}, \"Name\": \"dim_branch.index_size_adjusted\", \"NativeReferenceName\": \"index_size_adjusted\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Index breakdown - potential, predicted, actual'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 110,
-          "width": 224,
-          "x": 800,
-          "y": 68,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"19573753-e574-550b-9315-6129619b9b41\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1040, \"y\": 68, \"z\": 0, \"width\": 224, \"height\": 110}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"tract_capture_rate.Unmet Originations\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"tract_capture_rate\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Unmet Originations\"}, \"Name\": \"tract_capture_rate.Unmet Originations\", \"NativeReferenceName\": \"Unmet Originations\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Unmet originations'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 110,
-          "width": 224,
-          "x": 1040,
-          "y": 68,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"11958828-e93b-57ad-81e2-9c163f3170ac\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 800, \"y\": 192, \"z\": 0, \"width\": 464, \"height\": 296}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_tract_competition.tract_geoid\"}, {\"queryRef\": \"fact_tract_competition.competitor_branches\"}, {\"queryRef\": \"fact_tract_competition.competitor_per_10k_catchment_hh\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_tract_competition\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"tract_geoid\"}, \"Name\": \"fact_tract_competition.tract_geoid\", \"NativeReferenceName\": \"tract_geoid\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"competitor_branches\"}, \"Name\": \"fact_tract_competition.competitor_branches\", \"NativeReferenceName\": \"competitor_branches\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"competitor_per_10k_catchment_hh\"}, \"Name\": \"fact_tract_competition.competitor_per_10k_catchment_hh\", \"NativeReferenceName\": \"competitor_per_10k_catchment_hh\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Competitor branches near these tracts'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 296,
-          "width": 464,
-          "x": 800,
-          "y": 192,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"85ccaf20-dbe8-510b-9089-666c869e1736\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 288, \"y\": 300, \"z\": 0, \"width\": 500, \"height\": 188}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_tract.tract_geoid\"}, {\"queryRef\": \"dim_tract.households\"}, {\"queryRef\": \"dim_tract.lmi_flag\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"tract_geoid\"}, \"Name\": \"dim_tract.tract_geoid\", \"NativeReferenceName\": \"tract_geoid\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"households\"}, \"Name\": \"dim_tract.households\", \"NativeReferenceName\": \"households\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"lmi_flag\"}, \"Name\": \"dim_tract.lmi_flag\", \"NativeReferenceName\": \"lmi_flag\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Catchment tracts'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 188,
-          "width": 500,
+          "height": 192,
+          "width": 480,
           "x": 288,
-          "y": 300,
+          "y": 280,
           "z": 0
         },
         {
-          "config": "{\"name\": \"f79b1dea-8d76-5479-91b6-38f65ded3ef9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 500, \"z\": 0, \"width\": 1248, \"height\": 76}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"fact_tract_competition is not a catchment bridge. \", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#B23A22\"}}, {\"value\": \"It counts competitor branches near a tract and carries no branch identifier, because competitor branches have no catchments here \\u2014 their tract assignments were never computed and their coordinates never validated. Do not relate it to dim_branch.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "config": "{\"name\": \"29e5ad2c-e6ae-58b1-b81d-f5003c9956d4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 780, \"y\": 52, \"z\": 0, \"width\": 484, \"height\": 220}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_tract.tract_geoid\"}, {\"queryRef\": \"dim_tract.households\"}, {\"queryRef\": \"dim_tract.median_hh_income\"}, {\"queryRef\": \"dim_tract.lmi_flag\"}, {\"queryRef\": \"bridge_branch_catchment.distance_miles\"}, {\"queryRef\": \"bridge_branch_catchment.is_primary\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}, {\"Name\": \"b\", \"Entity\": \"bridge_branch_catchment\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"tract_geoid\"}, \"Name\": \"dim_tract.tract_geoid\", \"NativeReferenceName\": \"tract_geoid\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"households\"}, \"Name\": \"dim_tract.households\", \"NativeReferenceName\": \"households\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"median_hh_income\"}, \"Name\": \"dim_tract.median_hh_income\", \"NativeReferenceName\": \"median_hh_income\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"lmi_flag\"}, \"Name\": \"dim_tract.lmi_flag\", \"NativeReferenceName\": \"lmi_flag\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"distance_miles\"}, \"Name\": \"bridge_branch_catchment.distance_miles\", \"NativeReferenceName\": \"distance_miles\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"b\"}}, \"Property\": \"is_primary\"}, \"Name\": \"bridge_branch_catchment.is_primary\", \"NativeReferenceName\": \"is_primary\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Catchment tracts - distance and whether contested'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 220,
+          "width": 484,
+          "x": 780,
+          "y": 52,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"0a52ba54-e745-56ff-9ca4-cc8bb2e82af0\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 780, \"y\": 280, \"z\": 0, \"width\": 484, \"height\": 192}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_tract_competition.competitor_branches\"}, {\"queryRef\": \"fact_tract_competition.radius_miles\"}, {\"queryRef\": \"fact_tract_competition.competitor_per_10k_catchment_hh\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_tract_competition\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"competitor_branches\"}, \"Name\": \"fact_tract_competition.competitor_branches\", \"NativeReferenceName\": \"competitor_branches\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"radius_miles\"}, \"Name\": \"fact_tract_competition.radius_miles\", \"NativeReferenceName\": \"radius_miles\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"competitor_per_10k_catchment_hh\"}, \"Name\": \"fact_tract_competition.competitor_per_10k_catchment_hh\", \"NativeReferenceName\": \"competitor_per_10k_catchment_hh\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Competitors within tier radius'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 192,
+          "width": 484,
+          "x": 780,
+          "y": 280,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"5d65febb-a45a-5e6d-9840-429a44956df8\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 482, \"z\": 0, \"width\": 1248, \"height\": 76}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Flags. \", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#B23A22\"}}, {\"value\": \"position_drift_miles above threshold means the branch moved and its catchment was recomputed; catchment_partly_unmeasured means one or more tracts had suppressed ACS values. Either explains why an index reads as it does. fact_tract_competition is not a catchment bridge - it carries no branch identifier, because competitor branches have no catchments here.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
           "filters": "[]",
           "height": 76,
           "width": 1248,
           "x": 16,
-          "y": 500,
+          "y": 482,
           "z": 0
         }
       ],
@@ -289,156 +325,174 @@
       "ordinal": 3,
       "visualContainers": [
         {
-          "config": "{\"name\": \"f93c9346-bd46-5ca8-af3d-55b6994100b4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 12, \"z\": 0, \"width\": 1248, \"height\": 52}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Recommendation and equity check\", \"textStyle\": {\"fontSize\": \"20pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "config": "{\"name\": \"b8f4c3fe-788e-54fb-ac80-2c87d3c2db64\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 10, \"z\": 0, \"width\": 1248, \"height\": 40}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Recommendation and equity check\", \"textStyle\": {\"fontSize\": \"20pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}]}]}}]}}}",
           "filters": "[]",
-          "height": 52,
+          "height": 40,
           "width": 1248,
           "x": 16,
-          "y": 12,
+          "y": 10,
           "z": 0
         },
         {
-          "config": "{\"name\": \"af0eaf23-5784-59b9-8e74-951a4221d7a9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 64, \"z\": 0, \"width\": 1248, \"height\": 52}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Rule B ships. \", \"textStyle\": {\"fontSize\": \"12pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}, {\"value\": \"The commercial set fails the binding test: non-LMI coverage grows 8.4\\u00d7 faster than LMI. AC-06 as written would have passed it, because AC-06 tests that two numbers exist.\", \"textStyle\": {\"fontSize\": \"12pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "config": "{\"name\": \"c4daf3bb-784b-51f4-99f9-1e95940f8e5f\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 54, \"z\": 0, \"width\": 620, \"height\": 250}}], \"singleVisual\": {\"visualType\": \"map\", \"projections\": {\"Category\": [{\"queryRef\": \"recommendation_sets.tract_geoid\"}], \"Series\": [{\"queryRef\": \"recommendation_sets.rule\"}], \"Size\": [{\"queryRef\": \"recommendation_sets.opportunity_score\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"r\", \"Entity\": \"recommendation_sets\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"tract_geoid\"}, \"Name\": \"recommendation_sets.tract_geoid\", \"NativeReferenceName\": \"tract_geoid\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"rule\"}, \"Name\": \"recommendation_sets.rule\", \"NativeReferenceName\": \"rule\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"opportunity_score\"}, \"Name\": \"recommendation_sets.opportunity_score\", \"NativeReferenceName\": \"opportunity_score\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Rule A (commercial) and Rule B (constrained), both shown'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 52,
-          "width": 1248,
-          "x": 16,
-          "y": 64,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"1ebe1c05-8352-59b9-a14f-4fa3cbd4ad7a\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 124, \"z\": 0, \"width\": 760, \"height\": 240}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"recommended_sites.rule\"}, {\"queryRef\": \"recommended_sites.tract_geoid\"}, {\"queryRef\": \"recommended_sites.county_name\"}, {\"queryRef\": \"recommended_sites.opportunity_score\"}, {\"queryRef\": \"recommended_sites.lmi_flag\"}, {\"queryRef\": \"recommended_sites.growth_is_estimated\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"r\", \"Entity\": \"recommended_sites\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"rule\"}, \"Name\": \"recommended_sites.rule\", \"NativeReferenceName\": \"rule\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"tract_geoid\"}, \"Name\": \"recommended_sites.tract_geoid\", \"NativeReferenceName\": \"tract_geoid\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"county_name\"}, \"Name\": \"recommended_sites.county_name\", \"NativeReferenceName\": \"county_name\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"opportunity_score\"}, \"Name\": \"recommended_sites.opportunity_score\", \"NativeReferenceName\": \"opportunity_score\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"lmi_flag\"}, \"Name\": \"recommended_sites.lmi_flag\", \"NativeReferenceName\": \"lmi_flag\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"growth_is_estimated\"}, \"Name\": \"recommended_sites.growth_is_estimated\", \"NativeReferenceName\": \"growth_is_estimated\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'The three sites \\u2014 constrained (B) and commercial (A)'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 240,
-          "width": 760,
-          "x": 16,
-          "y": 124,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"05f5cc22-2ab5-50f3-ab12-624d20e70719\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 792, \"y\": 124, \"z\": 0, \"width\": 232, \"height\": 106}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"lmi_coverage.LMI Coverage %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"l\", \"Entity\": \"lmi_coverage\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"LMI Coverage %\"}, \"Name\": \"lmi_coverage.LMI Coverage %\", \"NativeReferenceName\": \"LMI Coverage %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'LMI coverage now %'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 106,
-          "width": 232,
-          "x": 792,
-          "y": 124,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"dc8db449-60cd-5935-ac42-760394fca7c9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1032, \"y\": 124, \"z\": 0, \"width\": 232, \"height\": 106}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"lmi_coverage.LMI Coverage % (recommended)\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"l\", \"Entity\": \"lmi_coverage\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"LMI Coverage % (recommended)\"}, \"Name\": \"lmi_coverage.LMI Coverage % (recommended)\", \"NativeReferenceName\": \"LMI Coverage % (recommended)\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'LMI coverage recommended %'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 106,
-          "width": 232,
-          "x": 1032,
-          "y": 124,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"b52be0c7-b706-5c8d-84db-f0af783e31df\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 792, \"y\": 238, \"z\": 0, \"width\": 232, \"height\": 126}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"lmi_coverage.Binding Test Result\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"l\", \"Entity\": \"lmi_coverage\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"Binding Test Result\"}, \"Name\": \"lmi_coverage.Binding Test Result\", \"NativeReferenceName\": \"Binding Test Result\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Binding test'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 126,
-          "width": 232,
-          "x": 792,
-          "y": 238,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"55998039-5579-56a2-89e9-21ce57423e34\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1032, \"y\": 238, \"z\": 0, \"width\": 232, \"height\": 126}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"lmi_coverage.Constraint Cost %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"l\", \"Entity\": \"lmi_coverage\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"Constraint Cost %\"}, \"Name\": \"lmi_coverage.Constraint Cost %\", \"NativeReferenceName\": \"Constraint Cost %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Cost of the constraint %'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 126,
-          "width": 232,
-          "x": 1032,
-          "y": 238,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"f41d2570-8696-55e9-85ce-afaad4c7c5c9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 376, \"z\": 0, \"width\": 760, \"height\": 150}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"lmi_coverage.rule\"}, {\"queryRef\": \"lmi_coverage.lmi_coverage_pct\"}, {\"queryRef\": \"lmi_coverage.non_lmi_coverage_pct\"}, {\"queryRef\": \"lmi_coverage.delta_lmi_pp\"}, {\"queryRef\": \"lmi_coverage.delta_non_lmi_pp\"}, {\"queryRef\": \"lmi_coverage.binding_test\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"l\", \"Entity\": \"lmi_coverage\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"rule\"}, \"Name\": \"lmi_coverage.rule\", \"NativeReferenceName\": \"rule\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"lmi_coverage_pct\"}, \"Name\": \"lmi_coverage.lmi_coverage_pct\", \"NativeReferenceName\": \"lmi_coverage_pct\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"non_lmi_coverage_pct\"}, \"Name\": \"lmi_coverage.non_lmi_coverage_pct\", \"NativeReferenceName\": \"non_lmi_coverage_pct\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"delta_lmi_pp\"}, \"Name\": \"lmi_coverage.delta_lmi_pp\", \"NativeReferenceName\": \"delta_lmi_pp\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"delta_non_lmi_pp\"}, \"Name\": \"lmi_coverage.delta_non_lmi_pp\", \"NativeReferenceName\": \"delta_non_lmi_pp\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"binding_test\"}, \"Name\": \"lmi_coverage.binding_test\", \"NativeReferenceName\": \"binding_test\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'AC-06 and the test that can fail'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 150,
-          "width": 760,
-          "x": 16,
-          "y": 376,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"59a80238-6ed3-5f91-a7a2-fa70df3ceb09\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 792, \"y\": 376, \"z\": 0, \"width\": 232, \"height\": 150}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"lmi_coverage.LMI Sites in Shortlist\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"l\", \"Entity\": \"lmi_coverage\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"LMI Sites in Shortlist\"}, \"Name\": \"lmi_coverage.LMI Sites in Shortlist\", \"NativeReferenceName\": \"LMI Sites in Shortlist\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'LMI tracts among the 3 sites'\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 150,
-          "width": 232,
-          "x": 792,
-          "y": 376,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"6e527f64-9587-52ab-810b-9649ca2d1b4d\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1032, \"y\": 376, \"z\": 0, \"width\": 232, \"height\": 150}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"0 of 3.\", \"textStyle\": {\"fontSize\": \"14pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#B23A22\"}}, {\"value\": \" The constraint improves catchment composition; it does not site among LMI communities. It selects from a shortlist that is 4.0% LMI, so the ceiling is upstream in the opportunity model, not in the constraint.\", \"textStyle\": {\"fontSize\": \"9pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
-          "filters": "[]",
-          "height": 150,
-          "width": 232,
-          "x": 1032,
-          "y": 376,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"49b43c3c-b9a8-5f40-b417-47f68d27e802\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 538, \"z\": 0, \"width\": 1248, \"height\": 74}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"One named risk, not three caveats. \", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#B23A22\"}}, {\"value\": \"29 of the top 50 sit in one Chicago-area growth corridor, and growth there is disproportionately cluster-estimated rather than observed (22 of 29 against 9 of 21 elsewhere, phi +0.336). One growth assumption, mostly estimated, in one corridor.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
-          "filters": "[]",
-          "height": 74,
-          "width": 1248,
-          "x": 16,
-          "y": 538,
-          "z": 0
-        },
-        {
-          "config": "{\"name\": \"54d518d0-60f0-5433-b2d4-fef4e7a1147c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 620, \"z\": 0, \"width\": 620, \"height\": 84}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Weights are a judgement, not a fact.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}, {\"value\": \" Drag to re-weight. Under a growth-led weighting 39.7% of tracts move 500+ places and only 31 of the top 50 survive.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
-          "filters": "[]",
-          "height": 84,
+          "height": 250,
           "width": 620,
           "x": 16,
-          "y": 620,
+          "y": 54,
           "z": 0
         },
         {
-          "config": "{\"name\": \"e78f9871-25bf-54bf-8717-d381db6da806\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 648, \"y\": 620, \"z\": 0, \"width\": 122, \"height\": 84}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Household Growth.w Household Growth\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Household Growth\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Household Growth\"}, \"Name\": \"w Household Growth.w Household Growth\", \"NativeReferenceName\": \"w Household Growth\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Household Growth'\"}}}}}]}}}",
+          "config": "{\"name\": \"3b1dc428-bc7d-5695-a711-d01d0fd292cc\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 648, \"y\": 54, \"z\": 0, \"width\": 616, \"height\": 250}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"recommendation_sets.rule\"}, {\"queryRef\": \"recommendation_sets.county_name\"}, {\"queryRef\": \"recommendation_sets.tract_geoid\"}, {\"queryRef\": \"recommendation_sets.tier\"}, {\"queryRef\": \"recommendation_sets.opportunity_score\"}, {\"queryRef\": \"recommendation_sets.lmi_flag\"}, {\"queryRef\": \"recommendation_sets.growth_is_estimated\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"r\", \"Entity\": \"recommendation_sets\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"rule\"}, \"Name\": \"recommendation_sets.rule\", \"NativeReferenceName\": \"rule\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"county_name\"}, \"Name\": \"recommendation_sets.county_name\", \"NativeReferenceName\": \"county_name\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"tract_geoid\"}, \"Name\": \"recommendation_sets.tract_geoid\", \"NativeReferenceName\": \"tract_geoid\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"tier\"}, \"Name\": \"recommendation_sets.tier\", \"NativeReferenceName\": \"tier\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"opportunity_score\"}, \"Name\": \"recommendation_sets.opportunity_score\", \"NativeReferenceName\": \"opportunity_score\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"lmi_flag\"}, \"Name\": \"recommendation_sets.lmi_flag\", \"NativeReferenceName\": \"lmi_flag\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"growth_is_estimated\"}, \"Name\": \"recommendation_sets.growth_is_estimated\", \"NativeReferenceName\": \"growth_is_estimated\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'The three sites, both rules'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 84,
-          "width": 122,
+          "height": 250,
+          "width": 616,
           "x": 648,
-          "y": 620,
+          "y": 54,
           "z": 0
         },
         {
-          "config": "{\"name\": \"b81cf57b-7dc7-55d8-986a-7b1ef502bfc4\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 772, \"y\": 620, \"z\": 0, \"width\": 122, \"height\": 84}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Median Income.w Median Income\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Median Income\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Median Income\"}, \"Name\": \"w Median Income.w Median Income\", \"NativeReferenceName\": \"w Median Income\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Median Income'\"}}}}}]}}}",
+          "config": "{\"name\": \"c39d7927-e069-51de-b749-f635bcbcdf22\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 314, \"z\": 0, \"width\": 900, \"height\": 178}}], \"singleVisual\": {\"visualType\": \"tableEx\", \"projections\": {\"Values\": [{\"queryRef\": \"lmi_coverage.rule\"}, {\"queryRef\": \"lmi_coverage.lmi_coverage_pct\"}, {\"queryRef\": \"lmi_coverage.non_lmi_coverage_pct\"}, {\"queryRef\": \"lmi_coverage.delta_lmi_pp\"}, {\"queryRef\": \"lmi_coverage.delta_non_lmi_pp\"}, {\"queryRef\": \"lmi_coverage.non_lmi_growth_multiple\"}, {\"queryRef\": \"lmi_coverage.binding_test\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"l\", \"Entity\": \"lmi_coverage\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"rule\"}, \"Name\": \"lmi_coverage.rule\", \"NativeReferenceName\": \"rule\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"lmi_coverage_pct\"}, \"Name\": \"lmi_coverage.lmi_coverage_pct\", \"NativeReferenceName\": \"lmi_coverage_pct\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"non_lmi_coverage_pct\"}, \"Name\": \"lmi_coverage.non_lmi_coverage_pct\", \"NativeReferenceName\": \"non_lmi_coverage_pct\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"delta_lmi_pp\"}, \"Name\": \"lmi_coverage.delta_lmi_pp\", \"NativeReferenceName\": \"delta_lmi_pp\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"delta_non_lmi_pp\"}, \"Name\": \"lmi_coverage.delta_non_lmi_pp\", \"NativeReferenceName\": \"delta_non_lmi_pp\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"non_lmi_growth_multiple\"}, \"Name\": \"lmi_coverage.non_lmi_growth_multiple\", \"NativeReferenceName\": \"non_lmi_growth_multiple\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"binding_test\"}, \"Name\": \"lmi_coverage.binding_test\", \"NativeReferenceName\": \"binding_test\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Current, Rule A, Rule B - the test that can fail'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 84,
-          "width": 122,
-          "x": 772,
-          "y": 620,
+          "height": 178,
+          "width": 900,
+          "x": 16,
+          "y": 314,
           "z": 0
         },
         {
-          "config": "{\"name\": \"c628211f-27f0-5be4-a33e-1b3b1a7f33b8\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 896, \"y\": 620, \"z\": 0, \"width\": 122, \"height\": 84}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Deposit Growth.w Deposit Growth\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Deposit Growth\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Deposit Growth\"}, \"Name\": \"w Deposit Growth.w Deposit Growth\", \"NativeReferenceName\": \"w Deposit Growth\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Deposit Growth'\"}}}}}]}}}",
+          "config": "{\"name\": \"ef5674c4-5e37-5013-81df-986b673b25a7\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 928, \"y\": 314, \"z\": 0, \"width\": 168, \"height\": 88}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_tract.Subject LMI Coverage\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"Subject LMI Coverage\"}, \"Name\": \"dim_tract.Subject LMI Coverage\", \"NativeReferenceName\": \"Subject LMI Coverage\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'LMI coverage now'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 84,
-          "width": 122,
-          "x": 896,
-          "y": 620,
+          "height": 88,
+          "width": 168,
+          "x": 928,
+          "y": 314,
           "z": 0
         },
         {
-          "config": "{\"name\": \"a3e9f26f-2521-59ef-9388-8cd11e9b1828\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1020, \"y\": 620, \"z\": 0, \"width\": 122, \"height\": 84}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Competitor Saturation.w Competitor Saturation\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Competitor Saturation\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Competitor Saturation\"}, \"Name\": \"w Competitor Saturation.w Competitor Saturation\", \"NativeReferenceName\": \"w Competitor Saturation\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Competitor Saturation'\"}}}}}]}}}",
+          "config": "{\"name\": \"d0fabcff-1bbc-5270-8fe5-676ff85da9e1\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1104, \"y\": 314, \"z\": 0, \"width\": 160, \"height\": 88}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_tract.Subject Non-LMI Coverage\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_tract\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"Subject Non-LMI Coverage\"}, \"Name\": \"dim_tract.Subject Non-LMI Coverage\", \"NativeReferenceName\": \"Subject Non-LMI Coverage\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'non-LMI now'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 84,
-          "width": 122,
-          "x": 1020,
-          "y": 620,
+          "height": 88,
+          "width": 160,
+          "x": 1104,
+          "y": 314,
           "z": 0
         },
         {
-          "config": "{\"name\": \"9b55cd74-5d51-5d6c-a7d0-655e933ba3b0\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1144, \"y\": 620, \"z\": 0, \"width\": 122, \"height\": 84}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Unmet Demand.w Unmet Demand\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Unmet Demand\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Unmet Demand\"}, \"Name\": \"w Unmet Demand.w Unmet Demand\", \"NativeReferenceName\": \"w Unmet Demand\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Unmet Demand'\"}}}}}]}}}",
+          "config": "{\"name\": \"cc2f1833-5611-5808-b9b7-77509820f49b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 928, \"y\": 410, \"z\": 0, \"width\": 168, \"height\": 82}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"lmi_coverage.Constraint Cost %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"l\", \"Entity\": \"lmi_coverage\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"Constraint Cost %\"}, \"Name\": \"lmi_coverage.Constraint Cost %\", \"NativeReferenceName\": \"Constraint Cost %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Constraint cost %'\"}}}}}]}}}",
           "filters": "[]",
-          "height": 84,
-          "width": 122,
-          "x": 1144,
-          "y": 620,
+          "height": 82,
+          "width": 168,
+          "x": 928,
+          "y": 410,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"cd94bf5f-f741-527b-aec7-c7b21f1cf230\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1104, \"y\": 410, \"z\": 0, \"width\": 160, \"height\": 82}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"lmi_coverage.LMI Sites in Shortlist\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"l\", \"Entity\": \"lmi_coverage\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"l\"}}, \"Property\": \"LMI Sites in Shortlist\"}, \"Name\": \"lmi_coverage.LMI Sites in Shortlist\", \"NativeReferenceName\": \"LMI Sites in Shortlist\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'LMI sites of 3'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 82,
+          "width": 160,
+          "x": 1104,
+          "y": 410,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"5f4894ad-7004-53f5-b59b-305eaf79e97f\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 500, \"z\": 0, \"width\": 410, \"height\": 104}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Cost of the constraint. \", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}, {\"value\": \"0.6712 index points, 9.4% of the unconstrained score. 26,617 new catchment households against 37,413.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "filters": "[]",
+          "height": 104,
+          "width": 410,
+          "x": 16,
+          "y": 500,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"7f856b16-70ee-58d3-b82c-8e34c738bf23\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 436, \"y\": 500, \"z\": 0, \"width\": 410, \"height\": 104}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"0 of 3. \", \"textStyle\": {\"fontSize\": \"11pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#B23A22\"}}, {\"value\": \"Neither set places a branch in an LMI tract. Rule B improves catchment composition; it does not site among LMI households. Anyone reading this as a CRA response needs that distinction - the ceiling is upstream, in a shortlist that is 4.0% LMI.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "filters": "[]",
+          "height": 104,
+          "width": 410,
+          "x": 436,
+          "y": 500,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"2bf36fe5-c524-52a6-8775-2b8d739281d9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 856, \"y\": 500, \"z\": 0, \"width\": 408, \"height\": 104}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Correlated exposure. \", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#B23A22\"}}, {\"value\": \"Both sets concentrate in the Chicago-Naperville-Elgin corridor, where 22 of 29 top-50 tracts carry cluster-estimated growth. One regional growth assumption, mostly estimated.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "filters": "[]",
+          "height": 104,
+          "width": 408,
+          "x": 856,
+          "y": 500,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"495b7efe-7f0f-5f69-9050-e62659eb0b53\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 16, \"y\": 612, \"z\": 0, \"width\": 300, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"textbox\", \"drillFilterOtherVisuals\": true, \"objects\": {\"general\": [{\"properties\": {\"paragraphs\": [{\"textRuns\": [{\"value\": \"Weights are a judgement, not a fact.\", \"textStyle\": {\"fontSize\": \"10pt\", \"fontFamily\": \"Segoe UI\", \"fontWeight\": \"bold\", \"color\": \"#1F2933\"}}, {\"value\": \" Under a growth-led weighting 39.7% of tracts move 500+ places and only 31 of the top 50 survive.\", \"textStyle\": {\"fontSize\": \"9pt\", \"fontFamily\": \"Segoe UI\", \"color\": \"#1F2933\"}}]}]}}]}}}",
+          "filters": "[]",
+          "height": 92,
+          "width": 300,
+          "x": 16,
+          "y": 612,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"cfb7d603-e72b-5359-bab5-81a731a9806b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1004, \"y\": 612, \"z\": 0, \"width\": 128, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"index_components.Top 50 LMI Share %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"i\", \"Entity\": \"index_components\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"Top 50 LMI Share %\"}, \"Name\": \"index_components.Top 50 LMI Share %\", \"NativeReferenceName\": \"Top 50 LMI Share %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Top-50 LMI %'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 92,
+          "width": 128,
+          "x": 1004,
+          "y": 612,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"5c1ffcf3-3f4c-5a03-b098-d0a969c682c6\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 1140, \"y\": 612, \"z\": 0, \"width\": 124, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"index_components.Top 50 Cluster-Measured Growth %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"i\", \"Entity\": \"index_components\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"i\"}}, \"Property\": \"Top 50 Cluster-Measured Growth %\"}, \"Name\": \"index_components.Top 50 Cluster-Measured Growth %\", \"NativeReferenceName\": \"Top 50 Cluster-Measured Growth %\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Top-50 est. growth %'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 92,
+          "width": 124,
+          "x": 1140,
+          "y": 612,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"6f3b6de3-86f3-5e7b-9f49-0fb28009ce24\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 324, \"y\": 612, \"z\": 0, \"width\": 132, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Household Growth.w Household Growth\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Household Growth\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Household Growth\"}, \"Name\": \"w Household Growth.w Household Growth\", \"NativeReferenceName\": \"w Household Growth\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Household Growth'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 92,
+          "width": 132,
+          "x": 324,
+          "y": 612,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"1e31aea1-e97b-5219-ad18-8cb8cc7abe51\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 460, \"y\": 612, \"z\": 0, \"width\": 132, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Median Income.w Median Income\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Median Income\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Median Income\"}, \"Name\": \"w Median Income.w Median Income\", \"NativeReferenceName\": \"w Median Income\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Median Income'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 92,
+          "width": 132,
+          "x": 460,
+          "y": 612,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"71417f05-31fc-5215-9e1a-a4e88ba688c9\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 596, \"y\": 612, \"z\": 0, \"width\": 132, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Deposit Growth.w Deposit Growth\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Deposit Growth\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Deposit Growth\"}, \"Name\": \"w Deposit Growth.w Deposit Growth\", \"NativeReferenceName\": \"w Deposit Growth\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Deposit Growth'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 92,
+          "width": 132,
+          "x": 596,
+          "y": 612,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"de3ed71b-da7e-5ca4-b45c-5d7884542fe7\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 732, \"y\": 612, \"z\": 0, \"width\": 132, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Competitor Saturation.w Competitor Saturation\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Competitor Saturation\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Competitor Saturation\"}, \"Name\": \"w Competitor Saturation.w Competitor Saturation\", \"NativeReferenceName\": \"w Competitor Saturation\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Competitor Saturation'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 92,
+          "width": 132,
+          "x": 732,
+          "y": 612,
+          "z": 0
+        },
+        {
+          "config": "{\"name\": \"382410de-f90f-566d-8279-9a414ecf80ba\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 868, \"y\": 612, \"z\": 0, \"width\": 132, \"height\": 92}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"w Unmet Demand.w Unmet Demand\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"w\", \"Entity\": \"w Unmet Demand\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"w\"}}, \"Property\": \"w Unmet Demand\"}, \"Name\": \"w Unmet Demand.w Unmet Demand\", \"NativeReferenceName\": \"w Unmet Demand\"}]}, \"drillFilterOtherVisuals\": true, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Unmet Demand'\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 92,
+          "width": 132,
+          "x": 868,
+          "y": 612,
           "z": 0
         }
       ],
